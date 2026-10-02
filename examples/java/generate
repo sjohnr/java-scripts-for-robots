@@ -1,0 +1,16 @@
+#!/bin/sh
+# Regenerates the example wrappers with javaw.
+set -e
+cd -- "$(dirname -- "$0")"
+
+#javaw --force --jvm-opts -ea --profile fast-start -o example1 example1_assert.java
+#javaw --force --jvm-opts -ea --profile fast-start -o example2 example2_args.java
+#javaw --force --jvm-opts -ea --profile fast-start -o example3 example3_argparse.java
+#javaw --force --jvm-opts -ea --profile fast-start -o example4 example4_glob.java
+#javaw --force --jvm-opts -ea --profile fast-start -r '*.csv' -o example5 example5_csv.java
+#javaw --force --jvm-opts '-ea --add-modules=jdk.incubator.json' --profile fast-start -r '*.json' -o example6 example6_json.java
+
+javaw --force --jvm-opts '-ea --add-modules=jdk.incubator.json' --min-java 28 --profile small-disk -o json-small-disk example6_json.java
+javaw --force --jvm-opts '-ea --add-modules=jdk.incubator.json' --min-java 28 -r '*.json' --profile portable -o json-portable example6_json.java
+javaw --force --jvm-opts '-ea --add-modules=jdk.incubator.json' --min-java 28 -r '*.json' --profile fast-start -o json-fast-start example6_json.java
+javaw --force --jvm-opts '-ea --add-modules=jdk.incubator.json' --min-java 28 -r '*.json' --profile max-perf -o json-max-perf example6_json.java

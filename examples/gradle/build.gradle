@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(28)
+    }
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:6.0.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+application {
+    mainClass = 'example6_json'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += '--enable-preview'
+    options.compilerArgs += '--add-modules=jdk.incubator.json'
+}
+
+tasks.withType(JavaExec).configureEach {
+    jvmArgs += '-ea'
+    jvmArgs += '--enable-preview'
+    jvmArgs += '--add-modules=jdk.incubator.json'
+}
+
+test {
+    useJUnitPlatform()
+    jvmArgs += '-ea'
+    jvmArgs += '--enable-preview'
+    jvmArgs += '--add-modules=jdk.incubator.json'
+}

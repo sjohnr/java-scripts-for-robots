@@ -1,0 +1,32 @@
+// #region main
+void main(String... args) {
+    var port = Integer.parseInt(hasArg("-P", args) ? parseArg("-P", args) : parseArg("--port", args));
+    var param1 = parseArg("--param1", args);
+    var param2 = Integer.parseInt(parseArg("--param2", args));
+    var enableFeatureX = hasArg("--enable-featureX", args);
+
+    IO.println("port           = " + port);
+    IO.println("param1         = " + param1);
+    IO.println("param2         = " + param2);
+    IO.println("enableFeatureX = " + enableFeatureX);
+}
+// #endregion
+
+boolean hasArg(String name, String[] args) {
+    for (String arg : args) {
+        if (Objects.equals(arg, name)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+String parseArg(String name, String[] args) {
+    for (var index = 0; index < args.length; index++) {
+        if (Objects.equals(args[index], name)) {
+            assert index + 1 < args.length : "Argument value not provided: " + name;
+            return args[index + 1];
+        }
+    }
+    throw new AssertionError("Argument missing: " + name);
+}
