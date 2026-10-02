@@ -1,0 +1,56 @@
+__pycache__/
+*.pyc
+*.class
+node_modules/
+llm-cli-bakeoff/tools/*/go/jarsrc
+llm-cli-bakeoff/tools/*/go/logsum
+llm-cli-bakeoff/tools/*/go/treesum
+llm-cli-bakeoff/tools/*/go/jsonpick
+llm-cli-bakeoff/tools/*/go/noop
+llm-cli-bakeoff/fixtures/
+llm-cli-bakeoff/bench/results/raw/*.json
+.DS_Store
+llm-cli-bakeoff/tools/*/java/build/
+llm-cli-bakeoff/tools/*/java/native/
+
+# Generated from start.spring.io
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+# Ignore local files
+.generate
