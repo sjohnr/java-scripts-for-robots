@@ -1,0 +1,3 @@
+#!/bin/sh
+# Launcher for build/jarsrc.jar; passes arguments and the exit status through unchanged.
+exec java -jar "$(cd "$(dirname "$0")" && pwd)/build/jarsrc.jar" "$@"

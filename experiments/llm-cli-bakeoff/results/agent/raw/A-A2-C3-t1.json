@@ -1,0 +1,109 @@
+{
+  "duration_api_ms": 13325,
+  "stop_reason": "end_turn",
+  "session_id": "284554da-4e8a-4c40-9d6b-244eee416578",
+  "total_cost_usd": 0.0790073,
+  "usage": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 32644,
+    "cache_read_input_tokens": 78283,
+    "output_tokens": 1173,
+    "output_tokens_details": {
+      "thinking_tokens": 635
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 32644,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 8,
+        "output_tokens": 643,
+        "cache_read_input_tokens": 43998,
+        "cache_creation_input_tokens": 2194,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2194
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 26,
+      "outputTokens": 1173,
+      "cacheReadInputTokens": 78283,
+      "cacheCreationInputTokens": 32644,
+      "webSearchRequests": 0,
+      "costUSD": 0.0790073,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 635,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 3,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Based on the ERROR messages in the log, here's the summary:\n\n## Top 3 Error Messages by Frequency\n\n1. **checksum mismatch** \u2014 16 occurrences\n   - Example: `checksum mismatch: expected a35f1f9a got 9b4c2427`\n\n2. **null pointer in handler for user** \u2014 15 occurrences\n   - Example: `null pointer in handler for user 674131`\n\n3. **failed to connect to host** \u2014 9 occurrences\n   - Example: `failed to connect to host8.local after 266950 attempts`\n\n(Other errors: `request...timed out` \u2014 8 times, `disk write failed` \u2014 5 times)\n\n## Time Range\n- **First timestamp:** 2026-01-01T00:00:27\n- **Last timestamp:** 2026-01-01T00:25:40\n- **Duration:** ~25 minutes and 13 seconds",
+  "ttft_ms": 1078,
+  "type": "result",
+  "duration_ms": 13519,
+  "uuid": "64c24c18-2f68-4b8a-a872-1f4a2abeb334",
+  "ttft_stream_ms": 617,
+  "time_to_request_ms": 70,
+  "first_content_frame_ms": 618,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "_wall_s_measured": 14.323122024536133,
+  "task": "A2",
+  "condition": "C3",
+  "trial": 1,
+  "trial_dir": "/private/tmp/claude-501/-Users-sriesenberg-git-ai-cli-experiment/4fe6da76-a1a1-4877-9783-663ab9fb5447/scratchpad/agent-A2-6eoxy11g",
+  "check_hits": [
+    "checksum mismatch",
+    "null pointer",
+    "failed to connect"
+  ],
+  "check_total": 5,
+  "success": false
+}

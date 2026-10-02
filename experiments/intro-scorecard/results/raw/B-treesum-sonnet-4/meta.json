@@ -1,0 +1,94 @@
+{
+  "run_id": "B-treesum-sonnet-4",
+  "condition": "B",
+  "task": "treesum",
+  "model_alias": "sonnet",
+  "model_id": "claude-sonnet-5-5",
+  "model_ids_used": [
+    "claude-sonnet-5-5"
+  ],
+  "replicate": 4,
+  "seed": 20261010,
+  "seed_position": 47,
+  "started": "2026-10-11T01:09:41+00:00",
+  "ended": "2026-10-11T01:10:09+00:00",
+  "wall_s": 28.3,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 4,
+  "duration_ms": 27747,
+  "duration_api_ms": 26822,
+  "tokens": {
+    "input_tokens": 6,
+    "output_tokens": 4340,
+    "cache_creation_input_tokens": 9064,
+    "cache_read_input_tokens": 43817
+  },
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 4340,
+      "cacheReadInputTokens": 43817,
+      "cacheCreationInputTokens": 9064,
+      "webSearchRequests": 0,
+      "costUSD": 0.08404969999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 751,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.08404969999999999,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "7589491d-2d7a-43d6-a523-443feb5ebbbb",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-sonnet-4",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.1,
+    "cost_usd": 0.0041897000000000045,
+    "cost_usd_cumulative_reported": 0.0882394,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 8,
+      "cache_creation_input_tokens": 506,
+      "cache_read_input_tokens": 20817
+    },
+    "subtype": "success",
+    "reply": "`./treesum`",
+    "run_command": "./treesum",
+    "limit_hits": []
+  },
+  "run_command": "./treesum",
+  "excluded_from_copy": [
+    {
+      "path": "out",
+      "bytes": 9771
+    }
+  ],
+  "prompt": "Build the `treesum` command-line tool described in SPEC.md. Write it in Java.",
+  "claude_args": [
+    "-p",
+    "Build the `treesum` command-line tool described in SPEC.md. Write it in Java.",
+    "--model",
+    "sonnet",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

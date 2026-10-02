@@ -1,0 +1,261 @@
+planned: 84  already recorded: 12  to run: 72  limit retries: 0  follow-up retries: 0
+ledger attempts so far: 12  cap: 84  seed: 20261010  parallel: 4
+  A jarsrc    haiku   3
+  A jarsrc    opus    2
+  A jarsrc    sonnet  2
+  A jsonpick  haiku   3
+  A jsonpick  opus    3
+  A jsonpick  sonnet  3
+  A logsum    haiku   2
+  A logsum    opus    2
+  A logsum    sonnet  2
+  A treesum   haiku   2
+  A treesum   opus    3
+  A treesum   sonnet  2
+  B jarsrc    haiku   4
+  B jarsrc    opus    4
+  B jarsrc    sonnet  4
+  B jsonpick  haiku   3
+  B jsonpick  opus    4
+  B jsonpick  sonnet  4
+  B logsum    haiku   3
+  B logsum    opus    3
+  B logsum    sonnet  3
+  B treesum   haiku   4
+  B treesum   opus    3
+  B treesum   sonnet  4
+--- [16/84] B-treesum-opus-2 (seed position 10) 2026-10-11T00:55:22+00:00
+--- [16/84] A-treesum-opus-3 (seed position 8) 2026-10-11T00:55:22+00:00
+--- [16/84] B-jarsrc-sonnet-4 (seed position 9) 2026-10-11T00:55:22+00:00
+--- [16/84] A-jsonpick-haiku-2 (seed position 11) 2026-10-11T00:55:22+00:00
+    A-treesum-opus-3: model=claude-opus-5-5 turns=7 cost=$0.21399400000000002 wall=48.6s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-treesum-opus-3: run command: ./treesum
+    measured A-treesum-opus-3: lang=python pass=5/5 style=- flags=[]
+--- [17/84] B-jarsrc-haiku-1 (seed position 12) 2026-10-11T00:56:13+00:00
+    B-jarsrc-sonnet-4: model=claude-sonnet-5-5 turns=6 cost=$0.16777340000000002 wall=62.6s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-sonnet-4: run command: ./jarsrc
+    measured B-jarsrc-sonnet-4: lang=java pass=12/12 style=build script / javac + java flags=[]
+--- [18/84] B-logsum-haiku-4 (seed position 13) 2026-10-11T00:56:27+00:00
+    B-treesum-opus-2: model=claude-opus-5-5 turns=9 cost=$0.3160114 wall=81.0s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-treesum-opus-2: run command: ./treesum
+    measured B-treesum-opus-2: lang=java pass=5/5 style=build script / jar flags=[]
+--- [19/84] B-jsonpick-haiku-3 (seed position 14) 2026-10-11T00:56:49+00:00
+    A-jsonpick-haiku-2: model=claude-haiku-5-5 turns=14 cost=$0.02448347 wall=115.5s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-jsonpick-haiku-2: run command: ./jsonpick --help
+    measured A-jsonpick-haiku-2: lang=python pass=11/11 style=- flags=[]
+    scorecard regenerated (ok)
+--- [20/84] B-logsum-haiku-2 (seed position 15) 2026-10-11T00:57:20+00:00
+    B-logsum-haiku-4: model=claude-haiku-5-5 turns=10 cost=$0.03159283 wall=156.8s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-logsum-haiku-4: run command: java -jar build/logsum.jar
+    measured B-logsum-haiku-4: lang=java pass=9/9 style=build script / jar flags=[]
+--- [21/84] A-jarsrc-sonnet-2 (seed position 17) 2026-10-11T00:59:07+00:00
+    B-jarsrc-haiku-1: model=claude-haiku-5-5 turns=11 cost=$0.036793940000000004 wall=179.9s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-haiku-1: run command: ./jarsrc --help
+    measured B-jarsrc-haiku-1: lang=java pass=11/12 style=build script / jar flags=[]
+--- [22/84] A-jarsrc-haiku-3 (seed position 18) 2026-10-11T00:59:16+00:00
+    B-logsum-haiku-2: model=claude-haiku-5-5 turns=10 cost=$0.02615799 wall=132.3s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-logsum-haiku-2: run command: java -jar build/logsum.jar
+    measured B-logsum-haiku-2: lang=java pass=9/9 style=Make / jar flags=[]
+--- [23/84] B-jsonpick-opus-4 (seed position 19) 2026-10-11T00:59:36+00:00
+    A-jarsrc-sonnet-2: model=claude-sonnet-5-5 turns=6 cost=$0.12254739999999997 wall=44.5s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-jarsrc-sonnet-2: run command: ./jarsrc --help
+    measured A-jarsrc-sonnet-2: lang=python pass=12/12 style=- flags=[]
+    scorecard regenerated (ok)
+--- [24/84] B-jsonpick-sonnet-1 (seed position 20) 2026-10-11T00:59:54+00:00
+    B-jsonpick-haiku-3: model=claude-haiku-5-5 turns=24 cost=$0.04717359 wall=229.0s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jsonpick-haiku-3: run command: build/jsonpick --help
+    measured B-jsonpick-haiku-3: lang=java pass=11/11 style=build script / javac + java flags=[]
+--- [25/84] B-jarsrc-opus-1 (seed position 21) 2026-10-11T01:00:41+00:00
+    B-jsonpick-sonnet-1: model=claude-sonnet-5-5 turns=7 cost=$0.1711483 wall=56.8s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jsonpick-sonnet-1: run command: ./jsonpick PATH [FILE] [--shape] [--depth N]
+    measured B-jsonpick-sonnet-1: lang=java pass=10/11 style=none / javac + java flags=[]
+--- [26/84] B-treesum-haiku-1 (seed position 22) 2026-10-11T01:00:54+00:00
+    A-jarsrc-haiku-3: model=claude-haiku-5-5 turns=7 cost=$0.022643999999999997 wall=111.8s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-jarsrc-haiku-3: run command: ./jarsrc --help
+    measured A-jarsrc-haiku-3: lang=python pass=12/12 style=- flags=[]
+--- [27/84] A-jarsrc-opus-1 (seed position 23) 2026-10-11T01:01:10+00:00
+    B-jsonpick-opus-4: model=claude-opus-5-5 turns=10 cost=$0.5577567999999999 wall=142.4s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jsonpick-opus-4: run command: ./jsonpick
+    measured B-jsonpick-opus-4: lang=java pass=11/11 style=build script / jar flags=[]
+    scorecard regenerated (ok)
+--- [28/84] B-jarsrc-sonnet-3 (seed position 24) 2026-10-11T01:02:01+00:00
+    B-jarsrc-opus-1: model=claude-opus-5-5 turns=8 cost=$0.48282620000000004 wall=121.0s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-opus-1: run command: ./jarsrc
+    measured B-jarsrc-opus-1: lang=java pass=11/12 style=build script / jar flags=[]
+--- [29/84] B-treesum-sonnet-3 (seed position 25) 2026-10-11T01:02:52+00:00
+    B-jarsrc-sonnet-3: model=claude-sonnet-5-5 turns=4 cost=$0.13751790000000003 wall=50.3s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-sonnet-3: run command: ./jarsrc --help
+    measured B-jarsrc-sonnet-3: lang=java pass=12/12 style=none / javac + java flags=[]
+--- [30/84] A-logsum-haiku-2 (seed position 27) 2026-10-11T01:02:54+00:00
+    B-treesum-haiku-1: model=claude-haiku-5-5 turns=11 cost=$0.02699758 wall=131.4s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-treesum-haiku-1: run command: java -jar build/treesum.jar
+    measured B-treesum-haiku-1: lang=java pass=5/5 style=build script / jar flags=[]
+--- [31/84] B-jarsrc-sonnet-2 (seed position 28) 2026-10-11T01:03:07+00:00
+    A-jarsrc-opus-1: model=claude-opus-5-5 turns=8 cost=$0.38455760000000005 wall=124.8s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-jarsrc-opus-1: run command: ./jarsrc
+    measured A-jarsrc-opus-1: lang=python pass=12/12 style=- flags=[]
+    scorecard regenerated (ok)
+--- [32/84] A-jsonpick-opus-2 (seed position 29) 2026-10-11T01:03:24+00:00
+    B-treesum-sonnet-3: model=claude-sonnet-5-5 turns=4 cost=$0.09238170000000001 wall=34.5s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-treesum-sonnet-3: run command: ./treesum
+    measured B-treesum-sonnet-3: lang=java pass=5/5 style=none / javac + java flags=[]
+--- [33/84] A-logsum-haiku-3 (seed position 30) 2026-10-11T01:03:29+00:00
+    B-jarsrc-sonnet-2: model=claude-sonnet-5-5 turns=6 cost=$0.1846722 wall=69.6s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-sonnet-2: run command: ./jarsrc
+    measured B-jarsrc-sonnet-2: lang=java pass=12/12 style=build script / jar flags=[]
+--- [34/84] B-jarsrc-haiku-2 (seed position 31) 2026-10-11T01:04:19+00:00
+    A-jsonpick-opus-2: model=claude-opus-5-5 turns=8 cost=$0.346931 wall=87.2s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-jsonpick-opus-2: run command: ./jsonpick PATH [FILE]
+    measured A-jsonpick-opus-2: lang=python pass=11/11 style=- flags=[]
+--- [35/84] A-logsum-opus-2 (seed position 32) 2026-10-11T01:04:54+00:00
+    A-logsum-haiku-2: model=claude-haiku-5-5 turns=9 cost=$0.023642100000000003 wall=121.2s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-logsum-haiku-2: run command: ./logsum
+    measured A-logsum-haiku-2: lang=python pass=9/9 style=- flags=[]
+    scorecard regenerated (ok)
+--- [36/84] B-treesum-haiku-4 (seed position 33) 2026-10-11T01:04:58+00:00
+    A-logsum-haiku-3: model=claude-haiku-5-5 turns=14 cost=$0.019399260000000005 wall=87.4s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-logsum-haiku-3: run command: ./logsum
+    measured A-logsum-haiku-3: lang=python pass=9/9 style=- flags=[]
+--- [37/84] B-jarsrc-opus-3 (seed position 34) 2026-10-11T01:04:59+00:00
+    A-logsum-opus-2: model=claude-opus-5-5 turns=6 cost=$0.24123039999999996 wall=61.4s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-logsum-opus-2: run command: ./logsum
+    measured A-logsum-opus-2: lang=python pass=9/9 style=- flags=[]
+--- [38/84] B-logsum-sonnet-3 (seed position 35) 2026-10-11T01:05:57+00:00
+    B-logsum-sonnet-3: model=claude-sonnet-5-5 turns=5 cost=$0.08985279999999998 wall=30.2s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-logsum-sonnet-3: run command: ./logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]
+    measured B-logsum-sonnet-3: lang=java pass=9/9 style=none / javac + java flags=[]
+--- [39/84] B-jsonpick-haiku-1 (seed position 36) 2026-10-11T01:06:31+00:00
+    B-jarsrc-opus-3: model=claude-opus-5-5 turns=8 cost=$0.41529479999999996 wall=100.0s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-opus-3: run command: ./jarsrc
+    measured B-jarsrc-opus-3: lang=java pass=12/12 style=build script / jar flags=[]
+    scorecard regenerated (ok)
+--- [40/84] A-treesum-haiku-1 (seed position 37) 2026-10-11T01:06:42+00:00
+    B-treesum-haiku-4: model=claude-haiku-5-5 turns=9 cost=$0.0219776 wall=109.3s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-treesum-haiku-4: run command: java -jar build/treesum.jar
+    measured B-treesum-haiku-4: lang=java pass=5/5 style=build script / jar flags=[]
+--- [41/84] B-jarsrc-sonnet-1 (seed position 38) 2026-10-11T01:06:50+00:00
+    B-jarsrc-haiku-2: model=claude-haiku-5-5 turns=16 cost=$0.04328197 wall=192.5s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-haiku-2: run command: javac -d out src/jarsrc/*.java && java -cp out jarsrc.Main --help
+    measured B-jarsrc-haiku-2: lang=java pass=1/12 style=none / javac + java flags=[]
+--- [42/84] B-jsonpick-sonnet-3 (seed position 39) 2026-10-11T01:07:39+00:00
+    B-jarsrc-sonnet-1: model=claude-sonnet-5-5 turns=4 cost=$0.14519790000000002 wall=54.9s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-sonnet-1: run command: ./jarsrc
+    measured B-jarsrc-sonnet-1: lang=java pass=12/12 style=none / javac + java flags=[]
+--- [43/84] B-jsonpick-sonnet-2 (seed position 40) 2026-10-11T01:07:48+00:00
+    A-treesum-haiku-1: model=claude-haiku-5-5 turns=10 cost=$0.015787960000000004 wall=76.0s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-treesum-haiku-1: run command: ./treesum
+    measured A-treesum-haiku-1: lang=python pass=5/5 style=- flags=[]
+    scorecard regenerated (ok)
+--- [44/84] A-logsum-opus-3 (seed position 41) 2026-10-11T01:08:00+00:00
+    B-jsonpick-sonnet-3: model=claude-sonnet-5-5 turns=5 cost=$0.14994700000000002 wall=51.1s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jsonpick-sonnet-3: run command: ./jsonpick PATH [FILE] [--shape] [--depth N]
+    measured B-jsonpick-sonnet-3: lang=java pass=10/11 style=build script / jar flags=[]
+--- [45/84] B-treesum-sonnet-1 (seed position 42) 2026-10-11T01:08:33+00:00
+    B-jsonpick-sonnet-2: model=claude-sonnet-5-5 turns=6 cost=$0.1770426 wall=63.6s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jsonpick-sonnet-2: run command: ./jsonpick PATH [FILE] [--shape] [--depth N]
+    measured B-jsonpick-sonnet-2: lang=java pass=10/11 style=none / javac + java flags=[]
+--- [46/84] A-treesum-sonnet-3 (seed position 43) 2026-10-11T01:08:54+00:00
+    B-treesum-sonnet-1: model=claude-sonnet-5-5 turns=4 cost=$0.0819257 wall=26.9s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-treesum-sonnet-1: run command: ./treesum
+    measured B-treesum-sonnet-1: lang=java pass=5/5 style=none / javac + java flags=[]
+--- [47/84] B-jsonpick-haiku-2 (seed position 44) 2026-10-11T01:09:02+00:00
+    A-logsum-opus-3: model=claude-opus-5-5 turns=6 cost=$0.239077 wall=64.5s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-logsum-opus-3: run command: ./logsum
+    measured A-logsum-opus-3: lang=python pass=9/9 style=- flags=[]
+    scorecard regenerated (ok)
+--- [48/84] B-treesum-haiku-2 (seed position 45) 2026-10-11T01:09:07+00:00
+    A-treesum-sonnet-3: model=claude-sonnet-5-5 turns=5 cost=$0.06592909999999999 wall=21.5s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-treesum-sonnet-3: run command: ./treesum
+    measured A-treesum-sonnet-3: lang=python pass=5/5 style=- flags=[]
+--- [49/84] B-treesum-sonnet-2 (seed position 46) 2026-10-11T01:09:18+00:00
+    B-jsonpick-haiku-1: model=claude-haiku-5-5 turns=22 cost=$0.03783478999999999 wall=187.1s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jsonpick-haiku-1: run command: bin/jsonpick --help
+    measured B-jsonpick-haiku-1: lang=java pass=10/11 style=Make / javac + java flags=[]
+--- [50/84] B-treesum-sonnet-4 (seed position 47) 2026-10-11T01:09:41+00:00
+    B-treesum-sonnet-2: model=claude-sonnet-5-5 turns=4 cost=$0.0814637 wall=27.4s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-treesum-sonnet-2: run command: ./treesum
+    measured B-treesum-sonnet-2: lang=java pass=5/5 style=none / javac + java flags=[]
+--- [51/84] A-treesum-haiku-2 (seed position 49) 2026-10-11T01:09:48+00:00
+    B-treesum-sonnet-4: model=claude-sonnet-5-5 turns=4 cost=$0.08404969999999999 wall=28.3s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-treesum-sonnet-4: run command: ./treesum
+    measured B-treesum-sonnet-4: lang=java pass=5/5 style=none / javac + java flags=[]
+    scorecard regenerated (ok)
+--- [52/84] A-jsonpick-haiku-1 (seed position 50) 2026-10-11T01:10:12+00:00
+    B-treesum-haiku-2: model=claude-haiku-5-5 turns=9 cost=$0.021957489999999993 wall=108.3s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-treesum-haiku-2: run command: javac -d out src/treesum/Main.java && java -cp out treesum.Main
+    measured B-treesum-haiku-2: lang=java pass=5/5 style=none / javac + java flags=[]
+--- [53/84] B-treesum-haiku-3 (seed position 51) 2026-10-11T01:10:59+00:00
+    A-treesum-haiku-2: model=claude-haiku-5-5 turns=9 cost=$0.016645319999999998 wall=77.2s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-treesum-haiku-2: run command: ./treesum
+    measured A-treesum-haiku-2: lang=python pass=5/5 style=- flags=[]
+--- [54/84] A-jsonpick-opus-3 (seed position 52) 2026-10-11T01:11:08+00:00
+    A-jsonpick-haiku-1: model=claude-haiku-5-5 turns=8 cost=$0.017890529999999998 wall=92.3s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-jsonpick-haiku-1: run command: ./jsonpick --help
+    measured A-jsonpick-haiku-1: lang=python pass=11/11 style=- flags=[]
+--- [55/84] A-jsonpick-sonnet-2 (seed position 53) 2026-10-11T01:11:47+00:00
+    B-jsonpick-haiku-2: model=claude-haiku-5-5 turns=19 cost=$0.039743980000000005 wall=196.6s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jsonpick-haiku-2: run command: java -jar build/jsonpick.jar
+    measured B-jsonpick-haiku-2: lang=java pass=11/11 style=build script / jar flags=[]
+    scorecard regenerated (ok)
+--- [56/84] B-jarsrc-haiku-3 (seed position 54) 2026-10-11T01:12:21+00:00
+    A-jsonpick-sonnet-2: model=claude-sonnet-5-5 turns=6 cost=$0.10349219999999999 wall=38.4s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-jsonpick-sonnet-2: run command: ./jsonpick PATH [FILE] [--shape] [--depth N]
+    measured A-jsonpick-sonnet-2: lang=python pass=11/11 style=- flags=[]
+--- [57/84] B-jarsrc-opus-4 (seed position 55) 2026-10-11T01:12:28+00:00
+    A-jsonpick-opus-3: model=claude-opus-5-5 turns=15 cost=$0.4471725999999999 wall=111.1s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-jsonpick-opus-3: run command: ./jsonpick
+    measured A-jsonpick-opus-3: lang=python pass=11/11 style=- flags=[]
+--- [58/84] B-jarsrc-opus-2 (seed position 56) 2026-10-11T01:13:02+00:00
+    B-treesum-haiku-3: model=claude-haiku-5-5 turns=14 cost=$0.026852090000000002 wall=125.5s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-treesum-haiku-3: run command: ./bin/treesum
+    measured B-treesum-haiku-3: lang=java pass=5/5 style=Make / jar flags=[]
+--- [59/84] B-logsum-opus-2 (seed position 57) 2026-10-11T01:13:07+00:00
+    B-jarsrc-opus-4: model=claude-opus-5-5 turns=8 cost=$0.4163226 wall=105.6s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-opus-4: run command: ./jarsrc
+    measured B-jarsrc-opus-4: lang=java pass=12/12 style=build script / jar flags=[]
+    scorecard regenerated (ok)
+--- [60/84] B-logsum-opus-3 (seed position 58) 2026-10-11T01:14:17+00:00
+    B-logsum-opus-2: model=claude-opus-5-5 turns=7 cost=$0.30995399999999995 wall=78.6s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-logsum-opus-2: run command: ./logsum
+    measured B-logsum-opus-2: lang=java pass=9/9 style=build script / jar flags=[]
+--- [61/84] A-jarsrc-haiku-1 (seed position 60) 2026-10-11T01:14:28+00:00
+    B-jarsrc-haiku-3: model=claude-haiku-5-5 turns=17 cost=$0.03721021 wall=170.8s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-haiku-3: run command: ./jarsrc
+    measured B-jarsrc-haiku-3: lang=java pass=12/12 style=build script / jar flags=[]
+--- [62/84] A-logsum-sonnet-2 (seed position 61) 2026-10-11T01:15:15+00:00
+    B-jarsrc-opus-2: model=claude-opus-5-5 turns=10 cost=$0.5649458 wall=154.5s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-jarsrc-opus-2: run command: ./jarsrc
+    measured B-jarsrc-opus-2: lang=java pass=12/12 style=build script / jar flags=[]
+--- [63/84] B-logsum-haiku-3 (seed position 62) 2026-10-11T01:15:39+00:00
+    A-logsum-sonnet-2: model=claude-sonnet-5-5 turns=5 cost=$0.0765567 wall=25.4s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-logsum-sonnet-2: run command: ./logsum
+    measured A-logsum-sonnet-2: lang=python pass=9/9 style=- flags=[]
+    scorecard regenerated (ok)
+--- [64/84] B-jsonpick-opus-1 (seed position 63) 2026-10-11T01:15:43+00:00
+    B-logsum-opus-3: model=claude-opus-5-5 turns=5 cost=$0.3335668 wall=84.7s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    B-logsum-opus-3: run command: ./logsum
+    measured B-logsum-opus-3: lang=java pass=9/9 style=build script / jar flags=[]
+--- [65/84] A-jsonpick-opus-1 (seed position 64) 2026-10-11T01:15:44+00:00
+    A-jarsrc-haiku-1: model=claude-haiku-5-5 turns=14 cost=$0.030199009999999995 wall=142.1s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-jarsrc-haiku-1: run command: ./jarsrc --help
+    measured A-jarsrc-haiku-1: lang=python pass=12/12 style=- flags=[]
+--- [66/84] B-jsonpick-opus-2 (seed position 65) 2026-10-11T01:16:53+00:00
+    A-jsonpick-opus-1: model=claude-opus-5-5 turns=6 cost=$0.2726326 wall=67.8s subtype=success limits=[] followup_limits=[] apiKeySource=none
+    A-jsonpick-opus-1: run command: ./jsonpick PATH [FILE]
+    measured A-jsonpick-opus-1: lang=python pass=11/11 style=- flags=[]
+--- [67/84] B-jsonpick-sonnet-4 (seed position 66) 2026-10-11T01:16:54+00:00
+    B-jsonpick-opus-2: model=claude-opus-5-5 turns=3 cost=$0.09900139999999999 wall=30.1s subtype=success limits=['usage_or_rate_limit'] followup_limits=['usage_or_rate_limit'] apiKeySource=none
+    B-jsonpick-opus-2: run command: You've hit your session limit · resets 12:10am (America/Chicago)
+    scorecard regenerated (ok)
+--- [67/84] B-jsonpick-opus-2 (seed position 65) 2026-10-11T01:17:24+00:00
+    B-jsonpick-opus-2: model=claude-opus-5-5 turns=1 cost=$0 wall=1.1s subtype=success limits=['usage_or_rate_limit'] followup_limits=['usage_or_rate_limit'] apiKeySource=none
+    B-jsonpick-opus-2: run command: You've hit your session limit · resets 12:10am (America/Chicago)
+PAUSE: two runs in a row (completion order) hit a usage or rate limit (opus); waiting for in-flight runs, then probing
+    B-jsonpick-opus-1: model=claude-opus-5-5 turns=7 cost=$0.4278234 wall=106.1s subtype=success limits=['usage_or_rate_limit'] followup_limits=['usage_or_rate_limit'] apiKeySource=none
+    B-jsonpick-opus-1: run command: You've hit your session limit · resets 12:10am (America/Chicago)
+    B-jsonpick-sonnet-4: model=claude-sonnet-5-5 turns=4 cost=$0.10036170000000001 wall=43.5s subtype=success limits=['usage_or_rate_limit'] followup_limits=['usage_or_rate_limit'] apiKeySource=none
+    B-jsonpick-sonnet-4: run command: You've hit your session limit · resets 12:10am (America/Chicago)
+    B-logsum-haiku-3: model=claude-haiku-5-5 turns=7 cost=$0.02138701 wall=127.2s subtype=success limits=['usage_or_rate_limit'] followup_limits=['usage_or_rate_limit'] apiKeySource=none
+    B-logsum-haiku-3: run command: You've hit your session limit · resets 12:10am (America/Chicago)
+    scorecard regenerated (ok)
+    paused; probing haiku, opus, sonnet every 1200s (2026-10-11T01:17:48+00:00)

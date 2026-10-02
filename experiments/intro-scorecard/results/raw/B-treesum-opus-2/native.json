@@ -1,0 +1,20 @@
+{
+ "run_id": "B-treesum-opus-2",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-opus-2/opt/app.jar",
+ "main": "Treesum",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-treesum-opus-2/app",
+ "build_seconds": 9.6,
+ "image_bytes": 5439136,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-treesum-opus-2/app --help",
+  "median_ms": 2.56770668,
+  "mean_ms": 2.579962748055555,
+  "stddev_ms": 0.09978481072538851,
+  "min_ms": 2.38603968,
+  "runs": 720,
+  "load_avg_before": 10.78857421875,
+  "load_avg_after": 10.24462890625
+ }
+}

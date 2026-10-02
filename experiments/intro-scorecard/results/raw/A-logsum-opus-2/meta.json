@@ -1,0 +1,89 @@
+{
+  "run_id": "A-logsum-opus-2",
+  "condition": "A",
+  "task": "logsum",
+  "model_alias": "opus",
+  "model_id": "claude-opus-5-5",
+  "model_ids_used": [
+    "claude-opus-5-5"
+  ],
+  "replicate": 2,
+  "seed": 20261010,
+  "seed_position": 32,
+  "started": "2026-10-11T01:04:54+00:00",
+  "ended": "2026-10-11T01:05:55+00:00",
+  "wall_s": 61.4,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 6,
+  "duration_ms": 60873,
+  "duration_api_ms": 58720,
+  "tokens": {
+    "input_tokens": 10,
+    "output_tokens": 6378,
+    "cache_creation_input_tokens": 12008,
+    "cache_read_input_tokens": 87832
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 6378,
+      "cacheReadInputTokens": 87832,
+      "cacheCreationInputTokens": 12008,
+      "webSearchRequests": 0,
+      "costUSD": 0.24123039999999996,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1619,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.24123039999999996,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "085bfde7-432f-4bde-a97f-156c79064cbe",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-logsum-opus-2",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.1,
+    "cost_usd": 0.012558400000000025,
+    "cost_usd_cumulative_reported": 0.2537888,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 8,
+      "cache_creation_input_tokens": 955,
+      "cache_read_input_tokens": 23752
+    },
+    "subtype": "success",
+    "reply": "`./logsum`",
+    "run_command": "./logsum",
+    "limit_hits": []
+  },
+  "run_command": "./logsum",
+  "excluded_from_copy": [],
+  "prompt": "Build the `logsum` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `logsum` command-line tool described in SPEC.md.",
+    "--model",
+    "opus",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

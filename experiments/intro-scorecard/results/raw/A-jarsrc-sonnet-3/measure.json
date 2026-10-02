@@ -1,0 +1,135 @@
+{
+  "run_id": "A-jarsrc-sonnet-3",
+  "measured": "2026-10-11T08:58:38",
+  "run_command_reported": "./jarsrc --help",
+  "run_command_used": "./jarsrc",
+  "run_command_notes": [
+    "dropped trailing --help"
+  ],
+  "classification": {
+    "language": "python",
+    "language_group": "scripting",
+    "entry": "jarsrc",
+    "launch": {
+      "lang": "python",
+      "entry": "jarsrc",
+      "launch": null,
+      "wrapper": null,
+      "evidence": [
+        "run command program: ./jarsrc"
+      ],
+      "flags": [],
+      "java_opts": ""
+    },
+    "source_bytes_by_lang": {
+      "python": 7192
+    },
+    "flags": [],
+    "needs_review": false
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 5788
+    },
+    {
+      "path": "jarsrc",
+      "kind": "source",
+      "lang": "python",
+      "bytes": 7192
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jarsrc-find-exact",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-glob-star",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-glob-doublestar",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-highest-version",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-lines",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-lines-out-of-range",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-ls-ga",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-ls-gav-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-help",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-unknown-flag",
+        "ok": true
+      }
+    ],
+    "passed": 12,
+    "total": 12,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.04,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 2140,
+    "build_file_tokens": 0,
+    "test_tokens": 0,
+    "source_files": [
+      "jarsrc"
+    ],
+    "build_files": [],
+    "source_bytes": 7192,
+    "build_file_bytes": 0
+  },
+  "disk": {
+    "source_and_build_files_bytes": 7192,
+    "build_output_bytes": 0,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 7192
+  },
+  "load_avg_at_bench_start": 2.5810546875,
+  "startup": {
+    "command": "./jarsrc --help",
+    "median_ms": 19.564521200000005,
+    "mean_ms": 20.055943234188028,
+    "stddev_ms": 1.5523526463420185,
+    "min_ms": 19.093354200000004,
+    "runs": 117,
+    "load_avg_before": 2.5810546875,
+    "load_avg_after": 2.5341796875
+  },
+  "benchmarked": "2026-10-11T09:05:15"
+}

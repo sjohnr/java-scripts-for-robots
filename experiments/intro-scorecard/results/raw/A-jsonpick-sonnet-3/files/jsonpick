@@ -1,0 +1,233 @@
+#!/usr/bin/env python3
+import json
+import sys
+from decimal import Decimal
+
+HELP = """usage: jsonpick PATH [FILE] [--shape] [--depth N]
+
+Extract a value by path from JSON.
+
+arguments:
+  PATH      path such as a.b[0].c ("." or "" selects the whole document)
+  FILE      JSON file to read; omitted or "-" means stdin
+
+flags:
+  --shape   print a type/array-length summary of the subtree at PATH
+  --depth N levels to describe with --shape (default 2)
+  --help    show this message
+"""
+
+
+def out(text, stream=None):
+    stream = stream or sys.stdout
+    stream.buffer.write(text.encode("utf-8", "replace"))
+    stream.buffer.flush()
+
+
+def die(code, msg):
+    out("error: " + msg + "\n", sys.stderr)
+    sys.exit(code)
+
+
+def usage_error(msg):
+    out(msg + "\n", sys.stderr)
+    sys.exit(2)
+
+
+def parse_args(argv):
+    path = None
+    file = None
+    shape = False
+    depth = 2
+    positional = []
+    i = 0
+    only_pos = False
+    while i < len(argv):
+        a = argv[i]
+        i += 1
+        if only_pos or a == "-" or not a.startswith("-"):
+            positional.append(a)
+        elif a == "--":
+            only_pos = True
+        elif a == "--help":
+            out(HELP)
+            sys.exit(0)
+        elif a == "--shape":
+            shape = True
+        elif a == "--depth" or a.startswith("--depth="):
+            if a == "--depth":
+                if i >= len(argv):
+                    usage_error("error: --depth requires a value")
+                val = argv[i]
+                i += 1
+            else:
+                val = a[len("--depth="):]
+            try:
+                depth = int(val)
+                if depth < 0 or not val.strip().lstrip("+").isdigit():
+                    raise ValueError
+            except ValueError:
+                usage_error("error: invalid --depth value: " + val)
+        else:
+            usage_error("unknown flag: " + a)
+    if not positional:
+        usage_error("error: missing required argument: PATH")
+    if len(positional) > 2:
+        usage_error("error: unexpected argument: " + positional[2])
+    path = positional[0]
+    if len(positional) == 2:
+        file = positional[1]
+    return path, file, shape, depth
+
+
+def parse_path(path):
+    """Return list of str keys / int indexes, or None if malformed."""
+    if path in ("", "."):
+        return []
+    s = path[1:] if path.startswith(".") else path
+    toks = []
+    i = 0
+    n = len(s)
+    expect_key = True  # at start or after a dot
+    while i < n:
+        c = s[i]
+        if c == "[":
+            j = s.find("]", i)
+            if j < 0:
+                return None
+            num = s[i + 1:j]
+            if not (num.isascii() and num.isdigit()):
+                return None
+            toks.append(int(num))
+            i = j + 1
+            expect_key = False
+            if i < n and s[i] not in ".[":
+                return None
+        elif c == ".":
+            if expect_key:
+                return None
+            i += 1
+            expect_key = True
+            if i >= n:
+                return None
+        else:
+            j = i
+            while j < n and s[j] not in ".[":
+                j += 1
+            toks.append(s[i:j])
+            i = j
+            expect_key = False
+    return toks
+
+
+def resolve(doc, toks):
+    cur = doc
+    for t in toks:
+        if isinstance(t, int):
+            if not isinstance(cur, list) or t >= len(cur):
+                raise KeyError
+            cur = cur[t]
+        else:
+            if not isinstance(cur, dict) or t not in cur:
+                raise KeyError
+            cur = cur[t]
+    return cur
+
+
+def num_str(d):
+    if not d.is_finite():
+        return str(d)
+    if d == 0:
+        return "-0" if d.is_signed() and False else "0"
+    return format(d.normalize(), "f")
+
+
+def dumps(v):
+    if v is None:
+        return "null"
+    if v is True:
+        return "true"
+    if v is False:
+        return "false"
+    if isinstance(v, str):
+        return json.dumps(v, ensure_ascii=False)
+    if isinstance(v, (int, Decimal)):
+        return num_str(Decimal(v))
+    if isinstance(v, list):
+        return "[" + ",".join(dumps(x) for x in v) + "]"
+    return "{" + ",".join(
+        json.dumps(k, ensure_ascii=False) + ":" + dumps(x) for k, x in v.items()
+    ) + "}"
+
+
+def shape(v, budget):
+    if isinstance(v, str):
+        return "string"
+    if v is None:
+        return "null"
+    if isinstance(v, bool):
+        return "boolean"
+    if isinstance(v, (int, Decimal)):
+        return "number"
+    if isinstance(v, list):
+        base = "array[%d]" % len(v)
+        if budget <= 0 or not v:
+            return base
+        return base + " of " + shape(v[0], budget - 1)
+    if budget <= 0:
+        return "object{%d}" % len(v)
+    return "object{" + ", ".join(
+        k + ": " + shape(x, budget - 1) for k, x in v.items()
+    ) + "}"
+
+
+def bad_const(name):
+    raise ValueError("invalid literal " + name)
+
+
+def main():
+    path, file, shape_mode, depth = parse_args(sys.argv[1:])
+    try:
+        if file is None or file == "-":
+            raw = sys.stdin.buffer.read()
+        else:
+            with open(file, "rb") as f:
+                raw = f.read()
+    except OSError as e:
+        die(2, "cannot read input: " + (e.strerror or str(e)))
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError as e:
+        die(2, "invalid JSON: invalid UTF-8 at byte offset %d" % e.start)
+    if text.startswith("﻿"):
+        text = text[1:]
+    try:
+        doc = json.loads(
+            text, parse_float=Decimal, parse_constant=bad_const, strict=True
+        )
+    except json.JSONDecodeError as e:
+        die(2, "invalid JSON: %s at line %d col %d" % (e.msg, e.lineno, e.colno))
+    except ValueError as e:
+        die(2, "invalid JSON: %s at line 1 col 1" % e)
+    except RecursionError:
+        die(2, "invalid JSON: nesting too deep at line 1 col 1")
+
+    toks = parse_path(path)
+    try:
+        if toks is None:
+            raise KeyError
+        val = resolve(doc, toks)
+    except KeyError:
+        die(1, "path not found: " + path)
+
+    if shape_mode:
+        out(shape(val, depth) + "\n")
+    elif isinstance(val, str):
+        out(val + "\n")
+    else:
+        out(dumps(val) + "\n")
+
+
+if __name__ == "__main__":
+    sys.setrecursionlimit(10000)
+    main()

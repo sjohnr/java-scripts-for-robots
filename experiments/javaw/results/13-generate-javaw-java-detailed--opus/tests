@@ -1,0 +1,186 @@
+#!/usr/bin/env -S java --source 28 --enable-preview -ea
+// End-to-end tests for ./javaw. Run from this directory: ./tests
+import module java.base;
+
+record Result(int code, String out, String err) {
+    Result ok(String expected) {
+        assert code == 0 && out.contains(expected) : "expected exit 0 and '" + expected + "', got " + this;
+        return this;
+    }
+    Result fails(String expected) {
+        assert code != 0 && (err + out).contains(expected) : "expected failure with '" + expected + "', got " + this;
+        return this;
+    }
+}
+
+final Path JAVAW = Path.of("javaw").toAbsolutePath();
+Path tmp;
+int passed;
+
+void main() throws Exception {
+    tmp = Files.createTempDirectory("javaw-test").toRealPath();
+    var app = Files.createDirectories(tmp.resolve("app"));
+    Files.writeString(app.resolve("Hello.java"), """
+        void main(String[] args) {
+            IO.println("hello " + List.of(args) + " version=" + System.getProperty("app.version", "1"));
+        }
+        """);
+    buildJar(app);
+
+    test("kebab-case default names", () -> {
+        var names = Map.of("FooBar.java", "run-foo-bar", "HTTPServer.java", "run-http-server",
+            "example1_assert.java", "run-example1-assert", "Example1.java", "run-example1",
+            "Foo__Bar.java", "run-foo-bar", "my.tool name.java", "run-my-tool-name", "Tool.java", "run-tool");
+        names.forEach((in, out) -> javaw(tmp, "-o", "names/", "--force", in).ok("names/" + out));
+        javaw(tmp, "-o", "names/", "--force", "--jar", "my-tool.jar").ok("run-my-tool");
+        javaw(tmp, "-o", "names/", "--force", "--jar", "tool.jar").ok("names/run-tool");
+    });
+
+    test("source launch from another directory, with spaces in args", () -> {
+        javaw(app, "Hello.java").ok("wrote run-hello");
+        assert Files.isExecutable(app.resolve("run-hello"));
+        sh(tmp, Map.of(), "app/run-hello", "a", "b c").ok("hello [a, b c] version=1");
+    });
+
+    test("jar launch, symlinks (relative, chain of two), JAVA_TOOL_OPTIONS", () -> {
+        javaw(app, "--jar", "hello.jar", "--min-java", "21").fails("run-hello already exists");
+        javaw(app, "--jar", "hello.jar", "--min-java", "21", "-o", "run-hello-jar").ok("run-hello-jar");
+        var bin = Files.createDirectories(tmp.resolve("bin"));
+        Files.createSymbolicLink(bin.resolve("hello"), Path.of("../app/run-hello-jar"));
+        Files.createSymbolicLink(bin.resolve("hi"), Path.of("hello"));
+        sh(tmp, Map.of(), "bin/hello", "x").ok("hello [x] version=1");
+        sh(bin, Map.of(), "./hi", "y").ok("hello [y] version=1");
+        sh(Path.of("/"), Map.of("JAVA_TOOL_OPTIONS", "-Dapp.version=2"), bin + "/hi").ok("version=2");
+        if (Files.isExecutable(Path.of("/bin/dash"))) {
+            sh(Path.of("/"), Map.of("JAVA_TOOL_OPTIONS", "-Dapp.version=2"), "/bin/dash", bin + "/hi").ok("version=2");
+        }
+    });
+
+    test("CDPATH exported with a matching relative path, and paths starting with -", () -> {
+        Files.createDirectories(tmp.resolve("decoy/app"));
+        var cdpath = Map.of("CDPATH", tmp.resolve("decoy").toString());
+        sh(tmp, cdpath, "app/run-hello", "z").ok("hello [z]");
+        for (var shell : List.of("/bin/dash", "/bin/ksh")) {  // other POSIX shells, when installed
+            if (Files.isExecutable(Path.of(shell))) sh(tmp, cdpath, shell, "app/run-hello", "z").ok("hello [z]");
+        }
+        Files.createDirectories(tmp.resolve("-dir"));
+        javaw(tmp, "-o", "-dir/", "app/Hello.java").ok("-dir/run-hello");
+        sh(tmp, Map.of(), "/bin/sh", "--", "-dir/run-hello").ok("hello []");  // $0 starts with -
+        sh(tmp, Map.of(), "./-dir/run-hello").ok("hello []");
+    });
+
+    test("relocating the wrapper with its siblings", () -> {
+        Files.move(app, tmp.resolve("moved"));
+        Files.move(tmp.resolve("moved/run-hello"), tmp.resolve("moved/renamed"));
+        sh(Path.of("/"), Map.of(), tmp + "/moved/renamed", "m").ok("hello [m]");
+        Files.move(tmp.resolve("moved/renamed"), tmp.resolve("moved/run-hello"));
+        Files.move(tmp.resolve("moved"), app);
+    });
+
+    test("--min-java, --java-home, version parsing", () -> {
+        var home = System.getProperty("java.home");
+        javaw(app, "-o", "new", "--min-java", "99", "Hello.java").ok("wrote");
+        sh(app, Map.of(), "./new").fails("new: requires Java 99 or newer, found: 28");
+        javaw(app, "-o", "jh", "--java-home", home, "--min-java", "8", "Hello.java").ok("wrote");
+        assert Files.readString(app.resolve("jh")).contains("\"" + home + "/bin/java\" -version");
+        sh(app, Map.of("PATH", "/usr/bin:/bin"), "./jh", "q").ok("hello [q]");
+        javaw(app, "-o", "nojava", "--java-home", "/nonexistent", "--min-java", "8", "Hello.java").ok("wrote");
+        sh(app, Map.of(), "./nojava").fails("requires Java 8 or newer, found: no usable Java");
+        for (var v : List.of("1.8.0_292:8:9", "28-ea:28:29", "17.0.2:17:18")) {
+            var p = v.split(":");
+            var fake = Files.createDirectories(tmp.resolve("jdk-" + p[0] + "/bin"));
+            Files.writeString(fake.resolve("java"), """
+                #!/bin/sh
+                echo 'Picked up JAVA_TOOL_OPTIONS: -Dversion="99"' >&2
+                echo 'openjdk version "%s" 2020-01-01' >&2
+                echo "fake java ran: $*"
+                """.formatted(p[0]));
+            Files.setPosixFilePermissions(fake.resolve("java"), PosixFilePermissions.fromString("rwxr-xr-x"));
+            for (var min : List.of(p[1], p[2])) {
+                javaw(app, "-o", "fake", "--force", "--java-home", fake.getParent().toString(), "--min-java", min, "Hello.java").ok("wrote");
+                var r = sh(app, Map.of(), "./fake");
+                if (min.equals(p[1])) r.ok("fake java ran"); else r.fails("requires Java " + min + " or newer, found: " + p[0]);
+            }
+        }
+    });
+
+    test("--classpath and --jvm-opts", () -> {
+        javaw(app, "-o", "opts", "--classpath", "/x y/*", "--jvm-opts", "-Dapp.version=\"3 4\" -Xmx64m", "Hello.java").ok("wrote");
+        assert Files.readString(app.resolve("opts")).contains("exec java -cp '/x y/*' -Dapp.version=\"3 4\" -Xmx64m \"$dir/Hello.java\" \"$@\"");
+        sh(tmp, Map.of(), "app/opts").ok("version=3 4");
+    });
+
+    test("minimal wrapper: no unused options", () -> {
+        var s = Files.readString(app.resolve("run-hello"));
+        assert s.startsWith("#!/bin/sh\n# Generated by: javaw Hello.java\n") : s;
+        assert !s.contains("version") && !s.contains("-cp") && !s.contains("[[") : s;
+        assert s.contains("exec java \"$dir/Hello.java\" \"$@\"") : s;
+    });
+
+    test("header command is shell-quoted and regenerates the same wrapper", () -> {
+        javaw(app, "-o", "q", "--jvm-opts", "-Dmsg='it''s'", "Hello.java").ok("wrote");
+        var before = Files.readString(app.resolve("q"));
+        var cmd = before.lines().skip(1).findFirst().orElseThrow().replaceFirst("^# Generated by: javaw", JAVAW + " --force");
+        sh(app, Map.of(), "/bin/sh", "-c", cmd).ok("wrote");
+        assert Files.readString(app.resolve("q")).equals(before.replace("javaw -o", "javaw --force -o"));
+    });
+
+    test("several inputs, output directory, overwrite protection", () -> {
+        javaw(tmp, "-o", "multi", "A.java", "B.java").fails("-o must be a directory");
+        javaw(tmp, "-o", "multi/", "A.java", "B.java").ok("multi/run-a").ok("multi/run-b");
+        javaw(tmp, "-o", "multi", "A.java", "B.java").fails("multi/run-a already exists (use --force");
+        javaw(tmp, "-o", "multi", "--force", "A.java", "B.java").ok("multi/run-b");
+        javaw(tmp, "-o", "multi/", "Tool.java", "--jar", "tool.jar").fails("both write");
+    });
+
+    test("CLI errors and help", () -> {
+        javaw(tmp, "--help").ok("Usage: javaw");
+        javaw(tmp).fails("missing input");
+        javaw(tmp, "--bogus", "A.java").fails("unknown option: --bogus");
+        javaw(tmp, "A.java", "-o").fails("missing value for -o");
+        javaw(tmp, "--min-java", "x", "A.java").fails("--min-java needs a positive integer");
+        javaw(tmp, "tool.jar").fails("use --jar");
+    });
+
+    try (var files = Files.walk(tmp)) { files.sorted(Comparator.reverseOrder()).forEach(p -> p.toFile().delete()); }
+    IO.println("\nAll " + passed + " tests passed.");
+}
+
+interface Body { void run() throws Exception; }
+
+void test(String name, Body body) throws Exception {
+    body.run();
+    passed++;
+    IO.println("ok - " + name);
+}
+
+void buildJar(Path app) throws Exception {
+    var classes = app.resolve("classes");
+    var tool = (Function<String, ToolProvider>) n -> ToolProvider.findFirst(n).orElseThrow();
+    assert tool.apply("javac").run(System.out, System.err, "-d", classes.toString(), app.resolve("Hello.java").toString()) == 0;
+    assert tool.apply("jar").run(System.out, System.err, "--create", "--file", app.resolve("hello.jar").toString(),
+        "--main-class", "Hello", "-C", classes.toString(), ".") == 0;
+}
+
+Result javaw(Path cwd, String... args) {
+    return sh(cwd, Map.of(), Stream.concat(Stream.of(JAVAW.toString()), Stream.of(args)).toArray(String[]::new));
+}
+
+Result sh(Path cwd, Map<String, String> env, String... cmd) {
+    try {
+        var pb = new ProcessBuilder(cmd).directory(cwd.toFile());
+        pb.environment().keySet().removeAll(Set.of("CDPATH", "JAVA_TOOL_OPTIONS", "JDK_JAVA_OPTIONS"));
+        pb.environment().putAll(env);
+        var p = pb.start();
+        var err = new CompletableFuture<String>();
+        Thread.startVirtualThread(() -> err.complete(read(p.getErrorStream())));
+        var out = read(p.getInputStream());
+        return new Result(p.waitFor(), out, err.join());
+    } catch (IOException | InterruptedException e) {
+        throw new RuntimeException(e);
+    }
+}
+
+String read(InputStream in) {
+    try (in) { return new String(in.readAllBytes()); } catch (IOException e) { throw new UncheckedIOException(e); }
+}

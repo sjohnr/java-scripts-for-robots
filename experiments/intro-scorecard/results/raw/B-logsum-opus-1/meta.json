@@ -1,0 +1,94 @@
+{
+  "run_id": "B-logsum-opus-1",
+  "condition": "B",
+  "task": "logsum",
+  "model_alias": "opus",
+  "model_id": "claude-opus-5-5",
+  "model_ids_used": [
+    "claude-opus-5-5"
+  ],
+  "replicate": 1,
+  "seed": 20261010,
+  "seed_position": 16,
+  "started": "2026-10-11T00:38:36+00:00",
+  "ended": "2026-10-11T00:40:40+00:00",
+  "wall_s": 123.3,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 9,
+  "duration_ms": 122566,
+  "duration_api_ms": 115969,
+  "tokens": {
+    "input_tokens": 14,
+    "output_tokens": 10141,
+    "cache_creation_input_tokens": 12940,
+    "cache_read_input_tokens": 144619
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 10141,
+      "cacheReadInputTokens": 144619,
+      "cacheCreationInputTokens": 12940,
+      "webSearchRequests": 0,
+      "costUSD": 0.33531979999999995,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2459,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.33531979999999995,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "02ce028f-b1b5-49bb-a28c-8191d2eafd98",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-opus-1",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 3.0,
+    "cost_usd": 0.01461800000000002,
+    "cost_usd_cumulative_reported": 0.34993779999999997,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 6,
+      "cache_creation_input_tokens": 1110,
+      "cache_read_input_tokens": 28050
+    },
+    "subtype": "success",
+    "reply": "./logsum",
+    "run_command": "./logsum",
+    "limit_hits": []
+  },
+  "run_command": "./logsum",
+  "excluded_from_copy": [
+    {
+      "path": "build",
+      "bytes": 7524
+    }
+  ],
+  "prompt": "Build the `logsum` command-line tool described in SPEC.md. Write it in Java.",
+  "claude_args": [
+    "-p",
+    "Build the `logsum` command-line tool described in SPEC.md. Write it in Java.",
+    "--model",
+    "opus",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

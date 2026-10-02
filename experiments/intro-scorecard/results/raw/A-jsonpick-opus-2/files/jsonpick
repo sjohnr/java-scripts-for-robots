@@ -1,0 +1,326 @@
+#!/usr/bin/env python3
+"""jsonpick: extract a value by path from JSON (see SPEC.md)."""
+
+import json
+import math
+import re
+import sys
+
+HELP = """\
+Usage: jsonpick PATH [FILE] [--shape] [--depth N]
+
+Extract a value by path from JSON.
+
+Arguments:
+  PATH         Path to select, e.g. a.b[0].c ("." or "" selects the root)
+  FILE         JSON file to read ("-" or omitted reads stdin)
+
+Flags:
+  --shape      Print a type/array-length summary of the value at PATH
+  --depth N    Levels to describe in --shape mode (default 2; also --depth=N)
+  --help       Show this help and exit
+  --           Treat all following arguments as positional
+"""
+
+
+class UsageError(Exception):
+    pass
+
+
+class JSONError(Exception):
+    pass
+
+
+class Num:
+    """A JSON number, keeping its source text for exotic values."""
+
+    __slots__ = ("text", "value")
+
+    def __init__(self, text, value):
+        self.text = text
+        self.value = value
+
+
+class Obj:
+    """A JSON object as an ordered list of (key, value) pairs."""
+
+    __slots__ = ("pairs",)
+
+    def __init__(self, pairs):
+        self.pairs = pairs
+
+    def get(self, key):
+        found = False
+        result = None
+        for k, v in self.pairs:  # last duplicate wins
+            if k == key:
+                found, result = True, v
+        return found, result
+
+
+def _parse_int(text):
+    return Num(text, int(text))
+
+
+def _parse_float(text):
+    return Num(text, float(text))
+
+
+def _reject_constant(name):
+    raise ValueError(name)
+
+
+def parse_json(data):
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError as e:
+        raise JSONError("invalid UTF-8 at byte offset %d" % e.start)
+    if text.startswith("﻿"):
+        text = text[1:]
+    decoder = json.JSONDecoder(
+        object_pairs_hook=Obj,
+        parse_int=_parse_int,
+        parse_float=_parse_float,
+        parse_constant=_reject_constant,
+    )
+    try:
+        return decoder.decode(text)
+    except json.JSONDecodeError as e:
+        raise JSONError("%s at line %d, column %d" % (e.msg, e.lineno, e.colno))
+    except ValueError as e:
+        # NaN / Infinity literals; locate the first occurrence for the message.
+        name = str(e)
+        line, col = _locate(text, name)
+        raise JSONError("invalid literal %s at line %d, column %d" % (name, line, col))
+    except RecursionError:
+        raise JSONError("nesting too deep at line 1, column 1")
+
+
+def _locate(text, needle):
+    idx = max(text.find(needle), 0)
+    line = text.count("\n", 0, idx) + 1
+    col = idx - (text.rfind("\n", 0, idx) + 1) + 1
+    return line, col
+
+
+_SEGMENT = re.compile(r"\.([^.\[]+)|\[(\d+)\]|^([^.\[]+)")
+
+
+def parse_path(path):
+    """Return a list of str keys / int indices, or raise UsageError."""
+    if path in ("", "."):
+        return []
+    # ".a" is handled by the "\.key" pattern; ".[0]" just drops the root dot.
+    rest = path[1:] if path.startswith(".[") else path
+    steps = []
+    pos = 0
+    while pos < len(rest):
+        m = _SEGMENT.match(rest, pos)
+        if m is None or (m.group(3) is not None and pos != 0):
+            raise UsageError("invalid path: %s" % path)
+        if m.group(1) is not None:
+            steps.append(m.group(1))
+        elif m.group(2) is not None:
+            steps.append(int(m.group(2)))
+        else:
+            steps.append(m.group(3))
+        pos = m.end()
+    return steps
+
+
+def resolve(doc, steps):
+    cur = doc
+    for step in steps:
+        if isinstance(step, int):
+            if not isinstance(cur, list) or step >= len(cur):
+                return False, None
+            cur = cur[step]
+        else:
+            if not isinstance(cur, Obj):
+                return False, None
+            found, cur = cur.get(step)
+            if not found:
+                return False, None
+    return True, cur
+
+
+def fmt_number(n):
+    v = n.value
+    if isinstance(v, int):
+        return str(v)
+    if math.isinf(v):
+        return n.text  # out of float range: keep the source literal
+    if v.is_integer() and abs(v) < 1e16:
+        return "-0" if v == 0 and math.copysign(1, v) < 0 else str(int(v))
+    r = repr(v)
+    if "e" in r:
+        mant, exp = r.split("e")
+        r = "%se%d" % (mant, int(exp))
+    return r
+
+
+def _escape_surrogates(s):
+    # Lone surrogates cannot be encoded as UTF-8; keep them as JSON escapes.
+    return re.sub(r"[\ud800-\udfff]", lambda m: "\\u%04x" % ord(m.group()), s)
+
+
+def fmt_string(s):
+    return _escape_surrogates(json.dumps(s, ensure_ascii=False))
+
+
+def to_compact(v, out):
+    if isinstance(v, Obj):
+        out.append("{")
+        for i, (k, val) in enumerate(v.pairs):
+            if i:
+                out.append(",")
+            out.append(fmt_string(k))
+            out.append(":")
+            to_compact(val, out)
+        out.append("}")
+    elif isinstance(v, list):
+        out.append("[")
+        for i, val in enumerate(v):
+            if i:
+                out.append(",")
+            to_compact(val, out)
+        out.append("]")
+    elif isinstance(v, str):
+        out.append(fmt_string(v))
+    elif isinstance(v, Num):
+        out.append(fmt_number(v))
+    elif v is True:
+        out.append("true")
+    elif v is False:
+        out.append("false")
+    else:
+        out.append("null")
+
+
+def render_value(v):
+    if isinstance(v, str):
+        return v.encode("utf-8", "replace") + b"\n"
+    out = []
+    to_compact(v, out)
+    return "".join(out).encode("utf-8") + b"\n"
+
+
+def shape(v, budget):
+    if isinstance(v, str):
+        return "string"
+    if isinstance(v, Num):
+        return "number"
+    if v is True or v is False:
+        return "boolean"
+    if v is None:
+        return "null"
+    if isinstance(v, list):
+        if not v or budget <= 0:
+            return "array[%d]" % len(v)
+        return "array[%d] of %s" % (len(v), shape(v[0], budget - 1))
+    if not v.pairs:
+        return "object{}"
+    if budget <= 0:
+        return "object{%d keys}" % len(v.pairs)
+    parts = ["%s: %s" % (k, shape(val, budget - 1)) for k, val in v.pairs]
+    return "object{%s}" % ", ".join(parts)
+
+
+def parse_args(argv):
+    if "--help" in argv[: argv.index("--") if "--" in argv else len(argv)]:
+        return None
+    positional = []
+    shape_mode = False
+    depth = 2
+    i = 0
+    only_positional = False
+    while i < len(argv):
+        arg = argv[i]
+        if only_positional or arg == "-" or not arg.startswith("-"):
+            positional.append(arg)
+        elif arg == "--":
+            only_positional = True
+        elif arg == "--shape":
+            shape_mode = True
+        elif arg == "--depth" or arg.startswith("--depth="):
+            if arg == "--depth":
+                i += 1
+                if i >= len(argv):
+                    raise UsageError("--depth requires a value")
+                value = argv[i]
+            else:
+                value = arg[len("--depth="):]
+            if not re.fullmatch(r"[0-9]+", value):
+                raise UsageError("invalid --depth value: %s" % value)
+            depth = int(value)
+        else:
+            raise UsageError("unknown flag: %s" % arg)
+        i += 1
+    if not positional:
+        raise UsageError("missing required argument: PATH")
+    if len(positional) > 2:
+        raise UsageError("unexpected argument: %s" % positional[2])
+    path = positional[0]
+    file = positional[1] if len(positional) == 2 else "-"
+    return path, file, shape_mode, depth
+
+
+def read_input(file):
+    if file == "-":
+        return sys.stdin.buffer.read()
+    try:
+        with open(file, "rb") as f:
+            return f.read()
+    except OSError as e:
+        raise UsageError("cannot read %s: %s" % (file, e.strerror or e))
+
+
+def err(msg, code):
+    sys.stderr.buffer.write(("error: %s\n" % msg).encode("utf-8", "replace"))
+    sys.stderr.buffer.flush()
+    return code
+
+
+def main(argv):
+    try:
+        args = parse_args(argv)
+        if args is None:
+            sys.stdout.buffer.write(HELP.encode("utf-8"))
+            return 0
+        path, file, shape_mode, depth = args
+        steps = parse_path(path)
+        data = read_input(file)
+    except UsageError as e:
+        msg = str(e)
+        if msg.startswith("unknown flag: "):
+            sys.stderr.buffer.write((msg + "\n").encode("utf-8", "replace"))
+            return 2
+        return err(msg, 2)
+
+    try:
+        doc = parse_json(data)
+    except JSONError as e:
+        return err("invalid JSON: %s" % e, 2)
+
+    found, value = resolve(doc, steps)
+    if not found:
+        return err("path not found: %s" % path, 1)
+
+    if shape_mode:
+        out = (shape(value, depth) + "\n").encode("utf-8", "replace")
+    else:
+        out = render_value(value)
+    sys.stdout.buffer.write(out)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.setrecursionlimit(100000)
+    try:
+        code = main(sys.argv[1:])
+        sys.stdout.flush()
+    except BrokenPipeError:
+        code = 0
+    except KeyboardInterrupt:
+        code = 2
+    sys.exit(code)

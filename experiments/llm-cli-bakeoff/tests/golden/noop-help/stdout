@@ -1,0 +1,2 @@
+usage: noop
+prints "ok" and exits 0

@@ -1,0 +1,1514 @@
+{
+  "duration_api_ms": 79475,
+  "stop_reason": "end_turn",
+  "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+  "total_cost_usd": 0.2169176,
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 22249,
+    "cache_read_input_tokens": 187538,
+    "output_tokens": 9039,
+    "output_tokens_details": {
+      "thinking_tokens": 5513
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22249,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 182,
+        "cache_read_input_tokens": 39945,
+        "cache_creation_input_tokens": 798,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 798
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 12,
+      "outputTokens": 9039,
+      "cacheReadInputTokens": 187538,
+      "cacheCreationInputTokens": 22249,
+      "webSearchRequests": 0,
+      "costUSD": 0.2169176,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 5513,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 7,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "All behaviors match the spec: exit code 2 with the correct error shapes, `--help` on stdout with exit 0, filters applied before stats, empty `top errors:` line when there are no ERROR lines, and normalization grouping correctly. The `logsum` script is implemented at `/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum` (executable, no external dependencies, hand-rolled arg parsing, streams input line-by-line).",
+  "ttft_ms": 1148,
+  "type": "result",
+  "duration_ms": 80324,
+  "uuid": "6e274dc5-45ae-4b48-91ca-7edf428a3233",
+  "ttft_stream_ms": 774,
+  "time_to_request_ms": 36,
+  "first_content_frame_ms": 774,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "_events": [
+    {
+      "type": "system",
+      "subtype": "init",
+      "cwd": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi",
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "tools": [
+        "Task",
+        "Bash",
+        "CronCreate",
+        "CronDelete",
+        "CronList",
+        "DesignSync",
+        "Edit",
+        "EnterWorktree",
+        "ExitWorktree",
+        "Glob",
+        "Grep",
+        "ListAgents",
+        "Monitor",
+        "NotebookEdit",
+        "PushNotification",
+        "Read",
+        "RemoteTrigger",
+        "ReportFindings",
+        "ScheduleWakeup",
+        "SendMessage",
+        "Skill",
+        "TaskStop",
+        "ToolSearch",
+        "WebFetch",
+        "WebSearch",
+        "Write"
+      ],
+      "mcp_servers": [],
+      "model": "claude-sonnet-5",
+      "permissionMode": "default",
+      "slash_commands": [
+        "design",
+        "design-sync",
+        "dataviz",
+        "update-config",
+        "verify",
+        "debug",
+        "code-review",
+        "simplify",
+        "batch",
+        "fewer-permission-prompts",
+        "doctor",
+        "loop",
+        "schedule",
+        "claude-api",
+        "run",
+        "run-skill-generator",
+        "advisor",
+        "agents",
+        "auto-mode-setup",
+        "autocompact",
+        "clear",
+        "color",
+        "compact",
+        "config",
+        "output-style",
+        "context",
+        "effort",
+        "fast",
+        "heapdump",
+        "init",
+        "mcp",
+        "import",
+        "model",
+        "__remote-workflow",
+        "workflow-launch-exec",
+        "reload-plugins",
+        "reload-skills",
+        "rename",
+        "ultrareview",
+        "security-review",
+        "usage-credits",
+        "extra-usage",
+        "usage",
+        "insights",
+        "recap",
+        "skill-doctor",
+        "goal",
+        "design-consent",
+        "design-revoke",
+        "list-agents",
+        "team-onboarding"
+      ],
+      "terminal_slash_commands": [
+        "doctor",
+        "color",
+        "reload-plugins"
+      ],
+      "apiKeySource": "none",
+      "claude_code_version": "2.1.278",
+      "output_style": "default",
+      "agents": [
+        "claude",
+        "Explore",
+        "general-purpose",
+        "Plan",
+        "statusline-setup"
+      ],
+      "skills": [
+        "design",
+        "design-sync",
+        "dataviz",
+        "update-config",
+        "verify",
+        "debug",
+        "code-review",
+        "simplify",
+        "batch",
+        "fewer-permission-prompts",
+        "doctor",
+        "loop",
+        "schedule",
+        "claude-api",
+        "run",
+        "run-skill-generator"
+      ],
+      "plugins": [
+        {
+          "name": "agents-md",
+          "path": "builtin",
+          "source": "agents-md@builtin"
+        }
+      ],
+      "capabilities": [
+        "interrupt_receipt_v1",
+        "interrupt_cancel_queued_v1",
+        "msg_lifecycle_v1"
+      ],
+      "analytics_disabled": false,
+      "product_feedback_disabled": false,
+      "uuid": "1efaa344-7bad-4a3a-ae58-1b7e20cfbd9e",
+      "memory_paths": {
+        "auto": "/Users/sriesenberg/.claude/projects/-private-var-folders-kg-lwnx-xvd1yd828s14w-cg--40000gn-T-agent5b-logsum-1--zuofi/memory/"
+      },
+      "messaging_socket_path": "/tmp/cc-socks/9673.sock",
+      "fast_mode_state": "off",
+      "fast_mode_disabled_reason": "sdk_opt_in_required"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5EhzqeL9c6U31619gF",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "EqwCCqgBCBIYAipAhBPmhkjcUK0PLSoYg7j4JDTSroyBu+odTpBHWoOCzzCczPdfILpcx/GDoh6r+2Buefh7/cFxDNJidl2LqmsabjIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ5OGE3N2NhOC0zNDYzLTRlOGYtYTViYy1iMGZkYTJiZTEzNTlyENQFFdbvOs9TGzbDqN4EPPuIAQGoAZarwNUGsAECEgwqqQEAhYUhE3PkBG0aDAdA/XBaXaDIKiPqcCIwuTd6nOb2aTUKSOoGODF2Mubsifwg00WK1HcnM9i8IDR/S3Fxl201rrJrRPpMFkBwKjH4iaJcLIOkm9wxF5SF+6L95QTa0q9Gl7JBMdqkA5Ftx0MC/eBqXG0yiEARHUFVPE6qGAE="
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 9132,
+          "cache_read_input_tokens": 18494,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 9132
+          },
+          "output_tokens": 7,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "c721738c-6d69-4674-b55c-649dca1d3ab1",
+      "timestamp": "2026-09-20T17:19:18.660Z",
+      "request_id": "req_011CfF5EhmwHWpC1gEH8LUxe"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5EhzqeL9c6U31619gF",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_012orUvSL4uedEiXZCAXc3uL",
+            "name": "Read",
+            "input": {
+              "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/spec.md"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 9132,
+          "cache_read_input_tokens": 18494,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 9132
+          },
+          "output_tokens": 7,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "18552a1d-0b40-447a-866f-aa19f875f65d",
+      "timestamp": "2026-09-20T17:19:19.053Z",
+      "request_id": "req_011CfF5EhmwHWpC1gEH8LUxe",
+      "wire_tool_inputs": {
+        "toolu_012orUvSL4uedEiXZCAXc3uL": {
+          "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/spec.md"
+        }
+      }
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_012orUvSL4uedEiXZCAXc3uL",
+            "type": "tool_result",
+            "content": "1\t# Cross-CLI conventions\n2\t\n3\tThese rules apply to every CLI in this suite (`noop`, `jarsrc`, `logsum`, `treesum`, `jsonpick`) unless a CLI's own spec overrides them.\n4\t\n5\t## General\n6\t\n7\t- All text output is UTF-8, LF line endings (no CRLF, even on any platform), no trailing whitespace on any line.\n8\t- No implementation may print anything to stdout or stderr beyond what its spec defines as output. In particular: no JVM/Node/Go/Python banners, no \"Picked up JAVA_TOOL_OPTIONS\" notices, no deprecation warnings on the success path. Any unavoidable noise from a given execution mode is a measured finding (Phase 3), not something to suppress by redirecting streams inside the program.\n9\t- Exit code `0` = success. Exit code `1` = a well-formed \"not found\" / \"no results\" condition described in the CLI's own spec. Exit code `2` = usage error (bad flags, missing required argument, unparsable input). No other exit codes are used.\n10\t- `--help` on any CLI prints a usage message to stdout and exits 0. Exact wording is not byte-compared across languages (natural per-language help text is fine) but must list every flag the CLI supports.\n11\t- Argument parsing is hand-rolled (no argparse/commander/picocli/etc.) so that dependency footprint stays comparable across languages. Unknown flags are a usage error (exit 2) with message `unknown flag: <flag>` on stderr.\n12\t- All implementations are single-threaded by default. Any parallel variant is a separate, clearly labeled extra (e.g. `treesum-parallel`), never the default benchmarked path.\n13\t\n14\t## Numeric-segment version comparison (used by `jarsrc`)\n15\t\n16\tGiven two version strings, split each on `.` and `-` (both are segment separators) into segments. Compare segments left to right:\n17\t- If both segments parse as non-negative base-10 integers (no leading `+`, optional leading zeros allowed and ignored numerically), compare numerically.\n18\t- Otherwise compare the two segments as plain byte strings (ordinal comparison).\n19\t- If all compared segments are equal and one version has more segments than the other, the version with more segments is greater (e.g. `1.2` < `1.2.0`... note: `1.2.0` has an extra numeric `0` segment, so `1.2` < `1.2.0`).\n20\t- `1.2.0` > `1.2` ; `1.10.0` > `1.9.0` ; `1.0.0-beta` < `1.0.0` (`\"beta\"` is not a valid non-negative integer so falls back to string compare only if the other side is also non-numeric at that position \u2014 but here segment 4 exists on the left only after equal 1/0/0 prefix, so shorter-wins... wait `1.0.0-beta` splits to [1,0,0,beta], `1.0.0` splits to [1,0,0]; first 3 segments equal, left has an extra segment, so `1.0.0-beta` > `1.0.0` by the \"more segments\" rule). This is intentionally the documented, if slightly surprising, behavior \u2014 implementations must match it exactly, not attempt semver.\n21\t\n22\t\"Highest version\" = the maximum element of the version set under this ordering. Ties (two identical version strings for the same group:artifact) are not expected in fixtures; if they occur, either is acceptable and this is noted as an untested edge case.\n23\t\n24\t## Timestamps\n25\t\n26\tWhere a timestamp is printed (`logsum`), format is `YYYY-MM-DDTHH:MM:SS` (no fractional seconds, no timezone suffix \u2014 inputs are assumed to already be in one consistent zone and are passed through verbatim after parsing, not converted).\n27\t\n28\t## Error message shape\n29\t\n30\tEvery \"not found\" style error is exactly one line to stderr, of the form:\n31\t\n32\t```\n33\terror: <what was not found>\n34\t```\n35\t\n36\toptionally followed on the same line by suggestions in the form:\n37\t\n38\t```\n39\terror: <what was not found> (did you mean: <s1>, <s2>, <s3>?)\n40\t```\n41\t\n42\tSuggestions are prefix matches against known names, case-sensitive, sorted lexicographically, capped at 3. If there are zero prefix matches, the `(did you mean...)` clause is omitted entirely (no empty parens).\n43\t\n44\t## Golden-file testing\n45\t\n46\tEvery case in `tests/cases/` specifies: CLI, args, stdin (optional), and expects stdout, stderr, and exit code to match golden files byte-for-byte across every implementation of that CLI.\n47\t"
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "01439576-1170-4324-8f15-d4fdec2d5800",
+      "timestamp": "2026-09-20T17:19:19.068Z",
+      "tool_use_result": {
+        "type": "text",
+        "file": {
+          "filePath": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/spec.md",
+          "content": "# Cross-CLI conventions\n\nThese rules apply to every CLI in this suite (`noop`, `jarsrc`, `logsum`, `treesum`, `jsonpick`) unless a CLI's own spec overrides them.\n\n## General\n\n- All text output is UTF-8, LF line endings (no CRLF, even on any platform), no trailing whitespace on any line.\n- No implementation may print anything to stdout or stderr beyond what its spec defines as output. In particular: no JVM/Node/Go/Python banners, no \"Picked up JAVA_TOOL_OPTIONS\" notices, no deprecation warnings on the success path. Any unavoidable noise from a given execution mode is a measured finding (Phase 3), not something to suppress by redirecting streams inside the program.\n- Exit code `0` = success. Exit code `1` = a well-formed \"not found\" / \"no results\" condition described in the CLI's own spec. Exit code `2` = usage error (bad flags, missing required argument, unparsable input). No other exit codes are used.\n- `--help` on any CLI prints a usage message to stdout and exits 0. Exact wording is not byte-compared across languages (natural per-language help text is fine) but must list every flag the CLI supports.\n- Argument parsing is hand-rolled (no argparse/commander/picocli/etc.) so that dependency footprint stays comparable across languages. Unknown flags are a usage error (exit 2) with message `unknown flag: <flag>` on stderr.\n- All implementations are single-threaded by default. Any parallel variant is a separate, clearly labeled extra (e.g. `treesum-parallel`), never the default benchmarked path.\n\n## Numeric-segment version comparison (used by `jarsrc`)\n\nGiven two version strings, split each on `.` and `-` (both are segment separators) into segments. Compare segments left to right:\n- If both segments parse as non-negative base-10 integers (no leading `+`, optional leading zeros allowed and ignored numerically), compare numerically.\n- Otherwise compare the two segments as plain byte strings (ordinal comparison).\n- If all compared segments are equal and one version has more segments than the other, the version with more segments is greater (e.g. `1.2` < `1.2.0`... note: `1.2.0` has an extra numeric `0` segment, so `1.2` < `1.2.0`).\n- `1.2.0` > `1.2` ; `1.10.0` > `1.9.0` ; `1.0.0-beta` < `1.0.0` (`\"beta\"` is not a valid non-negative integer so falls back to string compare only if the other side is also non-numeric at that position \u2014 but here segment 4 exists on the left only after equal 1/0/0 prefix, so shorter-wins... wait `1.0.0-beta` splits to [1,0,0,beta], `1.0.0` splits to [1,0,0]; first 3 segments equal, left has an extra segment, so `1.0.0-beta` > `1.0.0` by the \"more segments\" rule). This is intentionally the documented, if slightly surprising, behavior \u2014 implementations must match it exactly, not attempt semver.\n\n\"Highest version\" = the maximum element of the version set under this ordering. Ties (two identical version strings for the same group:artifact) are not expected in fixtures; if they occur, either is acceptable and this is noted as an untested edge case.\n\n## Timestamps\n\nWhere a timestamp is printed (`logsum`), format is `YYYY-MM-DDTHH:MM:SS` (no fractional seconds, no timezone suffix \u2014 inputs are assumed to already be in one consistent zone and are passed through verbatim after parsing, not converted).\n\n## Error message shape\n\nEvery \"not found\" style error is exactly one line to stderr, of the form:\n\n```\nerror: <what was not found>\n```\n\noptionally followed on the same line by suggestions in the form:\n\n```\nerror: <what was not found> (did you mean: <s1>, <s2>, <s3>?)\n```\n\nSuggestions are prefix matches against known names, case-sensitive, sorted lexicographically, capped at 3. If there are zero prefix matches, the `(did you mean...)` clause is omitted entirely (no empty parens).\n\n## Golden-file testing\n\nEvery case in `tests/cases/` specifies: CLI, args, stdin (optional), and expects stdout, stderr, and exit code to match golden files byte-for-byte across every implementation of that CLI.\n",
+          "numLines": 47,
+          "startLine": 1,
+          "totalLines": 47
+        }
+      }
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5EhzqeL9c6U31619gF",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01H95e8jt5hLpQQZHep3Pj5t",
+            "name": "Read",
+            "input": {
+              "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum-spec.md"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 9132,
+          "cache_read_input_tokens": 18494,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 9132
+          },
+          "output_tokens": 7,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "f4931b51-c77b-4944-9ab9-1d229892aad1",
+      "timestamp": "2026-09-20T17:19:19.637Z",
+      "request_id": "req_011CfF5EhmwHWpC1gEH8LUxe",
+      "wire_tool_inputs": {
+        "toolu_01H95e8jt5hLpQQZHep3Pj5t": {
+          "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum-spec.md"
+        }
+      }
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_01H95e8jt5hLpQQZHep3Pj5t",
+            "type": "tool_result",
+            "content": "1\t# logsum\n2\t\n3\tPurpose: streaming summary of a log file (or stdin), no full-file buffering required for correctness (implementations should stream but this is not separately conformance-tested beyond correctness on large fixtures completing in reasonable memory).\n4\t\n5\t## Usage\n6\t\n7\t```\n8\tlogsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n9\t```\n10\t\n11\t`FILE` omitted or `-` means read stdin. `--top N` defaults to 5.\n12\t\n13\t## Input line format\n14\t\n15\tEach line: `TIMESTAMP LEVEL MESSAGE` where TIMESTAMP is `YYYY-MM-DDTHH:MM:SS`, LEVEL is one of `DEBUG`, `INFO`, `WARN`, `ERROR` (case-sensitive, exactly these tokens), and MESSAGE is the remainder of the line (may contain spaces). Fields are separated by single spaces (TIMESTAMP, then one space, then LEVEL, then one space, then MESSAGE \u2014 MESSAGE is everything after that third token starts, verbatim including any internal multiple spaces).\n16\t\n17\tLines that do not match this format (fewer than 3 whitespace-separated tokens, bad timestamp, or unrecognized level) are silently skipped and do not count toward any statistic. This is intentional \u2014 logsum is best-effort against messy real logs, not a strict parser.\n18\t\n19\t## Filters\n20\t\n21\t`--since TIMESTAMP`: only consider lines with TIMESTAMP >= the given value (plain string comparison is sufficient since the format is fixed-width and lexicographically ordered). `--level LEVEL`: only consider lines at exactly that level. Filters apply before all statistics below, including first/last timestamp.\n22\t\n23\t## Message normalization (for top-N grouping only, not for display)\n24\t\n25\tTo group similar ERROR-class... (see below) messages, normalize by applying these regex replacements in order to MESSAGE before grouping (display uses the ORIGINAL first-seen message for that group, not the normalized form):\n26\t\n27\t1. UUIDs: `[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}` -> `<uuid>`\n28\t2. Hex blobs of 6+ hex digits (word-boundary delimited, must contain at least one letter a-f/A-F to avoid eating plain decimal numbers): `\\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\\b` -> `<hex>`\n29\t3. Any remaining run of digits, 1 or more: `[0-9]+` -> `<num>`\n30\t\n31\tApply in that exact order (UUID pattern first, so a UUID is not partially eaten by the hex/digit rules first).\n32\t\n33\t## Output (to stdout, no output to stderr on success)\n34\t\n35\t```\n36\ttotal: <N>\n37\tby level: DEBUG=<a> INFO=<b> WARN=<c> ERROR=<d>\n38\tfirst: <timestamp or \"n/a\">\n39\tlast: <timestamp or \"n/a\">\n40\ttop errors:\n41\t  <count> <message>\n42\t  <count> <message>\n43\t  ...\n44\t```\n45\t\n46\t- `total` = count of all lines that passed parsing and filters (any level).\n47\t- `by level` always lists all four levels in that fixed order, `=0` for levels with no lines.\n48\t- `first`/`last` = the timestamp of the first and last (by input order, not sorted) line that passed filters; `n/a` if total is 0.\n49\t- `top errors`: only lines at level ERROR are eligible. Group by normalized message, count occurrences, sort by count descending then by the displayed (original, first-seen) message ascending for ties. Print top N groups (default 5). If fewer than N distinct groups exist, print all of them. If there are zero ERROR lines, print `top errors:` with no lines after it (not omitted).\n50\t- Each top-errors line is two-space indented: `  <count> <message>`.\n51\t\n52\t## Errors\n53\t\n54\tBad `--since` (unparsable timestamp) or bad `--level` (not one of the four): exit 2, stderr `error: invalid value for --since: <value>` (or `--level`). File given but not found: exit 2, stderr `error: cannot read <path>`.\n55\t\n56\t## `--help`\n57\t\n58\tLists FILE, `--since`, `--level`, `--top`. Exit 0.\n59\t"
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "466bf5ee-5472-47e8-8227-21091a0d3128",
+      "timestamp": "2026-09-20T17:19:19.646Z",
+      "tool_use_result": {
+        "type": "text",
+        "file": {
+          "filePath": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum-spec.md",
+          "content": "# logsum\n\nPurpose: streaming summary of a log file (or stdin), no full-file buffering required for correctness (implementations should stream but this is not separately conformance-tested beyond correctness on large fixtures completing in reasonable memory).\n\n## Usage\n\n```\nlogsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n```\n\n`FILE` omitted or `-` means read stdin. `--top N` defaults to 5.\n\n## Input line format\n\nEach line: `TIMESTAMP LEVEL MESSAGE` where TIMESTAMP is `YYYY-MM-DDTHH:MM:SS`, LEVEL is one of `DEBUG`, `INFO`, `WARN`, `ERROR` (case-sensitive, exactly these tokens), and MESSAGE is the remainder of the line (may contain spaces). Fields are separated by single spaces (TIMESTAMP, then one space, then LEVEL, then one space, then MESSAGE \u2014 MESSAGE is everything after that third token starts, verbatim including any internal multiple spaces).\n\nLines that do not match this format (fewer than 3 whitespace-separated tokens, bad timestamp, or unrecognized level) are silently skipped and do not count toward any statistic. This is intentional \u2014 logsum is best-effort against messy real logs, not a strict parser.\n\n## Filters\n\n`--since TIMESTAMP`: only consider lines with TIMESTAMP >= the given value (plain string comparison is sufficient since the format is fixed-width and lexicographically ordered). `--level LEVEL`: only consider lines at exactly that level. Filters apply before all statistics below, including first/last timestamp.\n\n## Message normalization (for top-N grouping only, not for display)\n\nTo group similar ERROR-class... (see below) messages, normalize by applying these regex replacements in order to MESSAGE before grouping (display uses the ORIGINAL first-seen message for that group, not the normalized form):\n\n1. UUIDs: `[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}` -> `<uuid>`\n2. Hex blobs of 6+ hex digits (word-boundary delimited, must contain at least one letter a-f/A-F to avoid eating plain decimal numbers): `\\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\\b` -> `<hex>`\n3. Any remaining run of digits, 1 or more: `[0-9]+` -> `<num>`\n\nApply in that exact order (UUID pattern first, so a UUID is not partially eaten by the hex/digit rules first).\n\n## Output (to stdout, no output to stderr on success)\n\n```\ntotal: <N>\nby level: DEBUG=<a> INFO=<b> WARN=<c> ERROR=<d>\nfirst: <timestamp or \"n/a\">\nlast: <timestamp or \"n/a\">\ntop errors:\n  <count> <message>\n  <count> <message>\n  ...\n```\n\n- `total` = count of all lines that passed parsing and filters (any level).\n- `by level` always lists all four levels in that fixed order, `=0` for levels with no lines.\n- `first`/`last` = the timestamp of the first and last (by input order, not sorted) line that passed filters; `n/a` if total is 0.\n- `top errors`: only lines at level ERROR are eligible. Group by normalized message, count occurrences, sort by count descending then by the displayed (original, first-seen) message ascending for ties. Print top N groups (default 5). If fewer than N distinct groups exist, print all of them. If there are zero ERROR lines, print `top errors:` with no lines after it (not omitted).\n- Each top-errors line is two-space indented: `  <count> <message>`.\n\n## Errors\n\nBad `--since` (unparsable timestamp) or bad `--level` (not one of the four): exit 2, stderr `error: invalid value for --since: <value>` (or `--level`). File given but not found: exit 2, stderr `error: cannot read <path>`.\n\n## `--help`\n\nLists FILE, `--since`, `--level`, `--top`. Exit 0.\n",
+          "numLines": 59,
+          "startLine": 1,
+          "totalLines": 59
+        }
+      }
+    },
+    {
+      "type": "rate_limit_event",
+      "rate_limit_info": {
+        "status": "allowed",
+        "resetsAt": 1789938600,
+        "rateLimitType": "five_hour",
+        "overageStatus": "rejected",
+        "overageDisabledReason": "org_level_disabled",
+        "isUsingOverage": false,
+        "unifiedWindows": {
+          "five_hour": {
+            "utilization": 0.16,
+            "resetsAt": 1789938600
+          },
+          "seven_day": {
+            "utilization": 0.1,
+            "resetsAt": 1789948800
+          }
+        }
+      },
+      "uuid": "1be45b83-8751-4baa-8a48-497fbb66d5c1",
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 50,
+      "estimated_tokens_delta": 50,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "e907f43a-a335-43df-9b1c-49e78b951c4f"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 144,
+      "estimated_tokens_delta": 94,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "46b74f1d-a78b-4f67-b972-9cebea04b430"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5EsJg8q4GK3Koj6QQL",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "ErsECqgBCBIYAipAbof9JBOnBvsOVJXgphkvz7yp+6r0Zr7qm5GbgwJi7i/BwLZsEUMK2gMFIK9DK0JTUY2TeXiY48L6D44wOEmpxTIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ5OGE3N2NhOC0zNDYzLTRlOGYtYTViYy1iMGZkYTJiZTEzNTlyENQFFdbvOs9TGzbDqN4EPPuIAQGoAZmrwNUGsAECEgwKma3a71wIY7KqjMUaDMijrwBKfeilyVsA4CIwd9lpCyfAthVOSUETix/PcI5CSIrLj4E6nXagakpvaVSMatKU58mPH0LCrJnkrPcCKr8CxHfruqs/5FGW5eLTKR2Ant+fXWr0KAM4PAmmETcgPLm0ZqsGntr8IqSO7gAszL6icz2jyd0uFHGk2J93zGu9bV7dm9guU/8xrryqnAcAoHzuuN9+j2tDGAy3mhwK45vxOHGFTtcuAR13erherJC12gH/si8UW78BcWz6rq0M2RY+T9SYhWeRhgvrZmjBe5xSNMUn17BA2Ab3mBiAhF51rwUFH5dFrSmMzCP5A9TpWl8akaQM1WkdMiR37oMcGR5oT4ua3YrOgHMKnfwpL185+W1aR0NaBj+VxU1IFJA7RUe0jwMdDzQVaWunhgJXDrhhVv+lGuKFc0aYPHIzS+Xp1+jGnV6kHfkU7ESAF5YemEPG5uhbSQnpE8SMgRH7eaV1HolbCoxuvHhC6g52y6hnpiOHjS3fiZQcRPS5W/lL9xgB"
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 3473,
+          "cache_read_input_tokens": 27626,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3473
+          },
+          "output_tokens": 6,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "ceb8eda1-5b0a-41a5-885a-96d5297a2368",
+      "timestamp": "2026-09-20T17:19:21.422Z",
+      "request_id": "req_011CfF5ErpeoZz7RUfExe5eW"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5EsJg8q4GK3Koj6QQL",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01BJfQtS9xG9EajXBCiGQEjM",
+            "name": "Bash",
+            "input": {
+              "command": "ls -la /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/",
+              "description": "List directory contents"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 3473,
+          "cache_read_input_tokens": 27626,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3473
+          },
+          "output_tokens": 6,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "06152fd1-cb4d-4dc5-9fe4-38869009006f",
+      "timestamp": "2026-09-20T17:19:22.066Z",
+      "request_id": "req_011CfF5ErpeoZz7RUfExe5eW",
+      "wire_tool_inputs": {
+        "toolu_01BJfQtS9xG9EajXBCiGQEjM": {
+          "command": "ls -la /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/",
+          "description": "List directory contents"
+        }
+      }
+    },
+    {
+      "type": "rate_limit_event",
+      "rate_limit_info": {
+        "status": "allowed",
+        "resetsAt": 1789938600,
+        "rateLimitType": "five_hour",
+        "overageStatus": "rejected",
+        "overageDisabledReason": "org_level_disabled",
+        "isUsingOverage": false,
+        "unifiedWindows": {
+          "five_hour": {
+            "utilization": 0.17,
+            "resetsAt": 1789938600
+          },
+          "seven_day": {
+            "utilization": 0.1,
+            "resetsAt": 1789948800
+          }
+        }
+      },
+      "uuid": "5d5bcd5f-fa95-46a4-8e41-4b8d26d0ba7b",
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61"
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_01BJfQtS9xG9EajXBCiGQEjM",
+            "type": "tool_result",
+            "content": "total 16\ndrwx------@   4 sriesenberg  staff   128 Sep 20 12:19 .\ndrwx------@ 154 sriesenberg  staff  4928 Sep 20 12:19 ..\n-rw-r--r--@   1 sriesenberg  staff  3520 Sep 20 12:19 logsum-spec.md\n-rw-r--r--@   1 sriesenberg  staff  3976 Sep 20 12:19 spec.md",
+            "is_error": false
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "898bb20d-c8e2-4d7d-8cef-5ac026874ba1",
+      "timestamp": "2026-09-20T17:19:22.496Z",
+      "tool_use_result": {
+        "stdout": "total 16\ndrwx------@   4 sriesenberg  staff   128 Sep 20 12:19 .\ndrwx------@ 154 sriesenberg  staff  4928 Sep 20 12:19 ..\n-rw-r--r--@   1 sriesenberg  staff  3520 Sep 20 12:19 logsum-spec.md\n-rw-r--r--@   1 sriesenberg  staff  3976 Sep 20 12:19 spec.md",
+        "stderr": "",
+        "interrupted": false,
+        "isImage": false,
+        "noOutputExpected": false
+      }
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 50,
+      "estimated_tokens_delta": 50,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "044ce639-7c86-4942-b7d4-fdf352f9e919"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 150,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "6dc38a18-9b1b-4add-a72f-2b640c21f2f4"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 300,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "b47381cd-144f-4875-8891-5d073581f624"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 450,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "e74dac2a-18f1-45fc-a163-3e57d53ff8bf"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 550,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "83be91b9-6809-4db8-894f-8722ac3ffa91"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 700,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "633a9af5-5462-4545-b9d8-9582980f5d2f"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 800,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "951074ef-38c9-4f72-8085-e64f3e52a91d"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 950,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "d7125a73-e6b4-4783-8ae3-0a8c23e77faa"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1100,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "97432619-2bb6-4dee-9754-02d449f38864"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1200,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "b78f85d3-c27f-4c4d-8545-42915e738294"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1300,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "bdb1a197-d132-45e8-942c-d4910e16db9e"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1400,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "3b4683bf-730e-4464-ab58-67dd78962317"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1500,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "0b12ac95-25da-4e42-a4f8-b89179200542"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1650,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "2557d594-0b46-4396-9a0f-631d8f65bc60"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1800,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "462bf4f5-1fec-418c-b0cb-6d41aaf980df"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1950,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "110e7f7d-ba51-473a-9cae-9c8efa54d4bc"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2150,
+      "estimated_tokens_delta": 200,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "f17c946c-bc44-40b2-a24e-96f8f5764771"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2300,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "b9ccd081-f34a-4b72-a6bd-cf55ce1301ac"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2500,
+      "estimated_tokens_delta": 200,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "1b7f5202-87c5-4de0-80c7-2f7e00b54dc3"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2600,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "f32f0246-a012-42fd-a30a-bf9ceda812ca"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2800,
+      "estimated_tokens_delta": 200,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "5c26bf0c-e544-4b53-a40e-1344161bba83"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2950,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "55f676bd-0922-4e8a-b3bd-dd4a6f08c837"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3100,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "99395cd3-e35e-4d2e-98bb-e78a1149adac"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3200,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "72f998ad-41c6-4ca6-87ee-d2c0ab1c5648"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3350,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "95f6eca0-c8dc-4869-adef-44dfa86342cd"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3450,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "b4ae0084-a299-4437-b757-f9e0918fee69"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3600,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "2c79edca-0028-4de0-b5f6-f42c76513856"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3700,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "e3e9a3e4-c22b-4e64-8d15-9d486888b84c"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3800,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "af9385d7-44dd-4f0f-95e9-dd1685fdc80a"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3900,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "a5614b1c-4eff-4320-a8ec-3989bd0ef772"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4050,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "61f4c6b8-a435-4fde-ae12-307de500b7c0"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4150,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "2b12f451-4742-48a0-be39-f744c4ce6b0f"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4250,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "2e7e30d6-afcc-4c25-af39-cc846877411d"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4400,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "e0afe0b8-e60d-4633-ba0b-100a37f6ce38"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4600,
+      "estimated_tokens_delta": 200,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "0ca9a4dc-3384-4094-a434-5927545f1383"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4750,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "796befc7-ca3d-46e3-9200-ff4b26f721b9"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4850,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "d9efef7d-8e02-4a41-b470-1ba606ff6168"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4950,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "f80d0ba3-72a4-442c-abe7-97efa31fdc6f"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 5100,
+      "estimated_tokens_delta": 150,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "813af576-c044-4387-a928-f66a2d61cd88"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5F5QC6H1EAnRn4VUW6",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "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"
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 417,
+          "cache_read_input_tokens": 31099,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 417
+          },
+          "output_tokens": 8,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "5efc953f-7d91-48af-b224-4cc160f07967",
+      "timestamp": "2026-09-20T17:20:09.992Z",
+      "request_id": "req_011CfF5F4xQaEPqjkibFrQ9u"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5F5QC6H1EAnRn4VUW6",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_017CQnDCPEhbgYsjH5Rq8dBL",
+            "name": "Write",
+            "input": {
+              "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum",
+              "content": "#!/usr/bin/env python3\nimport sys\nimport re\nfrom datetime import datetime\n\nLEVELS = (\"DEBUG\", \"INFO\", \"WARN\", \"ERROR\")\n\nHELP_TEXT = \"\"\"usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n\nStreaming summary of a log file (or stdin).\n\nArguments:\n  FILE                log file to read (default/'-': stdin)\n\nOptions:\n  --since TIMESTAMP   only consider lines with timestamp >= TIMESTAMP\n  --level LEVEL       only consider lines at exactly this level\n  --top N             number of top error groups to show (default: 5)\n  --help              show this help message and exit\n\"\"\"\n\nTIMESTAMP_RE = re.compile(r'^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$')\n\nUUID_RE = re.compile(\n    r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'\n)\nHEX_RE = re.compile(r'\\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\\b')\nNUM_RE = re.compile(r'[0-9]+')\n\n\ndef usage_error(message):\n    sys.stderr.write(message + \"\\n\")\n    sys.exit(2)\n\n\ndef is_valid_timestamp(s):\n    if not TIMESTAMP_RE.match(s):\n        return False\n    try:\n        datetime.strptime(s, \"%Y-%m-%dT%H:%M:%S\")\n    except ValueError:\n        return False\n    return True\n\n\ndef normalize(message):\n    message = UUID_RE.sub('<uuid>', message)\n    message = HEX_RE.sub('<hex>', message)\n    message = NUM_RE.sub('<num>', message)\n    return message\n\n\ndef parse_args(argv):\n    file = None\n    since = None\n    level = None\n    top_str = \"5\"\n    i = 0\n    while i < len(argv):\n        arg = argv[i]\n        if arg == \"--help\":\n            sys.stdout.write(HELP_TEXT)\n            sys.exit(0)\n        elif arg == \"--since\":\n            if i + 1 >= len(argv):\n                usage_error(\"error: missing value for --since\")\n            since = argv[i + 1]\n            i += 2\n        elif arg == \"--level\":\n            if i + 1 >= len(argv):\n                usage_error(\"error: missing value for --level\")\n            level = argv[i + 1]\n            i += 2\n        elif arg == \"--top\":\n            if i + 1 >= len(argv):\n                usage_error(\"error: missing value for --top\")\n            top_str = argv[i + 1]\n            i += 2\n        elif arg.startswith(\"--\"):\n            usage_error(f\"unknown flag: {arg}\")\n        else:\n            if file is not None:\n                usage_error(f\"error: unexpected argument: {arg}\")\n            file = arg\n            i += 1\n\n    return file, since, level, top_str\n\n\ndef main():\n    argv = sys.argv[1:]\n    file, since, level, top_str = parse_args(argv)\n\n    if since is not None and not is_valid_timestamp(since):\n        usage_error(f\"error: invalid value for --since: {since}\")\n\n    if level is not None and level not in LEVELS:\n        usage_error(f\"error: invalid value for --level: {level}\")\n\n    try:\n        top = int(top_str)\n    except ValueError:\n        usage_error(f\"error: invalid value for --top: {top_str}\")\n\n    if file is None or file == \"-\":\n        stream = sys.stdin\n        close_after = False\n    else:\n        try:\n            stream = open(file, \"r\", encoding=\"utf-8\", errors=\"replace\")\n            close_after = True\n        except OSError:\n            usage_error(f\"error: cannot read {file}\")\n\n    total = 0\n    by_level = {lvl: 0 for lvl in LEVELS}\n    first_ts = None\n    last_ts = None\n    # normalized message -> [count, original first-seen message]\n    error_groups = {}\n\n    try:\n        for raw_line in stream:\n            line = raw_line.rstrip(\"\\n\")\n            if line.endswith(\"\\r\"):\n                line = line[:-1]\n\n            parts = line.split(\" \", 2)\n            if len(parts) < 3:\n                continue\n\n            ts, lvl, message = parts\n\n            if not is_valid_timestamp(ts):\n                continue\n            if lvl not in LEVELS:\n                continue\n\n            if since is not None and ts < since:\n                continue\n            if level is not None and lvl != level:\n                continue\n\n            total += 1\n            by_level[lvl] += 1\n            if first_ts is None:\n                first_ts = ts\n            last_ts = ts\n\n            if lvl == \"ERROR\":\n                key = normalize(message)\n                if key in error_groups:\n                    error_groups[key][0] += 1\n                else:\n                    error_groups[key] = [1, message]\n    finally:\n        if close_after:\n            stream.close()\n\n    out = []\n    out.append(f\"total: {total}\")\n    out.append(\n        \"by level: \"\n        + \" \".join(f\"{lvl}={by_level[lvl]}\" for lvl in LEVELS)\n    )\n    out.append(f\"first: {first_ts if first_ts is not None else 'n/a'}\")\n    out.append(f\"last: {last_ts if last_ts is not None else 'n/a'}\")\n    out.append(\"top errors:\")\n\n    groups = sorted(\n        error_groups.values(), key=lambda g: (-g[0], g[1])\n    )\n    for count, message in groups[:top]:\n        out.append(f\"  {count} {message}\")\n\n    sys.stdout.write(\"\\n\".join(out) + \"\\n\")\n    sys.exit(0)\n\n\nif __name__ == \"__main__\":\n    main()\n"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 417,
+          "cache_read_input_tokens": 31099,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 417
+          },
+          "output_tokens": 8,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "8be430dc-81a6-49a0-887d-d40e8cf825ef",
+      "timestamp": "2026-09-20T17:20:22.786Z",
+      "request_id": "req_011CfF5F4xQaEPqjkibFrQ9u",
+      "wire_tool_inputs": {
+        "toolu_017CQnDCPEhbgYsjH5Rq8dBL": {
+          "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum",
+          "content": "#!/usr/bin/env python3\nimport sys\nimport re\nfrom datetime import datetime\n\nLEVELS = (\"DEBUG\", \"INFO\", \"WARN\", \"ERROR\")\n\nHELP_TEXT = \"\"\"usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n\nStreaming summary of a log file (or stdin).\n\nArguments:\n  FILE                log file to read (default/'-': stdin)\n\nOptions:\n  --since TIMESTAMP   only consider lines with timestamp >= TIMESTAMP\n  --level LEVEL       only consider lines at exactly this level\n  --top N             number of top error groups to show (default: 5)\n  --help              show this help message and exit\n\"\"\"\n\nTIMESTAMP_RE = re.compile(r'^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$')\n\nUUID_RE = re.compile(\n    r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'\n)\nHEX_RE = re.compile(r'\\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\\b')\nNUM_RE = re.compile(r'[0-9]+')\n\n\ndef usage_error(message):\n    sys.stderr.write(message + \"\\n\")\n    sys.exit(2)\n\n\ndef is_valid_timestamp(s):\n    if not TIMESTAMP_RE.match(s):\n        return False\n    try:\n        datetime.strptime(s, \"%Y-%m-%dT%H:%M:%S\")\n    except ValueError:\n        return False\n    return True\n\n\ndef normalize(message):\n    message = UUID_RE.sub('<uuid>', message)\n    message = HEX_RE.sub('<hex>', message)\n    message = NUM_RE.sub('<num>', message)\n    return message\n\n\ndef parse_args(argv):\n    file = None\n    since = None\n    level = None\n    top_str = \"5\"\n    i = 0\n    while i < len(argv):\n        arg = argv[i]\n        if arg == \"--help\":\n            sys.stdout.write(HELP_TEXT)\n            sys.exit(0)\n        elif arg == \"--since\":\n            if i + 1 >= len(argv):\n                usage_error(\"error: missing value for --since\")\n            since = argv[i + 1]\n            i += 2\n        elif arg == \"--level\":\n            if i + 1 >= len(argv):\n                usage_error(\"error: missing value for --level\")\n            level = argv[i + 1]\n            i += 2\n        elif arg == \"--top\":\n            if i + 1 >= len(argv):\n                usage_error(\"error: missing value for --top\")\n            top_str = argv[i + 1]\n            i += 2\n        elif arg.startswith(\"--\"):\n            usage_error(f\"unknown flag: {arg}\")\n        else:\n            if file is not None:\n                usage_error(f\"error: unexpected argument: {arg}\")\n            file = arg\n            i += 1\n\n    return file, since, level, top_str\n\n\ndef main():\n    argv = sys.argv[1:]\n    file, since, level, top_str = parse_args(argv)\n\n    if since is not None and not is_valid_timestamp(since):\n        usage_error(f\"error: invalid value for --since: {since}\")\n\n    if level is not None and level not in LEVELS:\n        usage_error(f\"error: invalid value for --level: {level}\")\n\n    try:\n        top = int(top_str)\n    except ValueError:\n        usage_error(f\"error: invalid value for --top: {top_str}\")\n\n    if file is None or file == \"-\":\n        stream = sys.stdin\n        close_after = False\n    else:\n        try:\n            stream = open(file, \"r\", encoding=\"utf-8\", errors=\"replace\")\n            close_after = True\n        except OSError:\n            usage_error(f\"error: cannot read {file}\")\n\n    total = 0\n    by_level = {lvl: 0 for lvl in LEVELS}\n    first_ts = None\n    last_ts = None\n    # normalized message -> [count, original first-seen message]\n    error_groups = {}\n\n    try:\n        for raw_line in stream:\n            line = raw_line.rstrip(\"\\n\")\n            if line.endswith(\"\\r\"):\n                line = line[:-1]\n\n            parts = line.split(\" \", 2)\n            if len(parts) < 3:\n                continue\n\n            ts, lvl, message = parts\n\n            if not is_valid_timestamp(ts):\n                continue\n            if lvl not in LEVELS:\n                continue\n\n            if since is not None and ts < since:\n                continue\n            if level is not None and lvl != level:\n                continue\n\n            total += 1\n            by_level[lvl] += 1\n            if first_ts is None:\n                first_ts = ts\n            last_ts = ts\n\n            if lvl == \"ERROR\":\n                key = normalize(message)\n                if key in error_groups:\n                    error_groups[key][0] += 1\n                else:\n                    error_groups[key] = [1, message]\n    finally:\n        if close_after:\n            stream.close()\n\n    out = []\n    out.append(f\"total: {total}\")\n    out.append(\n        \"by level: \"\n        + \" \".join(f\"{lvl}={by_level[lvl]}\" for lvl in LEVELS)\n    )\n    out.append(f\"first: {first_ts if first_ts is not None else 'n/a'}\")\n    out.append(f\"last: {last_ts if last_ts is not None else 'n/a'}\")\n    out.append(\"top errors:\")\n\n    groups = sorted(\n        error_groups.values(), key=lambda g: (-g[0], g[1])\n    )\n    for count, message in groups[:top]:\n        out.append(f\"  {count} {message}\")\n\n    sys.stdout.write(\"\\n\".join(out) + \"\\n\")\n    sys.exit(0)\n\n\nif __name__ == \"__main__\":\n    main()\n"
+        }
+      }
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_017CQnDCPEhbgYsjH5Rq8dBL",
+            "type": "tool_result",
+            "content": "File created successfully at: /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum (file state is current in your context \u2014 no need to Read it back)"
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "eab19afb-74fb-4264-9b32-69ba583d2d9b",
+      "timestamp": "2026-09-20T17:20:22.822Z",
+      "tool_use_result": {
+        "type": "create",
+        "filePath": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum",
+        "content": "#!/usr/bin/env python3\nimport sys\nimport re\nfrom datetime import datetime\n\nLEVELS = (\"DEBUG\", \"INFO\", \"WARN\", \"ERROR\")\n\nHELP_TEXT = \"\"\"usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n\nStreaming summary of a log file (or stdin).\n\nArguments:\n  FILE                log file to read (default/'-': stdin)\n\nOptions:\n  --since TIMESTAMP   only consider lines with timestamp >= TIMESTAMP\n  --level LEVEL       only consider lines at exactly this level\n  --top N             number of top error groups to show (default: 5)\n  --help              show this help message and exit\n\"\"\"\n\nTIMESTAMP_RE = re.compile(r'^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$')\n\nUUID_RE = re.compile(\n    r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'\n)\nHEX_RE = re.compile(r'\\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\\b')\nNUM_RE = re.compile(r'[0-9]+')\n\n\ndef usage_error(message):\n    sys.stderr.write(message + \"\\n\")\n    sys.exit(2)\n\n\ndef is_valid_timestamp(s):\n    if not TIMESTAMP_RE.match(s):\n        return False\n    try:\n        datetime.strptime(s, \"%Y-%m-%dT%H:%M:%S\")\n    except ValueError:\n        return False\n    return True\n\n\ndef normalize(message):\n    message = UUID_RE.sub('<uuid>', message)\n    message = HEX_RE.sub('<hex>', message)\n    message = NUM_RE.sub('<num>', message)\n    return message\n\n\ndef parse_args(argv):\n    file = None\n    since = None\n    level = None\n    top_str = \"5\"\n    i = 0\n    while i < len(argv):\n        arg = argv[i]\n        if arg == \"--help\":\n            sys.stdout.write(HELP_TEXT)\n            sys.exit(0)\n        elif arg == \"--since\":\n            if i + 1 >= len(argv):\n                usage_error(\"error: missing value for --since\")\n            since = argv[i + 1]\n            i += 2\n        elif arg == \"--level\":\n            if i + 1 >= len(argv):\n                usage_error(\"error: missing value for --level\")\n            level = argv[i + 1]\n            i += 2\n        elif arg == \"--top\":\n            if i + 1 >= len(argv):\n                usage_error(\"error: missing value for --top\")\n            top_str = argv[i + 1]\n            i += 2\n        elif arg.startswith(\"--\"):\n            usage_error(f\"unknown flag: {arg}\")\n        else:\n            if file is not None:\n                usage_error(f\"error: unexpected argument: {arg}\")\n            file = arg\n            i += 1\n\n    return file, since, level, top_str\n\n\ndef main():\n    argv = sys.argv[1:]\n    file, since, level, top_str = parse_args(argv)\n\n    if since is not None and not is_valid_timestamp(since):\n        usage_error(f\"error: invalid value for --since: {since}\")\n\n    if level is not None and level not in LEVELS:\n        usage_error(f\"error: invalid value for --level: {level}\")\n\n    try:\n        top = int(top_str)\n    except ValueError:\n        usage_error(f\"error: invalid value for --top: {top_str}\")\n\n    if file is None or file == \"-\":\n        stream = sys.stdin\n        close_after = False\n    else:\n        try:\n            stream = open(file, \"r\", encoding=\"utf-8\", errors=\"replace\")\n            close_after = True\n        except OSError:\n            usage_error(f\"error: cannot read {file}\")\n\n    total = 0\n    by_level = {lvl: 0 for lvl in LEVELS}\n    first_ts = None\n    last_ts = None\n    # normalized message -> [count, original first-seen message]\n    error_groups = {}\n\n    try:\n        for raw_line in stream:\n            line = raw_line.rstrip(\"\\n\")\n            if line.endswith(\"\\r\"):\n                line = line[:-1]\n\n            parts = line.split(\" \", 2)\n            if len(parts) < 3:\n                continue\n\n            ts, lvl, message = parts\n\n            if not is_valid_timestamp(ts):\n                continue\n            if lvl not in LEVELS:\n                continue\n\n            if since is not None and ts < since:\n                continue\n            if level is not None and lvl != level:\n                continue\n\n            total += 1\n            by_level[lvl] += 1\n            if first_ts is None:\n                first_ts = ts\n            last_ts = ts\n\n            if lvl == \"ERROR\":\n                key = normalize(message)\n                if key in error_groups:\n                    error_groups[key][0] += 1\n                else:\n                    error_groups[key] = [1, message]\n    finally:\n        if close_after:\n            stream.close()\n\n    out = []\n    out.append(f\"total: {total}\")\n    out.append(\n        \"by level: \"\n        + \" \".join(f\"{lvl}={by_level[lvl]}\" for lvl in LEVELS)\n    )\n    out.append(f\"first: {first_ts if first_ts is not None else 'n/a'}\")\n    out.append(f\"last: {last_ts if last_ts is not None else 'n/a'}\")\n    out.append(\"top errors:\")\n\n    groups = sorted(\n        error_groups.values(), key=lambda g: (-g[0], g[1])\n    )\n    for count, message in groups[:top]:\n        out.append(f\"  {count} {message}\")\n\n    sys.stdout.write(\"\\n\".join(out) + \"\\n\")\n    sys.exit(0)\n\n\nif __name__ == \"__main__\":\n    main()\n",
+        "structuredPatch": [],
+        "originalFile": null,
+        "userModified": false
+      }
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 50,
+      "estimated_tokens_delta": 50,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "4a7d6a4e-0429-463b-8156-c417ed5fa002"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 150,
+      "estimated_tokens_delta": 100,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "1a49b13a-0393-4985-aeaf-493b3572177b"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 290,
+      "estimated_tokens_delta": 140,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "07e6c4e5-65f2-46b9-9c5e-fa9029daeeb0"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5KXTDqCK32CAtN3p6V",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "Ev8ICqgBCBIYAipAtoCblEmXs0MFmG6W6rOvUcQxUtqdvDXvbB1PsdTK6pfUOblBk9a2OI832R2B0i7O3+WBJI92dxJYgUhC/mnLEjIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ5OGE3N2NhOC0zNDYzLTRlOGYtYTViYy1iMGZkYTJiZTEzNTlyENQFFdbvOs9TGzbDqN4EPPuIAQGoAdqrwNUGsAECEgxwMTby7bf/TVBHiPYaDLREwSjA598cQMh0RiIw5DC2P1u9ynBhqLNqmfqSbG4Ai13lIcLUghhgfy/60JZFI6rklLbyjOqT7pquiTvVKoMHNeRGR1yplUEC2r7vrrYrwz0em9W4aJoIybwlKSi/kTkrsbWAJ42WExu9K4E+BMsf9puJeqkrnOi9EFb6LHtAT9EjsXDcwnoI5VC4Woo2pzqWFvuch7qlwoOCFfCFcOb5M1eY/CGgDnub2HpyC4+9rg9cbo6vqDMHNsgsZXMRbWuWYVULmxTcctBJUIvhp76oz5RrXKDrOxuqQc7QuJvXpDUm4KKQzUB9Q/32+bJKU3ZXIxaPj1k5dTbr1ciOGLRln70SbwozPqou6Wkn1L2dN+PGLDkZ5WsGTW9ftWsLQcQGnEm9CyYK/dX4exRGBSlUSWmHrbw24en1fcWnF2O1yw50TkBbkJsNAW1rGBawWQVkcGGtyC3SzuBioXi5BjIeHABve+l2ENQgxkwCwhA5rlNT13E8xeGc4M23d8wpp0UtqcKT07ScLOrBm0nVCtmpIr5u1vzu+bVZuf0+iBpjyCY2b3bYzBmpMOJGlDQPsmHq1s6/WZGFOmSN7dR0RPjnceLHapG8+YSIpa865Ia1usWd1S4FTlo+ot4Cqz/xoyIp0OlzUhDSl83yzLTAs5XOwI3Tz10vW0W12RhO7zF9oaJAK0w/bybxHnVMgcxNx1WmJYBOXT1NAn8kmpFwnjiZaLpt1QYPy1uvEUbq9gBIZvHOxDNxcTIeyi8mLXqvY4+FXZCHji6PxYpg2isQUrQFiD43fhMXIlPMywkWkMiCRz0lfOvtKmDuA7hEeOZ3LRUMT3Jo4PWTZRVG/fI/jn1SPUg04T2sj5a/fgcxSy6UK2Mo3F6vv80pFvseCquzGRT45oks61XCWYMQMi1U91YYx9J5eFWPNYxT9/vTIni3cLpN9K3v+pr4H5P/sFpUh3SAfQ4u3XpEMXoHEYJO46OdmxQyHsG/K45infl1BnYTwDbJ3K/HNQgoDH5yXAJukjzbKYU77/kwJL4QcZwSEQ1BYuQSrTSPPe1WR5bxyDJEK2DK4cMPVNKDkXAnLHPkVNlBCN11UwTgduTuRMZl0nMLGLOj3tMGbu8/G5p801U+pGmbsPgxjkmCggjSk3tmP6NzGequdlHNru3YELcUUiijrBYTt4Jnod8g7WoAzHg4LCnjBvKZ5S3VnJZJ1sA8tg8Re8jhVywlYSsC05+IPq0vHRDipMTLTFpjGtKAO9hbdpYUOPhwb6fuz2AFxbmjM5twT1EYAQ=="
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 7342,
+          "cache_read_input_tokens": 31516,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 7342
+          },
+          "output_tokens": 3,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "d3dd6ff8-93a4-474b-91f9-5895e0285b69",
+      "timestamp": "2026-09-20T17:20:26.319Z",
+      "request_id": "req_011CfF5KWsEyAB82gUqcyjjt"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5KXTDqCK32CAtN3p6V",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01PcV4acv4AeTxkPnwYxvdJJ",
+            "name": "Bash",
+            "input": {
+              "command": "chmod +x /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum\ncd /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi\n./logsum --help\necho \"exit: $?\"\necho \"---\"\nprintf '2024-01-01T00:00:00 INFO starting up\\n2024-01-01T00:00:01 ERROR failed to connect to host 3f9a8b7c-1111-2222-3333-444455556666\\n2024-01-01T00:00:02 ERROR failed to connect to host aaaabbbb-1111-2222-3333-444455556666\\n2024-01-01T00:00:03 DEBUG debugging 12345\\n2024-01-01T00:00:04 WARN low disk space\\nbadline\\n2024-01-01T00:00:05 ERROR timeout after 500ms id=abc123\\n' | ./logsum\necho \"exit: $?\"\n",
+              "description": "Test help and basic streaming behavior"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 7342,
+          "cache_read_input_tokens": 31516,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 7342
+          },
+          "output_tokens": 3,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "4d0b9eed-fbba-47b0-ba0a-26a651302e7e",
+      "timestamp": "2026-09-20T17:20:30.005Z",
+      "request_id": "req_011CfF5KWsEyAB82gUqcyjjt",
+      "wire_tool_inputs": {
+        "toolu_01PcV4acv4AeTxkPnwYxvdJJ": {
+          "command": "chmod +x /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum\ncd /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi\n./logsum --help\necho \"exit: $?\"\necho \"---\"\nprintf '2024-01-01T00:00:00 INFO starting up\\n2024-01-01T00:00:01 ERROR failed to connect to host 3f9a8b7c-1111-2222-3333-444455556666\\n2024-01-01T00:00:02 ERROR failed to connect to host aaaabbbb-1111-2222-3333-444455556666\\n2024-01-01T00:00:03 DEBUG debugging 12345\\n2024-01-01T00:00:04 WARN low disk space\\nbadline\\n2024-01-01T00:00:05 ERROR timeout after 500ms id=abc123\\n' | ./logsum\necho \"exit: $?\"\n",
+          "description": "Test help and basic streaming behavior"
+        }
+      }
+    },
+    {
+      "type": "rate_limit_event",
+      "rate_limit_info": {
+        "status": "allowed",
+        "resetsAt": 1789938600,
+        "rateLimitType": "five_hour",
+        "overageStatus": "rejected",
+        "overageDisabledReason": "org_level_disabled",
+        "isUsingOverage": false,
+        "unifiedWindows": {
+          "five_hour": {
+            "utilization": 0.18,
+            "resetsAt": 1789938600
+          },
+          "seven_day": {
+            "utilization": 0.1,
+            "resetsAt": 1789948800
+          }
+        }
+      },
+      "uuid": "ca5897cd-850a-44d2-bc16-40a9a2ed6ce9",
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61"
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_01PcV4acv4AeTxkPnwYxvdJJ",
+            "type": "tool_result",
+            "content": "usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n\nStreaming summary of a log file (or stdin).\n\nArguments:\n  FILE                log file to read (default/'-': stdin)\n\nOptions:\n  --since TIMESTAMP   only consider lines with timestamp >= TIMESTAMP\n  --level LEVEL       only consider lines at exactly this level\n  --top N             number of top error groups to show (default: 5)\n  --help              show this help message and exit\nexit: 0\n---\ntotal: 6\nby level: DEBUG=1 INFO=1 WARN=1 ERROR=3\nfirst: 2024-01-01T00:00:00\nlast: 2024-01-01T00:00:05\ntop errors:\n  2 failed to connect to host 3f9a8b7c-1111-2222-3333-444455556666\n  1 timeout after 500ms id=abc123\nexit: 0",
+            "is_error": false
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "198fb7b0-4fc4-426c-989b-ed8b3d03f1c3",
+      "timestamp": "2026-09-20T17:20:30.278Z",
+      "tool_use_result": {
+        "stdout": "usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n\nStreaming summary of a log file (or stdin).\n\nArguments:\n  FILE                log file to read (default/'-': stdin)\n\nOptions:\n  --since TIMESTAMP   only consider lines with timestamp >= TIMESTAMP\n  --level LEVEL       only consider lines at exactly this level\n  --top N             number of top error groups to show (default: 5)\n  --help              show this help message and exit\nexit: 0\n---\ntotal: 6\nby level: DEBUG=1 INFO=1 WARN=1 ERROR=3\nfirst: 2024-01-01T00:00:00\nlast: 2024-01-01T00:00:05\ntop errors:\n  2 failed to connect to host 3f9a8b7c-1111-2222-3333-444455556666\n  1 timeout after 500ms id=abc123\nexit: 0",
+        "stderr": "",
+        "interrupted": false,
+        "isImage": false,
+        "noOutputExpected": false
+      }
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5L5Bh4M8x7dM6Bv3xb",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Works as expected \u2014 the two UUID errors normalized and grouped together (displaying the first-seen original message), and the `<hex>`/`<num>` normalization correctly distinguished the timeout message. Let me check the error paths."
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 1087,
+          "cache_read_input_tokens": 38858,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1087
+          },
+          "output_tokens": 6,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "ca34a9a4-e5d0-46ce-b6e6-b98ed450e3fb",
+      "timestamp": "2026-09-20T17:20:31.678Z",
+      "request_id": "req_011CfF5L4iARjfgyaJ1jie7b"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5L5Bh4M8x7dM6Bv3xb",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01XNPTXAav6WSj1CbswDnRNJ",
+            "name": "Bash",
+            "input": {
+              "command": "cd /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi\necho \"--- bad since ---\"\n./logsum --since notatime <<< \"\"; echo \"exit: $?\"\necho \"--- bad level ---\"\n./logsum --level TRACE <<< \"\"; echo \"exit: $?\"\necho \"--- missing file ---\"\n./logsum /no/such/file; echo \"exit: $?\"\necho \"--- unknown flag ---\"\n./logsum --bogus; echo \"exit: $?\"\necho \"--- zero errors ---\"\nprintf '2024-01-01T00:00:00 INFO hi\\n' | ./logsum\necho \"exit: $?\"\necho \"--- since filter ---\"\nprintf '2024-01-01T00:00:00 INFO a\\n2024-01-02T00:00:00 INFO b\\n' | ./logsum --since 2024-01-02T00:00:00\n",
+              "description": "Test error handling and filters"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 1087,
+          "cache_read_input_tokens": 38858,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1087
+          },
+          "output_tokens": 6,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "0273bafb-9c3b-43ab-981b-6703a211c697",
+      "timestamp": "2026-09-20T17:20:35.087Z",
+      "request_id": "req_011CfF5L4iARjfgyaJ1jie7b",
+      "wire_tool_inputs": {
+        "toolu_01XNPTXAav6WSj1CbswDnRNJ": {
+          "command": "cd /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi\necho \"--- bad since ---\"\n./logsum --since notatime <<< \"\"; echo \"exit: $?\"\necho \"--- bad level ---\"\n./logsum --level TRACE <<< \"\"; echo \"exit: $?\"\necho \"--- missing file ---\"\n./logsum /no/such/file; echo \"exit: $?\"\necho \"--- unknown flag ---\"\n./logsum --bogus; echo \"exit: $?\"\necho \"--- zero errors ---\"\nprintf '2024-01-01T00:00:00 INFO hi\\n' | ./logsum\necho \"exit: $?\"\necho \"--- since filter ---\"\nprintf '2024-01-01T00:00:00 INFO a\\n2024-01-02T00:00:00 INFO b\\n' | ./logsum --since 2024-01-02T00:00:00\n",
+          "description": "Test error handling and filters"
+        }
+      }
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_01XNPTXAav6WSj1CbswDnRNJ",
+            "type": "tool_result",
+            "content": "--- bad since ---\nerror: invalid value for --since: notatime\nexit: 2\n--- bad level ---\nerror: invalid value for --level: TRACE\nexit: 2\n--- missing file ---\nerror: cannot read /no/such/file\nexit: 2\n--- unknown flag ---\nunknown flag: --bogus\nexit: 2\n--- zero errors ---\ntotal: 1\nby level: DEBUG=0 INFO=1 WARN=0 ERROR=0\nfirst: 2024-01-01T00:00:00\nlast: 2024-01-01T00:00:00\ntop errors:\nexit: 0\n--- since filter ---\ntotal: 1\nby level: DEBUG=0 INFO=1 WARN=0 ERROR=0\nfirst: 2024-01-02T00:00:00\nlast: 2024-01-02T00:00:00\ntop errors:",
+            "is_error": false
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "c2d9ca97-4592-47a3-a84d-8ab743a552f1",
+      "timestamp": "2026-09-20T17:20:35.242Z",
+      "tool_use_result": {
+        "stdout": "--- bad since ---\nerror: invalid value for --since: notatime\nexit: 2\n--- bad level ---\nerror: invalid value for --level: TRACE\nexit: 2\n--- missing file ---\nerror: cannot read /no/such/file\nexit: 2\n--- unknown flag ---\nunknown flag: --bogus\nexit: 2\n--- zero errors ---\ntotal: 1\nby level: DEBUG=0 INFO=1 WARN=0 ERROR=0\nfirst: 2024-01-01T00:00:00\nlast: 2024-01-01T00:00:00\ntop errors:\nexit: 0\n--- since filter ---\ntotal: 1\nby level: DEBUG=0 INFO=1 WARN=0 ERROR=0\nfirst: 2024-01-02T00:00:00\nlast: 2024-01-02T00:00:00\ntop errors:",
+        "stderr": "",
+        "interrupted": false,
+        "isImage": false,
+        "noOutputExpected": false
+      }
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF5LSNuPwSFzTfCNWbCZ",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "All behaviors match the spec: exit code 2 with the correct error shapes, `--help` on stdout with exit 0, filters applied before stats, empty `top errors:` line when there are no ERROR lines, and normalization grouping correctly. The `logsum` script is implemented at `/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum` (executable, no external dependencies, hand-rolled arg parsing, streams input line-by-line)."
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 798,
+          "cache_read_input_tokens": 39945,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 798
+          },
+          "output_tokens": 8,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "uuid": "de4b992b-0edc-497b-88ba-eeb7e94dcc3b",
+      "timestamp": "2026-09-20T17:20:37.812Z",
+      "request_id": "req_011CfF5LRwMha5tzkfcTxHjH"
+    },
+    {
+      "duration_api_ms": 79475,
+      "stop_reason": "end_turn",
+      "session_id": "ef19159b-8664-4ada-be35-9cbcb4d5fe61",
+      "total_cost_usd": 0.2169176,
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 22249,
+        "cache_read_input_tokens": 187538,
+        "output_tokens": 9039,
+        "output_tokens_details": {
+          "thinking_tokens": 5513
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 22249,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 182,
+            "cache_read_input_tokens": 39945,
+            "cache_creation_input_tokens": 798,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 798
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard"
+      },
+      "modelUsage": {
+        "claude-sonnet-5": {
+          "inputTokens": 12,
+          "outputTokens": 9039,
+          "cacheReadInputTokens": 187538,
+          "cacheCreationInputTokens": 22249,
+          "webSearchRequests": 0,
+          "costUSD": 0.2169176,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 64000,
+          "thinkingTokens": 5513,
+          "canonicalModel": "claude-sonnet-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "permission_denials": [],
+      "terminal_reason": "completed",
+      "fast_mode_state": "off",
+      "fast_mode_disabled_reason": "sdk_opt_in_required",
+      "subagent_stats": {
+        "spawned": 0,
+        "requested": {
+          "background": 0,
+          "foreground": 0,
+          "unset": 0
+        },
+        "started_in_background": 0,
+        "max_depth": 0,
+        "spawned_by_subagents": 0,
+        "completed": 0,
+        "failed": 0,
+        "killed": {
+          "parent": 0,
+          "user": 0,
+          "system": 0
+        },
+        "refused": {
+          "depth_limit": 0,
+          "concurrency_limit": 0,
+          "budget": 0
+        },
+        "by_type": {}
+      },
+      "is_error": false,
+      "num_turns": 7,
+      "subtype": "success",
+      "api_error_status": null,
+      "result": "All behaviors match the spec: exit code 2 with the correct error shapes, `--help` on stdout with exit 0, filters applied before stats, empty `top errors:` line when there are no ERROR lines, and normalization grouping correctly. The `logsum` script is implemented at `/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum` (executable, no external dependencies, hand-rolled arg parsing, streams input line-by-line).",
+      "ttft_ms": 1148,
+      "type": "result",
+      "duration_ms": 80324,
+      "uuid": "6e274dc5-45ae-4b48-91ca-7edf428a3233",
+      "ttft_stream_ms": 774,
+      "time_to_request_ms": 36,
+      "first_content_frame_ms": 774,
+      "queued_turn_count": 0,
+      "result_index": 0
+    }
+  ],
+  "_wall_s_measured": 81.35691285133362,
+  "tool": "logsum",
+  "condition": "B-a",
+  "trial": 2,
+  "trial_dir": "/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi",
+  "model_requested": "sonnet",
+  "source_file": "/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-1__zuofi/logsum",
+  "conformance": {
+    "lang_detected": "python (shebang)",
+    "passed": 8,
+    "total": 8,
+    "details": [
+      {
+        "case": "logsum-basic",
+        "ok": true
+      },
+      {
+        "case": "logsum-top3",
+        "ok": true
+      },
+      {
+        "case": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "case": "logsum-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-missing-file",
+        "ok": true
+      }
+    ]
+  },
+  "success": true
+}

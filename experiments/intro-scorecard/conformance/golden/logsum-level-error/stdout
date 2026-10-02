@@ -1,0 +1,10 @@
+total: 53
+by level: DEBUG=0 INFO=0 WARN=0 ERROR=53
+first: 2026-01-01T00:00:27
+last: 2026-01-01T00:25:40
+top errors:
+  16 checksum mismatch: expected 0b36bf7a got 2abf5819
+  15 null pointer in handler for user 674131
+  9 failed to connect to host3.local after 3323 attempts
+  8 request fe6db6e4-9a5e-8425-d43f-3a11f09514a8 timed out
+  5 disk write failed at offset 42811

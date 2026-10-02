@@ -1,0 +1,9 @@
+#!/bin/sh
+# Run treesum; builds the jar on first use.
+here=$(cd "$(dirname "$0")" && pwd)
+if [ ! -f "$here/build-out/treesum.jar" ]; then
+  "$here/build.sh" >/dev/null || exit 2
+fi
+# Prevent the JVM from printing "Picked up ..." notices on stderr.
+unset JAVA_TOOL_OPTIONS _JAVA_OPTIONS JDK_JAVA_OPTIONS
+exec java -Xshare:auto -XX:TieredStopAtLevel=1 -jar "$here/build-out/treesum.jar" "$@"

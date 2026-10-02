@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+# Symlink a generated javaw implementation into ~/.local/bin, replacing any existing link or file.
+#
+#   ./install 01 -m haiku          # results/01-generate-javaw--haiku  ->  ~/.local/bin/javaw
+#   ./install 12 -m opus -v 2      # results/12-...--opus--v2
+#   ./install 03 -m sonnet -n javaw-js   # install under another name to keep several side by side
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BIN="$HOME/.local/bin"
+
+usage() {
+  cat <<USAGE
+Usage: ./install NUMBER [-m MODEL] [-v N] [-n NAME] [-e ENTRY]
+
+Finds the result directory exactly as ./generate names it, locates the
+implementation's executable, and symlinks it to ~/.local/bin/NAME (default: javaw).
+An existing file or symlink at that path is replaced.
+
+Options:
+  -m, --model MODEL   Same meaning as ./generate (selects results/...--MODEL)
+  -v, --version N     Same meaning as ./generate (selects results/...--vN)
+  -n, --name NAME     Name of the link in ~/.local/bin (default: javaw)
+  -e, --entry PATH    Executable to link, relative to the result directory.
+                      Needed only when it can't be found automatically.
+  -h, --help          This help
+
+Automatic entry detection looks at the top level of the result directory for an
+executable file named "javaw", then "javaw.*", then a single executable file.
+USAGE
+}
+
+die() { echo "install: $*" >&2; exit 1; }
+
+NUM="" MODEL="" VERSION="" NAME="javaw" ENTRY=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    -m|--model)   [ $# -ge 2 ] || die "$1 needs a value"; MODEL="$2"; shift 2 ;;
+    -v|--version) [ $# -ge 2 ] || die "$1 needs a value"; VERSION="$2"; shift 2 ;;
+    -n|--name)    [ $# -ge 2 ] || die "$1 needs a value"; NAME="$2"; shift 2 ;;
+    -e|--entry)   [ $# -ge 2 ] || die "$1 needs a value"; ENTRY="$2"; shift 2 ;;
+    -*) die "unknown option: $1 (try --help)" ;;
+    *) [ -z "$NUM" ] || die "only one prompt number allowed"; NUM="$1"; shift ;;
+  esac
+done
+[ -n "$NUM" ] || { usage >&2; exit 2; }
+case "$NAME" in */*|"") die "--name must be a plain file name" ;; esac
+
+# Reuse generate's naming so the path is always the one generate created.
+GEN=("$ROOT/generate" "$NUM" --print-dir)
+[ -n "$MODEL" ] && GEN+=(-m "$MODEL")
+[ -n "$VERSION" ] && GEN+=(-v "$VERSION")
+OUT="$("${GEN[@]}")" || exit 1
+[ -d "$OUT" ] || die "no result directory ${OUT#"$ROOT"/} (run ./generate with the same options first)"
+
+is_exec() { [ -f "$1" ] && [ -x "$1" ]; }
+
+TARGET=""
+if [ -n "$ENTRY" ]; then
+  TARGET="$OUT/$ENTRY"
+  is_exec "$TARGET" || die "entry is not an executable file: ${TARGET#"$ROOT"/}"
+else
+  if is_exec "$OUT/javaw"; then
+    TARGET="$OUT/javaw"
+  else
+    CANDS=()
+    for f in "$OUT"/javaw.* "$OUT"/*; do
+      is_exec "$f" || continue
+      case " ${CANDS[*]-} " in *" $f "*) continue ;; esac
+      CANDS+=("$f")
+    done
+    FIRST=()
+    for f in "$OUT"/javaw.*; do is_exec "$f" && FIRST+=("$f"); done
+    if [ ${#FIRST[@]} -eq 1 ]; then TARGET="${FIRST[0]}"
+    elif [ ${#CANDS[@]} -eq 1 ]; then TARGET="${CANDS[0]}"
+    else
+      echo "install: cannot pick an executable in ${OUT#"$ROOT"/}" >&2
+      if [ ${#CANDS[@]} -eq 0 ]; then echo "  no executable files at the top level; use --entry PATH" >&2
+      else echo "  candidates (use --entry NAME):" >&2; for f in "${CANDS[@]}"; do echo "    ${f##*/}" >&2; done; fi
+      exit 1
+    fi
+  fi
+fi
+
+mkdir -p "$BIN"
+LINK="$BIN/$NAME"
+[ -d "$LINK" ] && [ ! -L "$LINK" ] && die "$LINK is a directory; refusing to replace it"
+ln -sfn "$TARGET" "$LINK"
+echo "$LINK -> $TARGET"
+
+case ":$PATH:" in *":$BIN:"*) ;; *) echo "note: $BIN is not on your PATH" >&2 ;; esac

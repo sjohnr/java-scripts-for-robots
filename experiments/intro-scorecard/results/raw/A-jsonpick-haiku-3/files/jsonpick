@@ -1,0 +1,260 @@
+#!/usr/bin/env python3
+"""jsonpick: print the value at a path in a JSON document, or summarize its shape."""
+
+import argparse
+import json
+import math
+import re
+import sys
+
+EXIT_OK = 0
+EXIT_NOT_FOUND = 1
+EXIT_USAGE = 2
+
+DEFAULT_DEPTH = 2
+
+USAGE = """\
+usage: jsonpick PATH [FILE] [--shape] [--depth N]
+
+Print the value at PATH in the JSON document read from FILE (stdin if omitted or "-").
+
+positional arguments:
+  PATH          path to select, e.g. a.b[0].c; "." or "" selects the whole document
+  FILE          JSON file to read; "-" or omitted reads stdin
+
+options:
+  --shape       print a depth-limited type/array-length summary of the value at PATH
+  --depth N     how many levels to describe with --shape (default 2)
+  --help        show this message and exit
+"""
+
+PATH_RE = re.compile(r"\.?(?:[^.\[\]]+|\[[0-9]+\])(?:\[[0-9]+\]|\.[^.\[\]]+)*")
+PATH_TOKEN_RE = re.compile(r"\[([0-9]+)\]|\.?([^.\[\]]+)")
+
+# Strings are matched first so that NaN/Infinity/number-looking text inside them is skipped.
+TOKEN_RE = re.compile(r'"(?:[^"\\]|\\.)*"|NaN|-?Infinity|-?[0-9][0-9.eE+-]*')
+
+
+class UsageError(Exception):
+    """Bad arguments or unparsable input: exit 2."""
+
+
+class NotFound(Exception):
+    """The path does not resolve in the document: exit 1."""
+
+
+class _Reject(ValueError):
+    """Raised from json hooks for constructs that strict JSON forbids."""
+
+
+def _write(stream, text):
+    stream.buffer.write(text.encode("utf-8", "replace"))
+    stream.buffer.flush()
+
+
+def parse_args(argv):
+    """Return parsed options, or None when --help was requested."""
+    opts = argparse.Namespace(shape=False, depth=DEFAULT_DEPTH)
+    positional = []
+    literal = False
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if literal or arg == "-" or not arg.startswith("-"):
+            positional.append(arg)
+        elif arg == "--":
+            literal = True
+        elif arg == "--help":
+            return None
+        elif arg == "--shape":
+            opts.shape = True
+        elif arg == "--depth" or arg.startswith("--depth="):
+            if "=" in arg:
+                value = arg.split("=", 1)[1]
+            elif i < len(argv):
+                value = argv[i]
+                i += 1
+            else:
+                raise UsageError("error: --depth requires a value")
+            if not re.fullmatch(r"[0-9]+", value):
+                raise UsageError(f"error: --depth must be a non-negative integer: {value}")
+            opts.depth = int(value)
+        else:
+            raise UsageError(f"unknown flag: {arg}")
+
+    if not positional:
+        raise UsageError("error: missing required argument: PATH")
+    if len(positional) > 2:
+        raise UsageError(f"error: unexpected argument: {positional[2]}")
+    opts.path = positional[0]
+    opts.file = positional[1] if len(positional) > 1 else None
+    return opts
+
+
+def parse_path(path):
+    """Split a path like a.b[0].c into keys (str) and indexes (int)."""
+    if path in ("", "."):
+        return []
+    if not PATH_RE.fullmatch(path):
+        raise UsageError(f"error: invalid path: {path}")
+    tokens = []
+    for match in PATH_TOKEN_RE.finditer(path):
+        index, key = match.group(1), match.group(2)
+        tokens.append(int(index) if index is not None else key)
+    return tokens
+
+
+def read_input(file):
+    if file in (None, "-"):
+        return sys.stdin.buffer.read()
+    try:
+        with open(file, "rb") as f:
+            return f.read()
+    except OSError as e:
+        raise UsageError(f"error: cannot read {file}: {e.strerror}")
+
+
+def _reject_constant(name):
+    raise _Reject(f"{name} is not valid JSON")
+
+
+def _parse_float(text):
+    value = float(text)
+    if math.isinf(value):
+        raise _Reject("number out of range")
+    return value
+
+
+def _locate(text):
+    """Character offset of the first NaN/Infinity or out-of-range number outside a string."""
+    for match in TOKEN_RE.finditer(text):
+        token = match.group()
+        if token.startswith('"'):
+            continue
+        if token in ("NaN", "Infinity", "-Infinity"):
+            return match.start()
+        if any(c in token for c in ".eE") and math.isinf(float(token)):
+            return match.start()
+    return 0
+
+
+def _position(text, offset):
+    line = text.count("\n", 0, offset) + 1
+    column = offset - (text.rfind("\n", 0, offset) + 1) + 1
+    return line, column
+
+
+def parse_json(data):
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError as e:
+        raise UsageError(f"error: invalid JSON: invalid UTF-8 at byte offset {e.start}")
+    try:
+        return json.loads(text, parse_constant=_reject_constant, parse_float=_parse_float)
+    except json.JSONDecodeError as e:
+        line, column = _position(text, e.pos)
+        raise UsageError(f"error: invalid JSON: {e.msg} at line {line} column {column}")
+    except _Reject as e:
+        line, column = _position(text, _locate(text))
+        raise UsageError(f"error: invalid JSON: {e} at line {line} column {column}")
+    except RecursionError:
+        raise UsageError("error: invalid JSON: nesting too deep to process")
+    except ValueError as e:
+        raise UsageError(f"error: invalid JSON: {e}")
+
+
+def resolve(doc, tokens):
+    node = doc
+    for token in tokens:
+        if isinstance(token, int):
+            if not isinstance(node, list) or token >= len(node):
+                raise NotFound()
+        elif not isinstance(node, dict) or token not in node:
+            raise NotFound()
+        node = node[token]
+    return node
+
+
+def format_scalar(value):
+    if value is None:
+        return "null"
+    if value is True:
+        return "true"
+    if value is False:
+        return "false"
+    if isinstance(value, int):
+        return str(value)
+    if value.is_integer() and abs(value) < 1e16:
+        return str(int(value))
+    return repr(value)
+
+
+def compact(value):
+    if isinstance(value, dict):
+        pairs = (json.dumps(k, ensure_ascii=False) + ":" + compact(v) for k, v in value.items())
+        return "{" + ",".join(pairs) + "}"
+    if isinstance(value, list):
+        return "[" + ",".join(compact(v) for v in value) + "]"
+    if isinstance(value, str):
+        return json.dumps(value, ensure_ascii=False)
+    return format_scalar(value)
+
+
+def default_output(value):
+    if isinstance(value, str):
+        return value
+    if isinstance(value, (dict, list)):
+        return compact(value)
+    return format_scalar(value)
+
+
+def shape(value, budget):
+    if isinstance(value, dict):
+        if budget == 0:
+            return f"object{{{len(value)} keys}}"
+        if not value:
+            return "object{}"
+        pairs = ", ".join(f"{k}: {shape(v, budget - 1)}" for k, v in value.items())
+        return "object{" + pairs + "}"
+    if isinstance(value, list):
+        if not value:
+            return "array[0]"
+        if budget == 0:
+            return f"array[{len(value)}]"
+        return f"array[{len(value)}] of {shape(value[0], budget - 1)}"
+    if isinstance(value, str):
+        return "string"
+    if isinstance(value, bool):
+        return "boolean"
+    if value is None:
+        return "null"
+    return "number"
+
+
+def main(argv):
+    opts = None
+    try:
+        opts = parse_args(argv)
+        if opts is None:
+            _write(sys.stdout, USAGE)
+            return EXIT_OK
+        tokens = parse_path(opts.path)
+        doc = parse_json(read_input(opts.file))
+        node = resolve(doc, tokens)
+    except UsageError as e:
+        _write(sys.stderr, f"{e}\n")
+        return EXIT_USAGE
+    except NotFound:
+        _write(sys.stderr, f"error: path not found: {opts.path}\n")
+        return EXIT_NOT_FOUND
+
+    if opts.shape:
+        _write(sys.stdout, shape(node, opts.depth) + "\n")
+    else:
+        _write(sys.stdout, default_output(node) + "\n")
+    return EXIT_OK
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

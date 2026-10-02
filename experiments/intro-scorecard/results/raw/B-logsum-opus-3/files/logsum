@@ -1,0 +1,4 @@
+#!/bin/sh
+# Launcher for logsum; run ./build.sh first.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+exec java -Xshare:auto -jar "$DIR/build/logsum.jar" "$@"

@@ -1,0 +1,3 @@
+#!/bin/sh
+# Launches the jsonpick jar built by `make` (see Makefile).
+exec java -jar "$(dirname "$0")/../build/jsonpick.jar" "$@"

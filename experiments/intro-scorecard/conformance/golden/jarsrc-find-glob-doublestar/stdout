@@ -1,0 +1,10 @@
+com.example.core.alpha.Main com.example.core:alpha:1.4.3
+com.example.core.alpha.Main com.example.core:alpha:2.0.4
+com.example.util.alpha.Main com.example.util:alpha:1.7.9
+com.example.util.alpha.Main com.example.util:alpha:2.18.6
+com.example.util.alpha.Main com.example.util:alpha:3.5.4
+org.sample.io.alpha.Main org.sample.io:alpha:1.1.0
+org.sample.io.alpha.Main org.sample.io:alpha:2.3.3
+org.sample.net.alpha.Main org.sample.net:alpha:1.18.1
+org.sample.net.alpha.Main org.sample.net:alpha:2.7.6
+org.sample.net.alpha.Main org.sample.net:alpha:3.4.0

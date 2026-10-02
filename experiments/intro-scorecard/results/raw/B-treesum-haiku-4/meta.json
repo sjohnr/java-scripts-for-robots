@@ -1,0 +1,94 @@
+{
+  "run_id": "B-treesum-haiku-4",
+  "condition": "B",
+  "task": "treesum",
+  "model_alias": "haiku",
+  "model_id": "claude-haiku-5-5",
+  "model_ids_used": [
+    "claude-haiku-5-5"
+  ],
+  "replicate": 4,
+  "seed": 20261010,
+  "seed_position": 33,
+  "started": "2026-10-11T01:04:58+00:00",
+  "ended": "2026-10-11T01:06:47+00:00",
+  "wall_s": 109.3,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 9,
+  "duration_ms": 108714,
+  "duration_api_ms": 106261,
+  "tokens": {
+    "input_tokens": 18,
+    "output_tokens": 25832,
+    "cache_creation_input_tokens": 31715,
+    "cache_read_input_tokens": 271680
+  },
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 18,
+      "outputTokens": 25832,
+      "cacheReadInputTokens": 271680,
+      "cacheCreationInputTokens": 31715,
+      "webSearchRequests": 0,
+      "costUSD": 0.0219776,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 18595,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.0219776,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "0392e909-bbce-4dca-b6a3-5850460aabaa",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-haiku-4",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.3,
+    "cost_usd": 0.0007357700000000002,
+    "cost_usd_cumulative_reported": 0.02271337,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 111,
+      "cache_creation_input_tokens": 1188,
+      "cache_read_input_tokens": 44247
+    },
+    "subtype": "success",
+    "reply": "```\njava -jar build/treesum.jar\n```",
+    "run_command": "java -jar build/treesum.jar",
+    "limit_hits": []
+  },
+  "run_command": "java -jar build/treesum.jar",
+  "excluded_from_copy": [
+    {
+      "path": "build",
+      "bytes": 30749
+    }
+  ],
+  "prompt": "Build the `treesum` command-line tool described in SPEC.md. Write it in Java.",
+  "claude_args": [
+    "-p",
+    "Build the `treesum` command-line tool described in SPEC.md. Write it in Java.",
+    "--model",
+    "haiku",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

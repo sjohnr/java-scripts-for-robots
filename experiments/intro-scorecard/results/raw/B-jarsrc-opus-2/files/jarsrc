@@ -1,0 +1,11 @@
+#!/bin/sh
+# Launcher for jarsrc; builds build/jarsrc.jar on first use or when sources change.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+JAR="$DIR/build/jarsrc.jar"
+if [ ! -f "$JAR" ] || [ -n "$(find "$DIR/src" -name '*.java' -newer "$JAR" 2>/dev/null)" ]; then
+  if ! out="$("$DIR/build.sh" 2>&1)"; then
+    printf '%s\n' "$out" >&2
+    exit 2
+  fi
+fi
+exec java -Xshare:auto -XX:TieredStopAtLevel=1 -jar "$JAR" "$@"

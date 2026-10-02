@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""treesum: compact repo overview."""
+import os
+import stat
+import sys
+
+IGNORED = {".git", "node_modules", "build", ".gradle", "target", "dist",
+           ".venv", "__pycache__", ".idea", ".vscode"}
+
+HELP = """usage: treesum [DIR] [--top N] [--ext-limit M]
+
+arguments:
+  DIR            directory to summarize (default: .)
+
+options:
+  --top N        number of largest files to list (default: 10)
+  --ext-limit M  max distinct extensions in the by-extension table (default: 20);
+                 the rest are folded into an 'other' row
+  --help         show this message and exit
+
+Ignored directory names (fixed): .git, node_modules, build, .gradle, target,
+dist, .venv, __pycache__, .idea, .vscode
+"""
+
+
+def usage_error(msg):
+    sys.stderr.write(msg + "\n")
+    sys.exit(2)
+
+
+def parse_int(flag, value):
+    try:
+        n = int(value)
+    except ValueError:
+        usage_error("invalid value for %s: %s" % (flag, value))
+    if n < 0:
+        usage_error("invalid value for %s: %s" % (flag, value))
+    return n
+
+
+def parse_args(argv):
+    top, ext_limit, root = 10, 20, None
+    i = 0
+    only_positional = False
+    while i < len(argv):
+        a = argv[i]
+        i += 1
+        if only_positional or not a.startswith("-") or a == "-":
+            if root is not None:
+                usage_error("unexpected argument: %s" % a)
+            root = a
+        elif a == "--":
+            only_positional = True
+        elif a == "--help":
+            sys.stdout.write(HELP)
+            sys.exit(0)
+        else:
+            name, eq, val = a.partition("=")
+            if name not in ("--top", "--ext-limit"):
+                usage_error("unknown flag: %s" % a)
+            if not eq:
+                if i >= len(argv):
+                    usage_error("missing value for %s" % name)
+                val = argv[i]
+                i += 1
+            n = parse_int(name, val)
+            if name == "--top":
+                top = n
+            else:
+                ext_limit = n
+    return (root if root is not None else "."), top, ext_limit
+
+
+def count_loc(path):
+    n = 0
+    last = b""
+    with open(path, "rb") as f:
+        while True:
+            chunk = f.read(1 << 20)
+            if not chunk:
+                break
+            n += chunk.count(b"\n")
+            last = chunk[-1:]
+    if last and last != b"\n":
+        n += 1
+    return n
+
+
+def ext_of(name):
+    if "." not in name:
+        return ""
+    return name.rsplit(".", 1)[1].lower()
+
+
+def main():
+    root, top, ext_limit = parse_args(sys.argv[1:])
+    if not os.path.isdir(root):
+        usage_error("error: cannot read %s" % root)
+
+    files = 0
+    dirs = 0
+    exts = {}
+    sizes = []
+    stack = [("", root)]
+    while stack:
+        rel, path = stack.pop()
+        try:
+            with os.scandir(path) as it:
+                entries = list(it)
+        except OSError:
+            if rel == "":
+                usage_error("error: cannot read %s" % root)
+            continue
+        for e in entries:
+            try:
+                st = e.stat(follow_symlinks=False)
+            except OSError:
+                continue
+            erel = rel + "/" + e.name if rel else e.name
+            if stat.S_ISDIR(st.st_mode):
+                if e.name in IGNORED:
+                    continue
+                dirs += 1
+                stack.append((erel, e.path))
+            elif stat.S_ISREG(st.st_mode):
+                try:
+                    loc = count_loc(e.path)
+                except OSError:
+                    continue
+                files += 1
+                c = exts.setdefault(ext_of(e.name), [0, 0])
+                c[0] += 1
+                c[1] += loc
+                sizes.append((st.st_size, erel))
+
+    rows = sorted(exts.items(), key=lambda kv: (-kv[1][0], kv[0]))
+    shown, rest = rows[:ext_limit], rows[ext_limit:]
+    out = ["files: %d" % files, "dirs: %d" % dirs, "by extension:"]
+    for ext, (n, loc) in shown:
+        out.append("  %s  files=%d loc=%d" % (ext or "(none)", n, loc))
+    if rest:
+        out.append("  other  files=%d loc=%d" % (
+            sum(v[0] for _, v in rest), sum(v[1] for _, v in rest)))
+    out.append("largest files:")
+    sizes.sort(key=lambda t: (-t[0], t[1]))
+    for size, rel in sizes[:top]:
+        out.append("  %d %s" % (size, rel))
+
+    sys.stdout.buffer.write(("\n".join(out) + "\n").encode("utf-8", "surrogateescape"))
+
+
+if __name__ == "__main__":
+    main()

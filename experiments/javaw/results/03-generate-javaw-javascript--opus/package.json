@@ -1,0 +1,9 @@
+{
+  "name": "javaw",
+  "version": "1.0.0",
+  "description": "Generate relocatable POSIX sh launcher scripts for Java programs",
+  "bin": { "javaw": "javaw" },
+  "scripts": { "test": "node --test" },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}

@@ -1,0 +1,90 @@
+{
+  "run_id": "A-logsum-sonnet-1",
+  "condition": "A",
+  "task": "logsum",
+  "model_alias": "sonnet",
+  "model_id": "claude-sonnet-5-5",
+  "model_ids_used": [
+    "claude-sonnet-5-5"
+  ],
+  "replicate": 1,
+  "seed": 20261010,
+  "seed_position": 78,
+  "started": "2026-10-11T00:15:47+00:00",
+  "ended": "2026-10-11T00:16:09+00:00",
+  "wall_s": 22.3,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 4,
+  "duration_ms": 21749,
+  "duration_api_ms": 21141,
+  "tokens": {
+    "input_tokens": 6,
+    "output_tokens": 3284,
+    "cache_creation_input_tokens": 8909,
+    "cache_read_input_tokens": 43846
+  },
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 3284,
+      "cacheReadInputTokens": 43846,
+      "cacheCreationInputTokens": 8909,
+      "webSearchRequests": 0,
+      "costUSD": 0.07287260000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 500,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.07287260000000001,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "02146585-5a32-496f-a992-072475c42a9d",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-logsum-sonnet-1",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.1,
+    "cost_usd": 0.0045742000000000005,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 8,
+      "cache_creation_input_tokens": 618,
+      "cache_read_input_tokens": 20182
+    },
+    "subtype": "success",
+    "reply": "`./logsum`",
+    "run_command": "./logsum",
+    "limit_hits": [],
+    "cost_usd_cumulative_reported": 0.07744680000000001,
+    "note": "cost_usd recomputed after recording (cumulative minus generation)"
+  },
+  "run_command": "./logsum",
+  "excluded_from_copy": [],
+  "prompt": "Build the `logsum` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `logsum` command-line tool described in SPEC.md.",
+    "--model",
+    "sonnet",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

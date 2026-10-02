@@ -1,0 +1,227 @@
+#!/usr/bin/env python3
+"""jsonpick: extract a value by path from JSON. See SPEC.md."""
+import json
+import math
+import re
+import sys
+
+USAGE = """usage: jsonpick PATH [FILE] [--shape] [--depth N]
+
+Extract a value by path from JSON.
+
+arguments:
+  PATH      path such as a.b[0].c ('.' or '' selects the whole document)
+  FILE      input file; omitted or '-' means stdin
+
+flags:
+  --shape   print a depth-limited type/length summary of the subtree at PATH
+  --depth N levels to describe with --shape (default 2)
+  --help    show this message
+"""
+
+
+class Usage(Exception):
+    pass
+
+
+class NotFound(Exception):
+    pass
+
+
+def out(text):
+    sys.stdout.buffer.write(text.encode("utf-8", "replace"))
+    sys.stdout.buffer.flush()
+
+
+def err(text):
+    sys.stderr.buffer.write(text.encode("utf-8", "replace"))
+    sys.stderr.buffer.flush()
+
+
+def parse_args(argv):
+    positional = []
+    shape = False
+    depth = 2
+    i = 0
+    only_pos = False
+    while i < len(argv):
+        a = argv[i]
+        if only_pos or a == "-" or not a.startswith("-"):
+            positional.append(a)
+        elif a == "--":
+            only_pos = True
+        elif a == "--help":
+            out(USAGE)
+            sys.exit(0)
+        elif a == "--shape":
+            shape = True
+        elif a == "--depth" or a.startswith("--depth="):
+            if "=" in a:
+                val = a.split("=", 1)[1]
+            else:
+                i += 1
+                if i >= len(argv):
+                    raise Usage("missing value for --depth")
+                val = argv[i]
+            if not re.fullmatch(r"[0-9]+", val):
+                raise Usage("invalid --depth value: " + val)
+            depth = int(val)
+        else:
+            raise Usage("unknown flag: " + a)
+        i += 1
+    if not positional:
+        raise Usage("missing required argument: PATH")
+    if len(positional) > 2:
+        raise Usage("unexpected argument: " + positional[2])
+    path = positional[0]
+    file = positional[1] if len(positional) > 1 else "-"
+    return path, file, shape, depth
+
+
+_TOKEN = re.compile(r"\[([0-9]+)\]|([^.\[\]]+)")
+
+
+def parse_path(path):
+    """Return list of str (key) / int (index) steps; raise NotFound if malformed."""
+    if path.startswith("."):
+        path = path[1:]
+    steps = []
+    pos = 0
+    first = True
+    while pos < len(path):
+        if path[pos] == "." and not first:
+            pos += 1
+            if pos >= len(path) or path[pos] in ".[":
+                raise NotFound()
+            m = re.compile(r"[^.\[\]]+").match(path, pos)
+            if not m:
+                raise NotFound()
+            steps.append(m.group(0))
+            pos = m.end()
+            continue
+        m = _TOKEN.match(path, pos)
+        if not m or (m.group(2) is not None and not first):
+            raise NotFound()
+        steps.append(int(m.group(1)) if m.group(1) is not None else m.group(2))
+        pos = m.end()
+        first = False
+    return steps
+
+
+def navigate(doc, path):
+    node = doc
+    for step in parse_path(path):
+        if isinstance(step, int):
+            if not isinstance(node, list) or step >= len(node):
+                raise NotFound()
+        else:
+            if not isinstance(node, dict) or step not in node:
+                raise NotFound()
+        node = node[step]
+    return node
+
+
+def fmt_number(v):
+    if isinstance(v, int):
+        return str(v)
+    if math.isinf(v) or math.isnan(v):
+        return "null"
+    if v == int(v) and abs(v) < 1e16:
+        return str(int(v))
+    return repr(v)
+
+
+def dump(v):
+    if v is None:
+        return "null"
+    if v is True:
+        return "true"
+    if v is False:
+        return "false"
+    if isinstance(v, (int, float)):
+        return fmt_number(v)
+    if isinstance(v, str):
+        return json.dumps(v, ensure_ascii=False)
+    if isinstance(v, list):
+        return "[" + ",".join(dump(x) for x in v) + "]"
+    return "{" + ",".join(
+        json.dumps(k, ensure_ascii=False) + ":" + dump(x) for k, x in v.items()
+    ) + "}"
+
+
+def shape(v, budget):
+    if isinstance(v, str):
+        return "string"
+    if isinstance(v, bool):
+        return "boolean"
+    if isinstance(v, (int, float)):
+        return "number"
+    if v is None:
+        return "null"
+    if isinstance(v, list):
+        if not v:
+            return "array[0]"
+        if budget <= 0:
+            return "array[%d]" % len(v)
+        return "array[%d] of %s" % (len(v), shape(v[0], budget - 1))
+    if budget <= 0:
+        return "object{%d}" % len(v)
+    return "object{" + ", ".join(
+        "%s: %s" % (k, shape(x, budget - 1)) for k, x in v.items()
+    ) + "}"
+
+
+def bad_constant(name):
+    raise ValueError("unexpected constant " + name)
+
+
+def load(file):
+    try:
+        if file == "-":
+            raw = sys.stdin.buffer.read()
+        else:
+            with open(file, "rb") as f:
+                raw = f.read()
+    except OSError as e:
+        raise Usage("cannot read %s: %s" % (file, e.strerror or e))
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError as e:
+        raise Usage("invalid JSON: invalid UTF-8 at byte offset %d" % e.start)
+    if text.startswith("﻿"):
+        text = text[1:]
+    try:
+        return json.loads(text, parse_constant=bad_constant)
+    except json.JSONDecodeError as e:
+        reason = e.msg.replace("\n", " ")
+        raise Usage("invalid JSON: %s at line %d column %d" % (reason, e.lineno, e.colno))
+    except ValueError as e:
+        raise Usage("invalid JSON: %s at line 1 column 1" % e)
+    except RecursionError:
+        raise Usage("invalid JSON: nesting too deep at line 1 column 1")
+
+
+def main():
+    try:
+        path, file, want_shape, depth = parse_args(sys.argv[1:])
+        doc = load(file)
+        try:
+            node = navigate(doc, path)
+        except NotFound:
+            err("error: path not found: %s\n" % path)
+            return 1
+        if want_shape:
+            out(shape(node, depth) + "\n")
+        elif isinstance(node, str):
+            out(node + "\n")
+        else:
+            out(dump(node) + "\n")
+        return 0
+    except Usage as e:
+        msg = str(e)
+        err((msg if msg.startswith("unknown flag") else "error: " + msg) + "\n")
+        return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,10 @@
+2024-05-01T10:00:00 INFO service started
+2024-05-01T10:00:01 DEBUG cache warm
+2024-05-01T10:00:02 ERROR request 1234 failed for user 42
+2024-05-01T10:00:03 ERROR request 5678 failed for user 99
+2024-05-01T10:00:04 WARN slow query took 300ms
+garbage line
+2024-05-01T10:00:05 error lowercase level is skipped
+2024-05-01T10:00:06 ERROR conn 3f2a9c1b reset
+2024-02-30T10:00:07 INFO impossible date is skipped
+2024-05-01T10:00:08 ERROR connection to db 2024-05-01 lost

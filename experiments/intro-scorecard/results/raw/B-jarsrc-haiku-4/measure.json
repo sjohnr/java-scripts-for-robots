@@ -1,0 +1,247 @@
+{
+  "run_id": "B-jarsrc-haiku-4",
+  "measured": "2026-10-11T09:02:12",
+  "run_command_reported": "./bin/jarsrc --help",
+  "run_command_used": "./bin/jarsrc",
+  "run_command_notes": [
+    "dropped trailing --help"
+  ],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "jarsrc.Main",
+    "launch": {
+      "lang": "java",
+      "entry": "jarsrc.Main",
+      "launch": "javac + java",
+      "wrapper": "bin/jarsrc",
+      "evidence": [
+        "run command program: ./bin/jarsrc",
+        "wrapper script bin/jarsrc runs: java -cp \"../build/classes\" jarsrc.Main "
+      ],
+      "flags": [],
+      "java_opts": "-cp ../build/classes",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 76,
+      "java": 18282
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "build script",
+      "launch": "javac + java",
+      "source": "classic",
+      "imports": "classic",
+      "files": "multiple files",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "build script / javac + java",
+      "java_file_count": 3,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "bin/jarsrc",
+      "evidence": {
+        "build": [
+          "build.sh"
+        ],
+        "launch": [
+          "run command program: ./bin/jarsrc",
+          "wrapper script bin/jarsrc runs: java -cp \"../build/classes\" jarsrc.Main ",
+          "run command program: java",
+          "via wrapper script bin/jarsrc"
+        ],
+        "source": [
+          "src/jarsrc/Main.java:69 static void main(String[] argv) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/jarsrc/Index.java",
+          "src/jarsrc/Main.java",
+          "src/jarsrc/Version.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 5788
+    },
+    {
+      "path": "build.sh",
+      "kind": "build",
+      "lang": null,
+      "bytes": 213
+    },
+    {
+      "path": "bin/jarsrc",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 76
+    },
+    {
+      "path": "src/jarsrc/Index.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 4520
+    },
+    {
+      "path": "src/jarsrc/Main.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 12340
+    },
+    {
+      "path": "src/jarsrc/Version.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 1422
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jarsrc-find-exact",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-glob-star",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-glob-doublestar",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-highest-version",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-lines",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-lines-out-of-range",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-ls-ga",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-ls-gav-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-help",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-unknown-flag",
+        "ok": true
+      }
+    ],
+    "passed": 12,
+    "total": 12,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.04,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 4135,
+    "build_file_tokens": 67,
+    "test_tokens": 0,
+    "source_files": [
+      "bin/jarsrc",
+      "src/jarsrc/Index.java",
+      "src/jarsrc/Main.java",
+      "src/jarsrc/Version.java"
+    ],
+    "build_files": [
+      "build.sh"
+    ],
+    "source_bytes": 18358,
+    "build_file_bytes": 213
+  },
+  "disk": {
+    "source_and_build_files_bytes": 18571,
+    "build_output_bytes": 26279,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 44850
+  },
+  "load_avg_at_bench_start": 1.865234375,
+  "startup": {
+    "command": "./bin/jarsrc --help",
+    "median_ms": 25.439455560000003,
+    "mean_ms": 25.541281774285736,
+    "stddev_ms": 0.6385841028263891,
+    "min_ms": 24.287580560000002,
+    "runs": 112,
+    "load_avg_before": 1.865234375,
+    "load_avg_after": 1.865234375
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-4/opt/app.jar",
+    "main": "jarsrc.Main",
+    "training": {
+      "args": [
+        "find",
+        "**.Main",
+        "--root",
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/jarsrc"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-4/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-4/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-4/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 11649024,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-4/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-4/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-4/opt/app.jar jarsrc.Main --help",
+      "median_ms": 19.43719378,
+      "mean_ms": 19.42127548198675,
+      "stddev_ms": 0.45380872240084896,
+      "min_ms": 18.405443780000002,
+      "runs": 151,
+      "load_avg_before": 1.865234375,
+      "load_avg_after": 1.8759765625
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-4/opt/app.jar jarsrc.Main --help",
+      "median_ms": 23.08647082,
+      "mean_ms": 23.1398654646281,
+      "stddev_ms": 0.4570547606855561,
+      "min_ms": 21.99030382,
+      "runs": 121,
+      "load_avg_before": 1.8759765625,
+      "load_avg_after": 1.8056640625
+    }
+  },
+  "benchmarked": "2026-10-11T09:06:59"
+}

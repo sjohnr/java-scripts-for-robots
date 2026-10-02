@@ -1,0 +1,6 @@
+#!/bin/sh
+DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ ! -f "$DIR/build/jarsrc.jar" ]; then
+  "$DIR/build.sh" >/dev/null || exit 2
+fi
+exec java -Xshare:auto -XX:TieredStopAtLevel=1 -jar "$DIR/build/jarsrc.jar" "$@"

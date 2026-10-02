@@ -1,0 +1,20 @@
+{
+ "run_id": "B-jarsrc-opus-2",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-2/opt/app.jar",
+ "main": "jarsrc.Main",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jarsrc-opus-2/app",
+ "build_seconds": 10.4,
+ "image_bytes": 6745424,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jarsrc-opus-2/app --help",
+  "median_ms": 2.36859268,
+  "mean_ms": 2.399924732197801,
+  "stddev_ms": 0.2186476127329635,
+  "min_ms": 2.21807168,
+  "runs": 728,
+  "load_avg_before": 5.94921875,
+  "load_avg_after": 5.94921875
+ }
+}

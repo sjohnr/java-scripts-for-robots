@@ -1,0 +1,326 @@
+#!/usr/bin/env python3
+"""jarsrc: query a Gradle-cache-like tree of *-sources.jar files. See SPEC.md."""
+
+import functools
+import os
+import re
+import sys
+import zipfile
+
+EXIT_OK = 0
+EXIT_NOT_FOUND = 1
+EXIT_USAGE = 2
+
+HELP = """\
+usage:
+  jarsrc find <fqcn-or-glob> [--root DIR]
+  jarsrc cat <fqcn> [--lines A:B] [--root DIR]
+  jarsrc ls <group:artifact[:version]> [--root DIR]
+  jarsrc --help
+
+commands:
+  find   list classes matching a FQCN or glob (* = any chars except '.', ** = any chars)
+  cat    print the source of a class from the highest version containing it
+  ls     list versions of group:artifact, or classes in group:artifact:version
+
+flags:
+  --root DIR    root of the sources-jar tree (default: .)
+  --lines A:B   (cat only) print only lines A through B, 1-indexed, inclusive
+  --help        show this help and exit
+"""
+
+
+class CliError(Exception):
+    def __init__(self, code, message):
+        super().__init__(message)
+        self.code = code
+        self.message = message
+
+
+def out(lines):
+    data = "".join(line.rstrip() + "\n" for line in lines)
+    sys.stdout.buffer.write(data.encode("utf-8"))
+    sys.stdout.buffer.flush()
+
+
+def err(message):
+    sys.stderr.buffer.write((message.rstrip() + "\n").encode("utf-8"))
+    sys.stderr.buffer.flush()
+
+
+# ---------------------------------------------------------------- versions
+
+def _version_segments(v):
+    return re.split(r"[.-]", v)
+
+
+def _is_int(s):
+    return s != "" and all("0" <= c <= "9" for c in s)
+
+
+def compare_versions(a, b):
+    sa, sb = _version_segments(a), _version_segments(b)
+    for x, y in zip(sa, sb):
+        if _is_int(x) and _is_int(y):
+            xi, yi = int(x), int(y)
+            if xi != yi:
+                return -1 if xi < yi else 1
+        else:
+            xb, yb = x.encode("utf-8"), y.encode("utf-8")
+            if xb != yb:
+                return -1 if xb < yb else 1
+    return (len(sa) > len(sb)) - (len(sa) < len(sb))
+
+
+version_key = functools.cmp_to_key(compare_versions)
+
+
+# ---------------------------------------------------------------- discovery
+
+class Jar:
+    def __init__(self, group, artifact, version, path):
+        self.group = group
+        self.artifact = artifact
+        self.version = version
+        self.path = path
+        self._classes = None
+
+    @property
+    def ga(self):
+        return f"{self.group}:{self.artifact}"
+
+    @property
+    def gav(self):
+        return f"{self.group}:{self.artifact}:{self.version}"
+
+    def _entries(self):
+        """Map FQCN -> zip entry name for every .java file in the jar."""
+        if self._classes is None:
+            classes = {}
+            try:
+                with zipfile.ZipFile(self.path) as zf:
+                    for name in zf.namelist():
+                        if name.endswith("/") or not name.endswith(".java"):
+                            continue
+                        rel = name.lstrip("/")[: -len(".java")]
+                        if not rel:
+                            continue
+                        classes.setdefault(rel.replace("/", "."), name)
+            except (OSError, zipfile.BadZipFile):
+                classes = {}
+            self._classes = classes
+        return self._classes
+
+    def classes(self):
+        return self._entries().keys()
+
+    def read(self, fqcn):
+        with zipfile.ZipFile(self.path) as zf:
+            return zf.read(self._entries()[fqcn])
+
+
+def discover(root):
+    if not os.path.isdir(root):
+        raise CliError(EXIT_USAGE, f"error: root is not a directory: {root}")
+    jars = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames.sort()
+        rel = os.path.relpath(dirpath, root)
+        if rel == os.curdir:
+            continue
+        parts = rel.split(os.sep)
+        if len(parts) < 3:
+            continue
+        group_parts, artifact, version = parts[:-2], parts[-2], parts[-1]
+        expected = f"{artifact}-{version}-sources.jar"
+        if expected in filenames:
+            path = os.path.join(dirpath, expected)
+            if os.path.isfile(path):
+                jars.append(Jar(".".join(group_parts), artifact, version, path))
+    return jars
+
+
+# ---------------------------------------------------------------- helpers
+
+def suggestions(needle, names):
+    if not needle:
+        return []
+    return sorted({n for n in names if n.startswith(needle)})[:3]
+
+
+def not_found(message, suggest):
+    if suggest:
+        message += f" (did you mean: {', '.join(suggest)}?)"
+    return CliError(EXIT_NOT_FOUND, f"error: {message}")
+
+
+def simple_name(fqcn):
+    return fqcn.rsplit(".", 1)[-1]
+
+
+def glob_to_regex(pattern):
+    parts = []
+    i = 0
+    while i < len(pattern):
+        if pattern.startswith("**", i):
+            parts.append(".*")
+            i += 2
+        elif pattern[i] == "*":
+            parts.append("[^.]*")
+            i += 1
+        else:
+            parts.append(re.escape(pattern[i]))
+            i += 1
+    return re.compile("".join(parts), re.DOTALL)
+
+
+# ---------------------------------------------------------------- commands
+
+def cmd_find(query, root):
+    jars = discover(root)
+    if "*" in query:
+        regex = glob_to_regex(query)
+        match = lambda fqcn: regex.fullmatch(fqcn) is not None
+    else:
+        match = lambda fqcn: fqcn == query
+    results = set()
+    for jar in jars:
+        for fqcn in jar.classes():
+            if match(fqcn):
+                results.add((fqcn, jar.gav))
+    if not results:
+        names = {simple_name(f) for jar in jars for f in jar.classes()}
+        needle = simple_name(query).split("*", 1)[0]
+        raise not_found(f"no matches for {query}", suggestions(needle, names))
+    out(f"{fqcn} {gav}" for fqcn, gav in sorted(results))
+
+
+def parse_lines(spec):
+    m = re.fullmatch(r"([0-9]+):([0-9]+)", spec)
+    if not m:
+        raise CliError(EXIT_USAGE, f"error: invalid --lines value: {spec} (expected A:B)")
+    return int(m.group(1)), int(m.group(2))
+
+
+def cmd_cat(fqcn, root, line_range):
+    jars = discover(root)
+    holders = [jar for jar in jars if fqcn in jar.classes()]
+    if not holders:
+        names = {simple_name(f) for jar in jars for f in jar.classes()}
+        raise not_found(f"no source for {fqcn}", suggestions(simple_name(fqcn), names))
+    gas = sorted({jar.ga for jar in holders})
+    if len(gas) > 1:
+        raise CliError(EXIT_USAGE, f"error: {fqcn} is ambiguous across: {', '.join(gas)}")
+    best = max(holders, key=lambda jar: version_key(jar.version))
+    text = best.read(fqcn).decode("utf-8", errors="replace")
+    if text.startswith("﻿"):
+        text = text[1:]
+    lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+    if lines and lines[-1] == "":
+        lines.pop()
+    if line_range is not None:
+        a, b = line_range
+        a = max(a, 1)
+        b = min(b, len(lines))
+        lines = lines[a - 1 : b] if a <= b else []
+    out(lines)
+
+
+def cmd_ls(coord, root):
+    parts = coord.split(":")
+    if len(parts) not in (2, 3) or any(p == "" for p in parts):
+        raise CliError(
+            EXIT_USAGE, f"error: invalid coordinate: {coord} (expected group:artifact[:version])"
+        )
+    jars = discover(root)
+    ga = f"{parts[0]}:{parts[1]}"
+    matching = [jar for jar in jars if jar.ga == ga]
+    if not matching:
+        known = {jar.ga for jar in jars}
+        raise not_found(f"no artifact {coord}", suggestions(ga, known))
+    if len(parts) == 2:
+        out(sorted({jar.version for jar in matching}, key=version_key))
+        return
+    exact = [jar for jar in matching if jar.version == parts[2]]
+    if not exact:
+        known = {jar.ga for jar in jars}
+        raise not_found(f"no artifact {coord}", suggestions(ga, known))
+    out(sorted(set(exact[0].classes())))
+
+
+# ---------------------------------------------------------------- argv
+
+COMMANDS = {"find", "cat", "ls"}
+
+
+def parse_args(argv):
+    if "--help" in argv:
+        return {"help": True}
+    root = "."
+    lines = None
+    positionals = []
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        if arg == "--root" or arg.startswith("--root="):
+            if arg == "--root":
+                if i + 1 >= len(argv):
+                    raise CliError(EXIT_USAGE, "error: --root requires a value")
+                root = argv[i + 1]
+                i += 2
+            else:
+                root = arg[len("--root="):]
+                i += 1
+            if root == "":
+                raise CliError(EXIT_USAGE, "error: --root requires a value")
+            continue
+        if arg == "--lines" or arg.startswith("--lines="):
+            if arg == "--lines":
+                if i + 1 >= len(argv):
+                    raise CliError(EXIT_USAGE, "error: --lines requires a value")
+                value = argv[i + 1]
+                i += 2
+            else:
+                value = arg[len("--lines="):]
+                i += 1
+            lines = parse_lines(value)
+            continue
+        if arg.startswith("-") and arg != "-":
+            raise CliError(EXIT_USAGE, f"unknown flag: {arg.split('=', 1)[0]}")
+        positionals.append(arg)
+        i += 1
+
+    if not positionals:
+        raise CliError(EXIT_USAGE, "error: missing command (try --help)")
+    command, rest = positionals[0], positionals[1:]
+    if command not in COMMANDS:
+        raise CliError(EXIT_USAGE, f"error: unknown command: {command}")
+    if not rest:
+        raise CliError(EXIT_USAGE, f"error: {command}: missing required argument")
+    if len(rest) > 1:
+        raise CliError(EXIT_USAGE, f"error: {command}: unexpected argument: {rest[1]}")
+    if lines is not None and command != "cat":
+        raise CliError(EXIT_USAGE, "error: --lines is only valid with cat")
+    return {"help": False, "command": command, "arg": rest[0], "root": root, "lines": lines}
+
+
+def main(argv):
+    try:
+        args = parse_args(argv)
+        if args["help"]:
+            out(HELP.splitlines())
+            return EXIT_OK
+        if args["command"] == "find":
+            cmd_find(args["arg"], args["root"])
+        elif args["command"] == "cat":
+            cmd_cat(args["arg"], args["root"], args["lines"])
+        else:
+            cmd_ls(args["arg"], args["root"])
+        return EXIT_OK
+    except CliError as e:
+        err(e.message)
+        return e.code
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

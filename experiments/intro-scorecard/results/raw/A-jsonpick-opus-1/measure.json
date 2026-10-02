@@ -1,0 +1,132 @@
+{
+  "run_id": "A-jsonpick-opus-1",
+  "measured": "2026-10-10T20:16:54",
+  "run_command_reported": "./jsonpick PATH [FILE]",
+  "run_command_used": "./jsonpick",
+  "run_command_notes": [
+    "dropped placeholders:  [FILE]",
+    "dropped trailing PATH"
+  ],
+  "classification": {
+    "language": "python",
+    "language_group": "scripting",
+    "entry": "jsonpick",
+    "launch": {
+      "lang": "python",
+      "entry": "jsonpick",
+      "launch": null,
+      "wrapper": null,
+      "evidence": [
+        "run command program: ./jsonpick"
+      ],
+      "flags": [],
+      "java_opts": ""
+    },
+    "source_bytes_by_lang": {
+      "python": 7689
+    },
+    "flags": [],
+    "needs_review": false
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 3310
+    },
+    {
+      "path": "jsonpick",
+      "kind": "source",
+      "lang": "python",
+      "bytes": 7689
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jsonpick-string",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-number",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-array-index",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-object",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-root",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-shape",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-shape-depth0",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-notfound",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-stdin",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-bad-json",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-help",
+        "ok": true
+      }
+    ],
+    "passed": 11,
+    "total": 11,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.03,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 1888,
+    "build_file_tokens": 0,
+    "test_tokens": 0,
+    "source_files": [
+      "jsonpick"
+    ],
+    "build_files": [],
+    "source_bytes": 7689,
+    "build_file_bytes": 0
+  },
+  "disk": {
+    "source_and_build_files_bytes": 7689,
+    "build_output_bytes": 0,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 7689
+  },
+  "load_avg_at_bench_start": 2.37158203125,
+  "startup": {
+    "command": "./jsonpick --help",
+    "median_ms": 16.120036400000004,
+    "mean_ms": 16.882574867065866,
+    "stddev_ms": 2.915201557766595,
+    "min_ms": 15.4714954,
+    "runs": 167,
+    "load_avg_before": 2.37158203125,
+    "load_avg_after": 2.37158203125
+  },
+  "benchmarked": "2026-10-11T09:05:28"
+}

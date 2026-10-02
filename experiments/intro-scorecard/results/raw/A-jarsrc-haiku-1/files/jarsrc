@@ -1,0 +1,275 @@
+#!/usr/bin/env python3
+"""jarsrc: query a Gradle-cache-like tree of *-sources.jar files. See SPEC.md."""
+
+import functools
+import os
+import re
+import sys
+import zipfile
+
+USAGE_TEXT = """\
+usage:
+  jarsrc find <fqcn-or-glob> [--root DIR]
+  jarsrc cat <fqcn> [--lines A:B] [--root DIR]
+  jarsrc ls <group:artifact[:version]> [--root DIR]
+  jarsrc --help
+
+subcommands:
+  find   list classes whose FQCN matches a name or glob (* stays within one
+         segment, ** may cross dots)
+  cat    print a class's source from its highest version
+  ls     list the versions of an artifact, or the classes in one version
+
+flags:
+  --root DIR     tree to search (default: .)
+  --lines A:B    cat only: print lines A through B (1-indexed, inclusive)
+  --help         print this message and exit 0
+"""
+
+EXIT_NOT_FOUND = 1
+EXIT_USAGE = 2
+SOURCES_SUFFIX = "-sources.jar"
+
+_VERSION_SEPARATORS = re.compile(r"[.-]")
+_DIGITS = re.compile(r"[0-9]+\Z")
+
+
+class Jar:
+    """One sources jar found under the root, and the classes it contains."""
+
+    def __init__(self, group, artifact, version, path, entries):
+        self.group = group
+        self.artifact = artifact
+        self.version = version
+        self.path = path
+        self.entries = entries  # FQCN -> entry name inside the jar
+
+    @property
+    def ga(self):
+        return f"{self.group}:{self.artifact}"
+
+
+def fail(code, message):
+    sys.stderr.buffer.write((message + "\n").encode("utf-8"))
+    sys.exit(code)
+
+
+def emit(text):
+    sys.stdout.buffer.write(text.encode("utf-8"))
+
+
+def compare_versions(a, b):
+    segs_a = _VERSION_SEPARATORS.split(a)
+    segs_b = _VERSION_SEPARATORS.split(b)
+    for x, y in zip(segs_a, segs_b):
+        if _DIGITS.match(x) and _DIGITS.match(y):
+            nx, ny = int(x), int(y)
+            if nx != ny:
+                return -1 if nx < ny else 1
+        elif x != y:
+            # Python str ordering is code point order, which matches UTF-8 byte order.
+            return -1 if x < y else 1
+    if len(segs_a) != len(segs_b):
+        return -1 if len(segs_a) < len(segs_b) else 1
+    return 0
+
+
+version_key = functools.cmp_to_key(compare_versions)
+
+
+def read_jar(group, artifact, version, path):
+    entries = {}
+    try:
+        with zipfile.ZipFile(path) as zf:
+            for name in zf.namelist():
+                if name.endswith(".java"):
+                    entries.setdefault(name[:-5].replace("/", "."), name)
+    except (OSError, zipfile.BadZipFile) as exc:
+        fail(EXIT_USAGE, f"error: cannot read {path}: {exc}")
+    return Jar(group, artifact, version, path, entries)
+
+
+def scan(root):
+    jars = []
+    for dirpath, _dirnames, filenames in os.walk(root):
+        for filename in filenames:
+            if not filename.endswith(SOURCES_SUFFIX):
+                continue
+            rel = os.path.relpath(os.path.join(dirpath, filename), root)
+            parts = rel.split(os.sep)
+            if len(parts) < 4:
+                continue
+            *group_parts, artifact, version, jar_name = parts
+            if jar_name != f"{artifact}-{version}-sources.jar":
+                continue
+            group = ".".join(group_parts)
+            jars.append(read_jar(group, artifact, version, os.path.join(dirpath, filename)))
+    return jars
+
+
+def simple_name(fqcn):
+    return fqcn.rsplit(".", 1)[-1]
+
+
+def all_simple_names(jars):
+    return {simple_name(c) for jar in jars for c in jar.entries}
+
+
+def not_found(what, prefix, candidates):
+    hits = sorted({c for c in candidates if prefix and c.startswith(prefix)})[:3]
+    suffix = f" (did you mean: {', '.join(hits)}?)" if hits else ""
+    fail(EXIT_NOT_FOUND, f"error: {what}{suffix}")
+
+
+def glob_to_regex(pattern):
+    parts = []
+    i = 0
+    while i < len(pattern):
+        if pattern.startswith("**", i):
+            parts.append(".*")
+            i += 2
+        elif pattern[i] == "*":
+            parts.append("[^.]*")
+            i += 1
+        else:
+            parts.append(re.escape(pattern[i]))
+            i += 1
+    return re.compile("".join(parts))
+
+
+def cmd_find(pattern, jars):
+    rx = glob_to_regex(pattern)
+    hits = set()
+    for jar in jars:
+        for fqcn in jar.entries:
+            if rx.fullmatch(fqcn):
+                hits.add((fqcn, f"{jar.ga}:{jar.version}"))
+    if not hits:
+        literal = pattern.rsplit(".", 1)[-1].split("*", 1)[0]
+        not_found(f"no matches for {pattern}", literal, all_simple_names(jars))
+    emit("".join(f"{fqcn} {coords}\n" for fqcn, coords in sorted(hits)))
+    return 0
+
+
+def read_entry(jar, fqcn):
+    try:
+        with zipfile.ZipFile(jar.path) as zf:
+            data = zf.read(jar.entries[fqcn])
+    except (OSError, zipfile.BadZipFile, KeyError) as exc:
+        fail(EXIT_USAGE, f"error: cannot read {jar.path}: {exc}")
+    return data.decode("utf-8", errors="replace")
+
+
+def select_lines(text, line_range):
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    if text.startswith("﻿"):
+        text = text[1:]
+    lines = text.split("\n")
+    if lines[-1] == "":
+        lines.pop()
+    lines = [line.rstrip() for line in lines]
+
+    start, end = line_range if line_range else (1, len(lines))
+    start = max(start, 1)
+    end = min(end, len(lines))
+    if start > end:
+        return ""
+    return "".join(line + "\n" for line in lines[start - 1:end])
+
+
+def parse_line_range(value):
+    match = re.fullmatch(r"(-?[0-9]+):(-?[0-9]+)", value)
+    if not match:
+        fail(EXIT_USAGE, f"error: invalid --lines value: {value}")
+    return int(match[1]), int(match[2])
+
+
+def cmd_cat(fqcn, line_range, jars):
+    holders = [jar for jar in jars if fqcn in jar.entries]
+    if not holders:
+        not_found(f"no source for {fqcn}", simple_name(fqcn), all_simple_names(jars))
+    gas = sorted({jar.ga for jar in holders})
+    if len(gas) > 1:
+        fail(EXIT_USAGE, f"error: {fqcn} is ambiguous across: {', '.join(gas)}")
+    best = max(holders, key=lambda jar: version_key(jar.version))
+    emit(select_lines(read_entry(best, fqcn), line_range))
+    return 0
+
+
+def cmd_ls(target, jars):
+    parts = target.split(":")
+    if len(parts) not in (2, 3) or any(part == "" for part in parts):
+        fail(EXIT_USAGE, f"error: invalid coordinates: {target}")
+    ga = f"{parts[0]}:{parts[1]}"
+    version = parts[2] if len(parts) == 3 else None
+    known_gas = {jar.ga for jar in jars}
+
+    matches = [jar for jar in jars if jar.ga == ga]
+    if not matches:
+        not_found(f"no artifact {ga}", ga, known_gas)
+
+    if version is None:
+        versions = sorted({jar.version for jar in matches}, key=version_key)
+        emit("".join(f"{v}\n" for v in versions))
+        return 0
+
+    selected = [jar for jar in matches if jar.version == version]
+    if not selected:
+        not_found(f"no artifact {ga}:{version}", ga, known_gas)
+    fqcns = sorted({fqcn for jar in selected for fqcn in jar.entries})
+    emit("".join(f"{fqcn}\n" for fqcn in fqcns))
+    return 0
+
+
+def main(argv):
+    flags = {"--root": None, "--lines": None}
+    positional = []
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if not arg.startswith("-") or arg == "-":
+            positional.append(arg)
+            continue
+        name, has_value, value = arg.partition("=")
+        if name == "--help":
+            emit(USAGE_TEXT)
+            return 0
+        if name not in flags:
+            fail(EXIT_USAGE, f"unknown flag: {name}")
+        if not has_value:
+            if i >= len(argv):
+                fail(EXIT_USAGE, f"error: {name} requires a value")
+            value = argv[i]
+            i += 1
+        flags[name] = value
+
+    if not positional:
+        fail(EXIT_USAGE, "error: missing subcommand")
+    subcommand, *rest = positional
+    if subcommand not in ("find", "cat", "ls"):
+        fail(EXIT_USAGE, f"error: unknown subcommand: {subcommand}")
+    if flags["--lines"] is not None and subcommand != "cat":
+        fail(EXIT_USAGE, "unknown flag: --lines")
+    if not rest:
+        fail(EXIT_USAGE, f"error: {subcommand} requires an argument")
+    if len(rest) > 1:
+        fail(EXIT_USAGE, f"error: unexpected argument: {rest[1]}")
+    argument = rest[0]
+
+    line_range = parse_line_range(flags["--lines"]) if flags["--lines"] is not None else None
+
+    root = "." if flags["--root"] is None else flags["--root"]
+    if not os.path.isdir(root):
+        fail(EXIT_USAGE, f"error: not a directory: {root}")
+    jars = scan(root)
+
+    if subcommand == "find":
+        return cmd_find(argument, jars)
+    if subcommand == "cat":
+        return cmd_cat(argument, line_range, jars)
+    return cmd_ls(argument, jars)
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

@@ -1,0 +1,26 @@
+planned: 6  already recorded: 0  to run: 6
+ledger attempts so far: 0  cap: 84  seed: 20261010
+  A logsum    haiku   1
+  A logsum    opus    1
+  A logsum    sonnet  1
+  B logsum    haiku   1
+  B logsum    opus    1
+  B logsum    sonnet  1
+--- [1/84] B-logsum-haiku-1 (seed position 4) 2026-10-11T00:08:22+00:00
+    model=claude-haiku-5-5 turns=24 cost=$0.03223229 wall=141.9s subtype=success limits=[] apiKeySource=none
+    run command: bin/logsum
+--- [2/84] B-logsum-opus-1 (seed position 16) 2026-10-11T00:10:46+00:00
+    model=claude-opus-5-5 turns=10 cost=$0.4078458000000001 wall=109.3s subtype=success limits=[] apiKeySource=none
+    run command: ./logsum
+--- [3/84] A-logsum-haiku-1 (seed position 26) 2026-10-11T00:12:38+00:00
+    model=claude-haiku-5-5 turns=13 cost=$0.01844467 wall=88.5s subtype=success limits=[] apiKeySource=none
+    run command: ./logsum
+--- [4/84] A-logsum-opus-1 (seed position 48) 2026-10-11T00:14:09+00:00
+    model=claude-opus-5-5 turns=5 cost=$0.2269612 wall=51.6s subtype=success limits=[] apiKeySource=none
+    run command: ./logsum
+--- [5/84] B-logsum-sonnet-1 (seed position 59) 2026-10-11T00:15:05+00:00
+    model=claude-sonnet-5-5 turns=5 cost=$0.12193739999999999 wall=39.6s subtype=success limits=[] apiKeySource=none
+    run command: ./logsum
+--- [6/84] A-logsum-sonnet-1 (seed position 78) 2026-10-11T00:15:47+00:00
+    model=claude-sonnet-5-5 turns=4 cost=$0.07287260000000001 wall=22.3s subtype=success limits=[] apiKeySource=none
+    run command: ./logsum

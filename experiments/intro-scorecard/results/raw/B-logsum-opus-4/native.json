@@ -1,0 +1,20 @@
+{
+ "run_id": "B-logsum-opus-4",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-opus-4/opt/app.jar",
+ "main": "LogSum",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-logsum-opus-4/app",
+ "build_seconds": 13.2,
+ "image_bytes": 11359744,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-logsum-opus-4/app --help",
+  "median_ms": 2.6970541599999995,
+  "mean_ms": 2.7330548049399677,
+  "stddev_ms": 0.17945455205508518,
+  "min_ms": 2.5063871600000005,
+  "runs": 583,
+  "load_avg_before": 12.8984375,
+  "load_avg_after": 12.8984375
+ }
+}

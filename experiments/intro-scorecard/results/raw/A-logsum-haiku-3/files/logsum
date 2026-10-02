@@ -1,0 +1,189 @@
+#!/usr/bin/env python3
+"""logsum: streaming summary of a log file (or stdin). See SPEC.md."""
+
+import datetime
+import re
+import sys
+
+LEVELS = ("DEBUG", "INFO", "WARN", "ERROR")
+TIMESTAMP_RE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}")
+LINE_RE = re.compile(r"\s*(\S+)\s+(\S+)\s(.*)")
+TOP_RE = re.compile(r"[0-9]+")
+
+UUID_RE = re.compile(
+    r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+)
+HEX_RE = re.compile(r"\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\b")
+NUM_RE = re.compile(r"[0-9]+")
+
+HELP = """\
+usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]
+
+Summarize a log file, or stdin when FILE is omitted or "-".
+
+positional arguments:
+  FILE                  log file to read (default: stdin)
+
+options:
+  --since TIMESTAMP     only count lines at or after TIMESTAMP (YYYY-MM-DDTHH:MM:SS)
+  --level LEVEL         only count lines at exactly LEVEL (DEBUG, INFO, WARN, ERROR)
+  --top N               number of top error groups to show (default: 5)
+  --help                show this message and exit
+"""
+
+
+def fail(message):
+    sys.stderr.write(message + "\n")
+    sys.exit(2)
+
+
+def valid_timestamp(text):
+    if not TIMESTAMP_RE.fullmatch(text):
+        return False
+    try:
+        datetime.datetime.strptime(text, "%Y-%m-%dT%H:%M:%S")
+    except ValueError:
+        return False
+    return True
+
+
+def parse_line(raw):
+    """Return (timestamp, level, message) for a valid line, else None."""
+    line = raw.decode("utf-8", errors="replace").rstrip()
+    match = LINE_RE.fullmatch(line)
+    if match is None:
+        return None
+    timestamp, level, message = match.groups()
+    if level not in LEVELS or not valid_timestamp(timestamp):
+        return None
+    return timestamp, level, message
+
+
+def normalize(message):
+    message = UUID_RE.sub("<uuid>", message)
+    message = HEX_RE.sub("<hex>", message)
+    return NUM_RE.sub("<num>", message)
+
+
+def parse_args(argv):
+    since = None
+    level = None
+    top = "5"
+    positional = []
+    end_of_flags = False
+
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if end_of_flags or arg == "-" or not arg.startswith("-"):
+            positional.append(arg)
+            continue
+        if arg == "--":
+            end_of_flags = True
+            continue
+        if arg == "--help":
+            sys.stdout.write(HELP)
+            sys.exit(0)
+
+        name, has_value, value = arg.partition("=")
+        if name not in ("--since", "--level", "--top"):
+            fail(f"unknown flag: {name}")
+        if not has_value:
+            if i >= len(argv):
+                fail(f"error: {name} requires a value")
+            value = argv[i]
+            i += 1
+
+        if name == "--since":
+            since = value
+        elif name == "--level":
+            level = value
+        else:
+            top = value
+
+    if len(positional) > 1:
+        fail(f"error: unexpected argument: {positional[1]}")
+    path = positional[0] if positional else None
+
+    if since is not None and not valid_timestamp(since):
+        fail(f"error: invalid value for --since: {since}")
+    if level is not None and level not in LEVELS:
+        fail(f"error: invalid value for --level: {level}")
+    if not TOP_RE.fullmatch(top):
+        fail(f"error: invalid value for --top: {top}")
+
+    return path, since, level, int(top)
+
+
+def summarize(stream, since, level):
+    """Stream lines once, returning the statistics needed for output."""
+    total = 0
+    counts = {name: 0 for name in LEVELS}
+    first = None
+    last = None
+    # normalized message -> [count, first-seen original message]
+    groups = {}
+
+    for raw in stream:
+        parsed = parse_line(raw)
+        if parsed is None:
+            continue
+        timestamp, line_level, message = parsed
+        if level is not None and line_level != level:
+            continue
+        if since is not None and timestamp < since:
+            continue
+
+        total += 1
+        counts[line_level] += 1
+        if first is None:
+            first = timestamp
+        last = timestamp
+
+        if line_level == "ERROR":
+            key = normalize(message)
+            group = groups.get(key)
+            if group is None:
+                groups[key] = [1, message]
+            else:
+                group[0] += 1
+
+    return total, counts, first, last, groups
+
+
+def render(total, counts, first, last, groups, top):
+    lines = [
+        f"total: {total}",
+        "by level: " + " ".join(f"{name}={counts[name]}" for name in LEVELS),
+        f"first: {first if first is not None else 'n/a'}",
+        f"last: {last if last is not None else 'n/a'}",
+        "top errors:",
+    ]
+    ranked = sorted(groups.values(), key=lambda group: (-group[0], group[1]))
+    for count, message in ranked[:top]:
+        lines.append(f"  {count} {message}")
+    return "\n".join(lines) + "\n"
+
+
+def main(argv):
+    path, since, level, top = parse_args(argv)
+
+    if path is None or path == "-":
+        stream = sys.stdin.buffer
+        output = summarize(stream, since, level)
+    else:
+        try:
+            with open(path, "rb") as stream:
+                output = summarize(stream, since, level)
+        except OSError:
+            fail(f"error: cannot read {path}")
+
+    total, counts, first, last, groups = output
+    text = render(total, counts, first, last, groups, top)
+    sys.stdout.buffer.write(text.encode("utf-8"))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

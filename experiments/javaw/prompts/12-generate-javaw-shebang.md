@@ -1,0 +1,1 @@
+Create the tool described in the requirements below. Write it in Java as a single source file with a shebang line (`#!/usr/bin/env -S java --source N`), so it runs directly as `./javaw` with no build step.

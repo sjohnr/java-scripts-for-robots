@@ -1,0 +1,95 @@
+{
+  "run_id": "B-logsum-haiku-1",
+  "condition": "B",
+  "task": "logsum",
+  "model_alias": "haiku",
+  "model_id": "claude-haiku-5-5",
+  "model_ids_used": [
+    "claude-haiku-5-5"
+  ],
+  "replicate": 1,
+  "seed": 20261010,
+  "seed_position": 4,
+  "started": "2026-10-11T00:08:22+00:00",
+  "ended": "2026-10-11T00:10:44+00:00",
+  "wall_s": 141.9,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 24,
+  "duration_ms": 141345,
+  "duration_api_ms": 131648,
+  "tokens": {
+    "input_tokens": 48,
+    "output_tokens": 30410,
+    "cache_creation_input_tokens": 41370,
+    "cache_read_input_tokens": 874849
+  },
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 48,
+      "outputTokens": 30410,
+      "cacheReadInputTokens": 874849,
+      "cacheCreationInputTokens": 41370,
+      "webSearchRequests": 0,
+      "costUSD": 0.03223229,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 16226,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.03223229,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "7c85fb4b-7ceb-4fa1-b451-76bfac4286a4",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-1",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 1.8,
+    "cost_usd": 0.0007506300000000021,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 8,
+      "cache_creation_input_tokens": 1061,
+      "cache_read_input_tokens": 53423
+    },
+    "subtype": "success",
+    "reply": "bin/logsum",
+    "run_command": "bin/logsum",
+    "limit_hits": [],
+    "cost_usd_cumulative_reported": 0.03298292,
+    "note": "cost_usd recomputed after recording (cumulative minus generation)"
+  },
+  "run_command": "bin/logsum",
+  "excluded_from_copy": [
+    {
+      "path": "build",
+      "bytes": 28183
+    }
+  ],
+  "prompt": "Build the `logsum` command-line tool described in SPEC.md. Write it in Java.",
+  "claude_args": [
+    "-p",
+    "Build the `logsum` command-line tool described in SPEC.md. Write it in Java.",
+    "--model",
+    "haiku",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

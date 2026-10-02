@@ -1,0 +1,179 @@
+#!/usr/bin/env python3
+"""logsum: streaming summary of a log file (or stdin). See SPEC.md."""
+
+import re
+import sys
+from datetime import datetime
+
+LEVELS = ("DEBUG", "INFO", "WARN", "ERROR")
+DEFAULT_TOP = 5
+
+USAGE = """usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]
+
+Summarize a log file (or stdin) with lines of the form:
+  TIMESTAMP LEVEL MESSAGE
+
+positional arguments:
+  FILE                 log file to read; omitted or "-" reads stdin
+
+options:
+  --since TIMESTAMP    only count lines at or after TIMESTAMP (YYYY-MM-DDTHH:MM:SS)
+  --level LEVEL        only count lines at exactly LEVEL (DEBUG, INFO, WARN, ERROR)
+  --top N              number of ERROR groups to list (default 5)
+  -h, --help           show this message and exit
+"""
+
+TIMESTAMP_RE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}")
+COUNT_RE = re.compile(r"[0-9]+")
+
+UUID_RE = re.compile(
+    r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+)
+HEX_RE = re.compile(r"\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\b", re.ASCII)
+NUM_RE = re.compile(r"[0-9]+")
+
+
+def usage_error(message):
+    sys.stderr.write(message + "\n")
+    sys.exit(2)
+
+
+def is_timestamp(value):
+    if not TIMESTAMP_RE.fullmatch(value):
+        return False
+    try:
+        datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+    except ValueError:
+        return False
+    return True
+
+
+def normalize(message):
+    message = UUID_RE.sub("<uuid>", message)
+    message = HEX_RE.sub("<hex>", message)
+    return NUM_RE.sub("<num>", message)
+
+
+def parse_line(raw):
+    """Return (timestamp, level, message) or None if the line is skipped."""
+    line = raw.rstrip(b"\r\n").decode("utf-8", errors="replace")
+    timestamp, sep, rest = line.partition(" ")
+    if not sep:
+        return None
+    level, sep, message = rest.partition(" ")
+    if not sep:
+        return None
+    message = message.rstrip()
+    if not message or not is_timestamp(timestamp) or level not in LEVELS:
+        return None
+    return timestamp, level, message
+
+
+def summarize(lines, since, level, top):
+    total = 0
+    counts = dict.fromkeys(LEVELS, 0)
+    first = None
+    last = None
+    groups = {}  # normalized message -> [count, first-seen message]
+
+    for raw in lines:
+        parsed = parse_line(raw)
+        if parsed is None:
+            continue
+        timestamp, line_level, message = parsed
+        if since is not None and timestamp < since:
+            continue
+        if level is not None and line_level != level:
+            continue
+
+        total += 1
+        counts[line_level] += 1
+        if first is None:
+            first = timestamp
+        last = timestamp
+
+        if line_level == "ERROR":
+            key = normalize(message)
+            group = groups.get(key)
+            if group is None:
+                groups[key] = [1, message]
+            else:
+                group[0] += 1
+
+    ranked = sorted(groups.values(), key=lambda group: (-group[0], group[1]))
+
+    output = [
+        f"total: {total}",
+        "by level: " + " ".join(f"{name}={counts[name]}" for name in LEVELS),
+        f"first: {first if first is not None else 'n/a'}",
+        f"last: {last if last is not None else 'n/a'}",
+        "top errors:",
+    ]
+    for count, message in ranked[:top]:
+        output.append(f"  {count} {message}")
+    return output
+
+
+def parse_args(argv):
+    options = {"since": None, "level": None, "top": str(DEFAULT_TOP)}
+    positional = []
+    options_done = False
+
+    args = list(argv)
+    i = 0
+    while i < len(args):
+        arg = args[i]
+        i += 1
+
+        if options_done or arg == "-" or not arg.startswith("-"):
+            positional.append(arg)
+            continue
+        if arg == "--":
+            options_done = True
+            continue
+
+        name, has_value, value = arg.partition("=")
+        if name in ("-h", "--help"):
+            sys.stdout.write(USAGE)
+            sys.exit(0)
+        if name not in ("--since", "--level", "--top"):
+            usage_error(f"unknown flag: {name}")
+        if not has_value:
+            if i >= len(args):
+                usage_error(f"error: missing value for {name}")
+            value = args[i]
+            i += 1
+        options[name[2:]] = value
+
+    if len(positional) > 1:
+        usage_error(f"error: unexpected argument: {positional[1]}")
+
+    if options["since"] is not None and not is_timestamp(options["since"]):
+        usage_error(f"error: invalid value for --since: {options['since']}")
+    if options["level"] is not None and options["level"] not in LEVELS:
+        usage_error(f"error: invalid value for --level: {options['level']}")
+    if not COUNT_RE.fullmatch(options["top"]):
+        usage_error(f"error: invalid value for --top: {options['top']}")
+
+    path = positional[0] if positional and positional[0] != "-" else None
+    return path, options["since"], options["level"], int(options["top"])
+
+
+def main(argv):
+    path, since, level, top = parse_args(argv)
+
+    if path is None:
+        output = summarize(sys.stdin.buffer, since, level, top)
+    else:
+        try:
+            with open(path, "rb") as handle:
+                output = summarize(handle, since, level, top)
+        except OSError:
+            usage_error(f"error: cannot read {path}")
+
+    sys.stdout.buffer.write(("\n".join(output) + "\n").encode("utf-8"))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

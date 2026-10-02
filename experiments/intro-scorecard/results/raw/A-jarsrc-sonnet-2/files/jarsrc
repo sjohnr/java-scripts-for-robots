@@ -1,0 +1,265 @@
+#!/usr/bin/env python3
+"""jarsrc: query a Gradle-cache-like tree of *-sources.jar files."""
+import os
+import re
+import sys
+import zipfile
+from functools import cmp_to_key
+
+USAGE = """usage:
+  jarsrc find <fqcn-or-glob> [--root DIR]
+  jarsrc cat <fqcn> [--lines A:B] [--root DIR]
+  jarsrc ls <group:artifact[:version]> [--root DIR]
+  jarsrc --help
+
+flags:
+  --root DIR     root of the Gradle-cache-like tree (default: .)
+  --lines A:B    (cat) print only lines A through B, 1-indexed, inclusive
+  --help         show this message
+"""
+
+
+class Usage(Exception):
+    pass
+
+
+def out(text):
+    sys.stdout.buffer.write(text.encode("utf-8"))
+    sys.stdout.buffer.flush()
+
+
+def err(text):
+    sys.stderr.buffer.write((text + "\n").encode("utf-8"))
+    sys.stderr.buffer.flush()
+
+
+def split_version(v):
+    return [s for s in re.split(r"[.-]", v)]
+
+
+def is_num(s):
+    return s != "" and all(c in "0123456789" for c in s)
+
+
+def vcmp(a, b):
+    sa, sb = split_version(a), split_version(b)
+    for x, y in zip(sa, sb):
+        if is_num(x) and is_num(y):
+            xi, yi = int(x), int(y)
+            if xi != yi:
+                return -1 if xi < yi else 1
+        else:
+            xb, yb = x.encode("utf-8"), y.encode("utf-8")
+            if xb != yb:
+                return -1 if xb < yb else 1
+    if len(sa) != len(sb):
+        return -1 if len(sa) < len(sb) else 1
+    return 0
+
+
+vkey = cmp_to_key(vcmp)
+
+
+def scan(root):
+    """Return list of (group, artifact, version, jar_path)."""
+    found = []
+    for dirpath, _dirs, files in os.walk(root):
+        for f in files:
+            if not f.endswith("-sources.jar"):
+                continue
+            rel = os.path.relpath(os.path.join(dirpath, f), root)
+            parts = rel.split(os.sep)
+            if len(parts) < 4:
+                continue
+            version, artifact = parts[-2], parts[-3]
+            if f != "%s-%s-sources.jar" % (artifact, version):
+                continue
+            group = ".".join(parts[:-3])
+            found.append((group, artifact, version, os.path.join(dirpath, f)))
+    return found
+
+
+def java_fqcns(jar):
+    names = set()
+    try:
+        with zipfile.ZipFile(jar) as z:
+            for info in z.infolist():
+                n = info.filename
+                if info.is_dir() or not n.endswith(".java"):
+                    continue
+                names.add(n[: -len(".java")].replace("/", "."))
+    except (zipfile.BadZipFile, OSError):
+        pass
+    return names
+
+
+def suggest(prefix, candidates):
+    m = sorted(set(c for c in candidates if c.startswith(prefix)))[:3]
+    if not m:
+        return ""
+    return " (did you mean: %s?)" % ", ".join(m)
+
+
+def glob_regex(g):
+    parts = re.split(r"(\*\*|\*)", g)
+    rx = ""
+    for p in parts:
+        if p == "**":
+            rx += ".*"
+        elif p == "*":
+            rx += "[^.]*"
+        else:
+            rx += re.escape(p)
+    return re.compile(rx + r"\Z", re.S)
+
+
+def cmd_find(pattern, root):
+    entries = scan(root)
+    if "*" in pattern:
+        rx = glob_regex(pattern)
+        match = lambda n: rx.match(n) is not None
+    else:
+        match = lambda n: n == pattern
+    results = []
+    simple = set()
+    for g, a, v, jar in entries:
+        for n in java_fqcns(jar):
+            simple.add(n.rsplit(".", 1)[-1])
+            if match(n):
+                results.append((n, "%s:%s:%s" % (g, a, v)))
+    if not results:
+        err("error: no matches for %s%s"
+            % (pattern, suggest(pattern.rsplit(".", 1)[-1], simple)))
+        return 1
+    results.sort()
+    out("".join("%s %s\n" % r for r in results))
+    return 0
+
+
+def parse_lines(spec):
+    m = re.fullmatch(r"(-?\d+):(-?\d+)", spec)
+    if not m:
+        raise Usage("invalid --lines value: %s" % spec)
+    return int(m.group(1)), int(m.group(2))
+
+
+def cmd_cat(fqcn, lines, root):
+    entries = scan(root)
+    hits = {}  # (g, a) -> list of (version, jar)
+    simple = set()
+    for g, a, v, jar in entries:
+        for n in java_fqcns(jar):
+            simple.add(n.rsplit(".", 1)[-1])
+            if n == fqcn:
+                hits.setdefault((g, a), []).append((v, jar))
+    if not hits:
+        err("error: no source for %s%s"
+            % (fqcn, suggest(fqcn.rsplit(".", 1)[-1], simple)))
+        return 1
+    if len(hits) > 1:
+        gas = sorted("%s:%s" % ga for ga in hits)
+        err("error: %s is ambiguous across: %s" % (fqcn, ", ".join(gas)))
+        return 2
+    (vers,) = hits.values()
+    best = vers[0]
+    for c in vers[1:]:
+        if vcmp(c[0], best[0]) > 0:
+            best = c
+    with zipfile.ZipFile(best[1]) as z:
+        data = z.read(fqcn.replace(".", "/") + ".java")
+    text = data.decode("utf-8", errors="replace").replace("\r\n", "\n")
+    if lines is not None:
+        a, b = lines
+        all_lines = text.split("\n")
+        if all_lines and all_lines[-1] == "":
+            all_lines.pop()
+        a = max(a, 1)
+        b = min(b, len(all_lines))
+        sel = all_lines[a - 1:b] if a <= b else []
+        text = "".join(l + "\n" for l in sel)
+    out(text)
+    return 0
+
+
+def cmd_ls(spec, root):
+    parts = spec.split(":")
+    if len(parts) not in (2, 3) or not all(parts):
+        raise Usage("invalid artifact: %s" % spec)
+    group, artifact = parts[0], parts[1]
+    version = parts[2] if len(parts) == 3 else None
+    entries = scan(root)
+    gas = set("%s:%s" % (g, a) for g, a, _v, _j in entries)
+    ga = "%s:%s" % (group, artifact)
+    if ga not in gas:
+        err("error: no artifact %s%s" % (spec, suggest(spec, gas)))
+        return 1
+    mine = [(v, j) for g, a, v, j in entries if g == group and a == artifact]
+    if version is None:
+        vs = sorted(set(v for v, _ in mine), key=vkey)
+        out("".join(v + "\n" for v in vs))
+        return 0
+    for v, j in mine:
+        if v == version:
+            out("".join(n + "\n" for n in sorted(java_fqcns(j))))
+            return 0
+    err("error: no artifact %s%s" % (spec, suggest(spec, gas)))
+    return 1
+
+
+def parse(argv):
+    root = "."
+    lines = None
+    pos = []
+    help_ = False
+    i = 0
+    while i < len(argv):
+        a = argv[i]
+        if a == "--help":
+            help_ = True
+        elif a == "--root" or a == "--lines":
+            if i + 1 >= len(argv):
+                raise Usage("missing value for %s" % a)
+            i += 1
+            if a == "--root":
+                root = argv[i]
+            else:
+                lines = argv[i]
+        elif a.startswith("--root="):
+            root = a[len("--root="):]
+        elif a.startswith("--lines="):
+            lines = a[len("--lines="):]
+        elif a.startswith("-") and len(a) > 1:
+            raise Usage("unknown flag: %s" % a.split("=", 1)[0])
+        else:
+            pos.append(a)
+        i += 1
+    return help_, root, lines, pos
+
+
+def main(argv):
+    try:
+        help_, root, lines, pos = parse(argv)
+        if help_:
+            out(USAGE)
+            return 0
+        if not pos:
+            raise Usage("missing subcommand")
+        cmd, args = pos[0], pos[1:]
+        if cmd not in ("find", "cat", "ls"):
+            raise Usage("unknown subcommand: %s" % cmd)
+        if len(args) != 1:
+            raise Usage("%s requires exactly one argument" % cmd)
+        if lines is not None and cmd != "cat":
+            raise Usage("unknown flag: --lines")
+        if cmd == "find":
+            return cmd_find(args[0], root)
+        if cmd == "cat":
+            return cmd_cat(args[0], parse_lines(lines) if lines is not None else None, root)
+        return cmd_ls(args[0], root)
+    except Usage as e:
+        err("error: %s" % e if not str(e).startswith("unknown flag") else str(e))
+        return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

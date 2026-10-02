@@ -1,0 +1,89 @@
+{
+  "run_id": "A-treesum-opus-1",
+  "condition": "A",
+  "task": "treesum",
+  "model_alias": "opus",
+  "model_id": "claude-opus-5-5",
+  "model_ids_used": [
+    "claude-opus-5-5"
+  ],
+  "replicate": 1,
+  "seed": 20261010,
+  "seed_position": 83,
+  "started": "2026-10-11T14:02:59+00:00",
+  "ended": "2026-10-11T14:03:50+00:00",
+  "wall_s": 50.3,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 6,
+  "duration_ms": 49688,
+  "duration_api_ms": 48881,
+  "tokens": {
+    "input_tokens": 12,
+    "output_tokens": 5373,
+    "cache_creation_input_tokens": 10652,
+    "cache_read_input_tokens": 102725
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 5373,
+      "cacheReadInputTokens": 102725,
+      "cacheCreationInputTokens": 10652,
+      "webSearchRequests": 0,
+      "costUSD": 0.213269,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1274,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.213269,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "6c38b351-b211-4ba6-aa57-a7a6f7677bd9",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-treesum-opus-1",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.6,
+    "cost_usd": 0.010913000000000006,
+    "cost_usd_cumulative_reported": 0.224182,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 6,
+      "cache_creation_input_tokens": 800,
+      "cache_read_input_tokens": 21925
+    },
+    "subtype": "success",
+    "reply": "./treesum",
+    "run_command": "./treesum",
+    "limit_hits": []
+  },
+  "run_command": "./treesum",
+  "excluded_from_copy": [],
+  "prompt": "Build the `treesum` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `treesum` command-line tool described in SPEC.md.",
+    "--model",
+    "opus",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

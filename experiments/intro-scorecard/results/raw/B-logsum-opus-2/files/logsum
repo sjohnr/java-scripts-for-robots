@@ -1,0 +1,8 @@
+#!/bin/sh
+# Launcher for logsum; builds the jar on first use.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+JAR="$DIR/build/logsum.jar"
+if [ ! -f "$JAR" ] || [ "$DIR/src/Logsum.java" -nt "$JAR" ]; then
+  "$DIR/build.sh" >/dev/null || exit 2
+fi
+exec java -jar "$JAR" "$@"

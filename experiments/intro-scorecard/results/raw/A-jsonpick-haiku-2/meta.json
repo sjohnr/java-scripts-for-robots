@@ -1,0 +1,89 @@
+{
+  "run_id": "A-jsonpick-haiku-2",
+  "condition": "A",
+  "task": "jsonpick",
+  "model_alias": "haiku",
+  "model_id": "claude-haiku-5-5",
+  "model_ids_used": [
+    "claude-haiku-5-5"
+  ],
+  "replicate": 2,
+  "seed": 20261010,
+  "seed_position": 11,
+  "started": "2026-10-11T00:55:22+00:00",
+  "ended": "2026-10-11T00:57:17+00:00",
+  "wall_s": 115.5,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 14,
+  "duration_ms": 114897,
+  "duration_api_ms": 109364,
+  "tokens": {
+    "input_tokens": 26,
+    "output_tokens": 26301,
+    "cache_creation_input_tokens": 33641,
+    "cache_read_input_tokens": 460217
+  },
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 26,
+      "outputTokens": 26301,
+      "cacheReadInputTokens": 460217,
+      "cacheCreationInputTokens": 33641,
+      "webSearchRequests": 0,
+      "costUSD": 0.02448347,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 15374,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.02448347,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "253841e4-935e-4905-ad29-059b386527b6",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-jsonpick-haiku-2",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.6,
+    "cost_usd": 0.0007390399999999998,
+    "cost_usd_cumulative_reported": 0.02522251,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 233,
+      "cache_creation_input_tokens": 827,
+      "cache_read_input_tokens": 45694
+    },
+    "subtype": "success",
+    "reply": "```\n./jsonpick --help\n```",
+    "run_command": "./jsonpick --help",
+    "limit_hits": []
+  },
+  "run_command": "./jsonpick --help",
+  "excluded_from_copy": [],
+  "prompt": "Build the `jsonpick` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `jsonpick` command-line tool described in SPEC.md.",
+    "--model",
+    "haiku",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

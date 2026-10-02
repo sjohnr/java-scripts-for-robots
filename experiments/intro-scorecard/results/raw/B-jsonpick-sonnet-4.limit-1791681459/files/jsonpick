@@ -1,0 +1,4 @@
+#!/bin/sh
+d=$(cd "$(dirname "$0")" && pwd)
+[ -f "$d/out/Jsonpick.class" ] || { mkdir -p "$d/out" && javac -d "$d/out" "$d/Jsonpick.java" || exit 2; }
+exec java -Xshare:auto -XX:TieredStopAtLevel=1 -cp "$d/out" Jsonpick "$@"

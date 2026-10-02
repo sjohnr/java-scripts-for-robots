@@ -1,0 +1,32 @@
+planned: 6  already recorded: 0  to run: 6
+ledger attempts so far: 6  cap: 84  seed: 20261010
+  A logsum    haiku   1
+  A logsum    opus    1
+  A logsum    sonnet  1
+  B logsum    haiku   1
+  B logsum    opus    1
+  B logsum    sonnet  1
+--- [7/84] B-logsum-haiku-1 (seed position 4) 2026-10-11T00:35:28+00:00
+    model=claude-haiku-5-5 turns=18 cost=$0.03851697 wall=185.7s subtype=success limits=[] apiKeySource=none
+    run command: java -jar build/logsum.jar --help
+--- [8/84] B-logsum-opus-1 (seed position 16) 2026-10-11T00:38:36+00:00
+    model=claude-opus-5-5 turns=9 cost=$0.33531979999999995 wall=123.3s subtype=success limits=[] apiKeySource=none
+    run command: ./logsum
+--- [9/84] A-logsum-haiku-1 (seed position 26) 2026-10-11T00:40:43+00:00
+    model=claude-haiku-5-5 turns=10 cost=$0.019589020000000002 wall=105.9s subtype=success limits=[] apiKeySource=none
+    run command: ./logsum
+--- [10/84] A-logsum-opus-1 (seed position 48) 2026-10-11T00:42:31+00:00
+    model=claude-opus-5-5 turns=6 cost=$0.22364940000000003 wall=78.5s subtype=success limits=[] apiKeySource=none
+    run command: ./logsum
+--- [11/84] B-logsum-sonnet-1 (seed position 59) 2026-10-11T00:43:56+00:00
+    model=claude-sonnet-5-5 turns=4 cost=$0.0873858 wall=33.7s subtype=success limits=[] apiKeySource=none
+    run command: ./logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]
+--- [12/84] A-logsum-sonnet-1 (seed position 78) 2026-10-11T00:44:32+00:00
+    model=claude-sonnet-5-5 turns=4 cost=$0.0626144 wall=25.7s subtype=success limits=[] apiKeySource=none
+    run command: ./logsum
+A-logsum-haiku-1: lang=python pass=9/9 tokens=1442 disk=19860 startup=14.574909540000002 style= flags=[]
+A-logsum-opus-1: lang=python pass=9/9 tokens=1531 disk=5684 startup=14.655846760000001 style= flags=[]
+A-logsum-sonnet-1: lang=python pass=9/9 tokens=1306 disk=4707 startup=14.4782883 style= flags=[]
+B-logsum-haiku-1: lang=java pass=1/9 tokens=2664 disk=43715 startup=None style=Make / jar flags=[]
+B-logsum-opus-1: lang=java pass=9/9 tokens=2837 disk=20113 startup=29.499425920000004 style=build script / jar flags=[]
+B-logsum-sonnet-1: lang=java pass=0/9 tokens=1973 disk=17925 startup=None style=none / javac + java flags=[]

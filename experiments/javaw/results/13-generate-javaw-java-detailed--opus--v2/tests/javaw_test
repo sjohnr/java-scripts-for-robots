@@ -1,0 +1,658 @@
+#!/usr/bin/env -S java --source 28 --enable-preview
+// Tests for javaw. Generates wrappers in a temporary directory and runs them the way users do:
+// from other directories, through symlinks, under every POSIX shell installed (sh, dash, ksh, bash).
+// Usage: tests/javaw_test [name-filter]   (needs JDK 28 as `java` on the PATH)
+// The native-image test runs when GRAALVM_HOME points at a GraalVM JDK.
+// The preview rebuild test runs when OTHER_JDK_HOME points at a JDK of another feature version.
+// Dependency tests also need jbang and network access to Maven Central; they are skipped otherwise.
+
+import module java.base;
+
+record Result(int code, String out, String err) {
+    String all() { return out + err; }
+}
+
+static Path javaw;
+static Path work;
+static int passed, failed, skipped;
+
+/// A compact program that shows its arguments and the app.version system property.
+static final String APP = """
+    void main(String[] args) {
+        IO.println("app.version=" + System.getProperty("app.version", "1") + " args=" + List.of(args));
+    }
+    """;
+
+void main(String[] args) throws Exception {
+    javaw = Stream.of("javaw", "../javaw").map(Path::of).filter(Files::isRegularFile).findFirst()
+            .orElseThrow(() -> new IllegalStateException("run from the project directory or tests/"))
+            .toRealPath();
+    work = Files.createTempDirectory("javaw-test").toRealPath();
+    var filter = args.length > 0 ? args[0] : "";
+    Map<String, Runnable> tests = new LinkedHashMap<>();
+    tests.put("default names are run- plus kebab case", this::defaultNames);
+    tests.put("command line errors are clear", this::commandLineErrors);
+    tests.put("existing files are kept unless --force", this::overwriting);
+    tests.put("header records a runnable, quoted command", this::header);
+    tests.put("wrappers are POSIX and minimal", this::minimalPosix);
+    tests.put("source wrapper runs from anywhere", this::launchScenarios);
+    tests.put("source launch with --no-build", this::noBuild);
+    tests.put("jar wrapper with classpath and JVM options", this::jarWrapper);
+    tests.put("--min-java checks the launched java", this::minJava);
+    tests.put("sources are rebuilt when they change", this::rebuild);
+    tests.put("AOT cache is created, used, and rebuilt", this::aotCache);
+    tests.put("a JDK change rebuilds a preview jar", this::previewJdkChange);
+    tests.put("--resource puts matching files in the jar", this::resources);
+    tests.put("concurrent first runs are safe", this::concurrentFirstRuns);
+    tests.put("wrappers sharing a directory do not collide", this::sharedDirectory);
+    tests.put("profiles set generation options", this::profiles);
+    tests.put("--native falls back to the jar without GraalVM", this::nativeFallback);
+    tests.put("--native builds a native image with GraalVM", this::nativeImage);
+    tests.put("javaw generates its own wrapper", this::dogfood);
+    tests.put("//DEPS are pinned, fetched, and shared", this::dependencies);
+    tests.forEach((name, test) -> {
+        if (!name.contains(filter)) return;
+        try {
+            test.run();
+            passed++;
+            IO.println("PASS  " + name);
+        } catch (Skip s) {
+            skipped++;
+            IO.println("SKIP  " + name + ": " + s.getMessage());
+        } catch (AssertionError | RuntimeException e) {
+            failed++;
+            IO.println("FAIL  " + name + "\n      " + e.getMessage().replace("\n", "\n      "));
+        }
+    });
+    IO.println("%d passed, %d failed, %d skipped".formatted(passed, failed, skipped));
+    if (failed > 0) {
+        IO.println("work directory kept: " + work);
+        System.exit(1);
+    }
+    delete(work);
+}
+
+// ---- Tests ----
+
+void defaultNames() {
+    var dir = mkdirs("names");
+    var expected = Map.of(
+            "FooBar.java", "run-foo-bar",
+            "HTTPServer.java", "run-http-server",
+            "example1_assert.java", "run-example1-assert",
+            "Example1.java", "run-example1",
+            "Foo__Bar.java", "run-foo-bar2",
+            "my-tool.jar", "run-my-tool",
+            "Tool.java", "run-tool");
+    expected.keySet().forEach(f -> write(dir.resolve(f), f.endsWith(".java") ? "void main() {}\n" : ""));
+    for (var entry : expected.entrySet()) {
+        if (entry.getKey().equals("Foo__Bar.java")) continue;
+        ok(javaw(dir, entry.getKey()));
+        check(Files.isExecutable(dir.resolve(entry.getValue())), entry.getKey() + " -> " + entry.getValue());
+    }
+    // Foo__Bar collides with FooBar, so it goes to a directory of its own.
+    ok(javaw(dir, "Foo__Bar.java", "-o", "other/"));
+    check(Files.isExecutable(dir.resolve("other/run-foo-bar")), "Foo__Bar.java -> run-foo-bar");
+    write(dir.resolve("tool.jar"), "");
+    var both = javaw(dir, "Tool.java", "tool.jar", "-o", "both/");
+    contains(both.err(), "would both be written to");
+}
+
+void commandLineErrors() {
+    var dir = mkdirs("cli");
+    write(dir.resolve("App.java"), APP);
+    var none = javaw(dir);
+    equal(2, none.code());
+    contains(none.err(), "javaw: missing input");
+    contains(none.err(), "javaw --help");
+    var unknown = javaw(dir, "--bogus", "App.java");
+    equal(2, unknown.code());
+    contains(unknown.err(), "unknown option: --bogus");
+    contains(javaw(dir, "App.java", "--jvm-opts").err(), "option --jvm-opts needs a value");
+    contains(javaw(dir, "App.java", "--force=yes").err(), "option --force does not take a value");
+    contains(javaw(dir, "Missing.java").err(), "no such file: Missing.java");
+    contains(javaw(dir, "--min-java", "eleven", "App.java").err(), "--min-java expects a Java version number");
+    contains(javaw(dir, "App.java", "App.java", "-o", "single").err(), "-o must be a directory");
+    contains(javaw(dir, "--profile", "nope", "App.java").err(), "unknown profile: nope");
+    contains(javaw(dir, "--profile", "portable", "--aot", "App.java").err(), "profile portable does not allow --aot");
+    contains(javaw(dir, "--no-build", "--aot", "App.java").err(), "cannot be combined with --no-build");
+    contains(javaw(dir, "--no-build", "-r", "*.txt", "App.java").err(), "with --no-build the source launcher already finds them");
+    contains(javaw(dir, "-r", "../*.txt", "App.java").err(), "--resource expects a glob relative to the source root");
+    contains(javaw(dir, "--java-home", "/no/such/jdk", "App.java").err(), "/no/such/jdk/bin/java does not exist");
+    write(dir.resolve("notes.txt"), "hello\n");
+    contains(javaw(dir, "notes.txt").err(), "cannot tell what notes.txt is");
+    write(dir.resolve("Repo.java"), "//REPOS https://example.com/maven\n" + APP);
+    contains(javaw(dir, "Repo.java").err(), "//REPOS is not supported");
+    write(dir.resolve("Broken.java"), "void main( {\n");
+    contains(javaw(dir, "Broken.java").err(), "cannot parse");
+    var help = javaw(dir, "--help");
+    equal(0, help.code());
+    contains(help.out(), "Usage: javaw [options] <input>...");
+    contains(help.out(), "fast-start");
+}
+
+void overwriting() {
+    var dir = mkdirs("overwrite");
+    write(dir.resolve("App.java"), APP);
+    ok(javaw(dir, "App.java"));
+    var again = javaw(dir, "App.java");
+    equal(1, again.code());
+    contains(again.err(), "already exists (use --force to overwrite)");
+    ok(javaw(dir, "--force", "App.java"));
+    // Nothing is written when any target exists.
+    write(dir.resolve("Other.java"), APP);
+    contains(javaw(dir, "Other.java", "App.java").err(), "already exists");
+    check(!Files.exists(dir.resolve("run-other")), "run-other must not be written");
+}
+
+void header() {
+    var dir = mkdirs("header/my dir");
+    write(dir.resolve("App.java"), APP);
+    ok(javaw(dir.getParent(), "--jvm-opts", "-Dapp.version=\"it's here\"", "my dir/App.java", "-o", "my dir/run it"));
+    var script = read(dir.resolve("run it"));
+    var command = script.lines().skip(2).findFirst().orElseThrow();
+    equal("#   javaw --jvm-opts '-Dapp.version=\"it'\\''s here\"' 'my dir/App.java' -o 'my dir/run it'", command);
+    contains(script, "exec java '-Dapp.version=it'\\''s here' -cp \"$jar\" App \"$@\"\n");
+    // Copy the command, run it verbatim, and get the same wrapper back.
+    shell(dir, Map.of(), "rm 'run it'");
+    ok(shell(dir.getParent(), Map.of(), "\"$JAVAW\" " + command.substring("#   javaw ".length())));
+    equal(script, read(dir.resolve("run it")));
+    equal("app.version=it's here args=[x]\n", ok(shell(work, Map.of(), "'header/my dir/run it' x")).out());
+}
+
+void minimalPosix() {
+    var dir = mkdirs("minimal");
+    write(dir.resolve("App.java"), APP);
+    write(dir.resolve("app.jar"), "");
+    ok(javaw(dir, "app.jar"));
+    var jar = read(dir.resolve("run-app"));
+    for (var absent : List.of("java_version", "curl", "AOT", "state=", "die()", "javac", "cp=")) {
+        check(!jar.contains(absent), "plain jar wrapper should not contain " + absent + ":\n" + jar);
+    }
+    contains(jar, "exec java -jar \"$app\" \"$@\"\n");
+    ok(javaw(dir, "--aot", "--native", "--min-java", "17", "--classpath", "x", "App.java", "-o", "full"));
+    for (var name : List.of("run-app", "full")) {
+        var script = read(dir.resolve(name));
+        check(script.startsWith("#!/bin/sh\n"), name + " starts with #!/bin/sh");
+        for (var bashism : List.of("[[", "readlink", "realpath", "local ", "function ", "=(", "<(", "$'", "pushd")) {
+            check(!script.contains(bashism), name + " must not use " + bashism);
+        }
+        check(script.lines().noneMatch(l -> l.strip().startsWith("source ")), name + " must not use source");
+        for (var sh : shells()) ok(run(dir, Map.of(), sh, "-n", name));
+    }
+    // The native image does not run on the PATH's java, so a JDK change must not rebuild it.
+    var nstamp = read(dir.resolve("full")).lines().filter(l -> l.startsWith("nstamp=")).findFirst().orElseThrow();
+    check(!nstamp.contains("jdkid") && !nstamp.contains("jstamp"), "native stamp leaves out the JDK: " + nstamp);
+}
+
+void launchScenarios() {
+    var proj = mkdirs("launch/my proj");
+    write(proj.resolve("HelloApp.java"), APP);
+    ok(javaw(proj, "HelloApp.java"));
+    var launch = proj.getParent();
+    mkdirs("launch/elsewhere");
+    mkdirs("launch/bin");
+    mkdirs("launch/links");
+    mkdirs("launch/-dash");
+    shell(launch, Map.of(), """
+            ln -s '../my proj/run-hello-app' bin/hello &&
+            ln -s hello bin/hello2 &&
+            ln -s ../bin/hello2 links/chained &&
+            ln -s -- '../my proj/run-hello-app' -dash/hello
+            """);
+    var expected = "app.version=1 args=[a, b c]\n";
+    for (var sh : shells()) {
+        var where = " (" + sh + ")";
+        equal(expected, ok(shell(launch.resolve("elsewhere"), Map.of(), sh + " '../my proj/run-hello-app' a 'b c'")).out(), "other directory" + where);
+        equal(expected, ok(shell(launch.resolve("elsewhere"), Map.of(), sh + " ../bin/hello a 'b c'")).out(), "relative symlink" + where);
+        equal(expected, ok(shell(launch, Map.of(), sh + " links/chained a 'b c'")).out(), "chain of two symlinks" + where);
+        equal(expected, ok(shell(launch, Map.of(), sh + " -- -dash/hello a 'b c'")).out(), "path starting with -" + where);
+        equal(expected, ok(shell(launch, Map.of(), "cd bin && " + sh + " hello a 'b c'")).out(), "bare name" + where);
+        equal("app.version=2 args=[a, b c]\n",
+                ok(shell(launch, Map.of("JAVA_TOOL_OPTIONS", "-Dapp.version=2"), sh + " bin/hello a 'b c'")).out(),
+                "JAVA_TOOL_OPTIONS" + where);
+    }
+    equal(expected, ok(shell(launch, Map.of(), "PATH=\"$PWD/bin:$PATH\" hello a 'b c'")).out(), "found on the PATH");
+    // CDPATH has an entry with the same relative name ("my proj") holding a decoy program.
+    var decoy = mkdirs("launch/cdpath/my proj");
+    write(decoy.resolve("HelloApp.java"), "void main() { IO.println(\"WRONG DIRECTORY\"); }\n");
+    var cdpath = Map.of("CDPATH", launch.resolve("cdpath").toString());
+    equal(expected, ok(shell(launch, cdpath, "export CDPATH; 'my proj/run-hello-app' a 'b c'")).out(), "CDPATH");
+    equal(expected, ok(shell(launch, cdpath, "export CDPATH; cd ./bin && ./hello a 'b c'")).out(), "CDPATH via symlink");
+    // A moved (and renamed) checkout keeps working.
+    shell(launch, Map.of(), "mv 'my proj' moved && mv moved/run-hello-app moved/go");
+    equal(expected, ok(shell(launch, Map.of(), "moved/go a 'b c'")).out(), "moved and renamed");
+}
+
+void noBuild() {
+    var dir = mkdirs("nobuild");
+    write(dir.resolve("App.java"), APP);
+    ok(javaw(dir, "--no-build", "App.java"));
+    var script = read(dir.resolve("run-app"));
+    check(script.endsWith("\nexec java \"$dir\"/App.java \"$@\"\n"), "source launch line:\n" + script);
+    check(!script.contains("state="), "no state directory for source launch");
+    equal("app.version=1 args=[z]\n", ok(shell(work, Map.of(), "nobuild/run-app z")).out());
+}
+
+void jarWrapper() {
+    var dir = mkdirs("jar");
+    write(dir.resolve("src/App.java"), APP);
+    ok(shell(dir, Map.of(), "javac -d classes src/App.java && mkdir lib && jar --create --file lib/app.jar --main-class App -C classes ."));
+    ok(javaw(dir, "--jar", "lib/app.jar", "--classpath", "extra dir/x.jar", "--jvm-opts", "-Dapp.version=3 -Xshare:auto"));
+    var script = read(dir.resolve("run-app"));
+    contains(script, "app=\"$dir\"/lib/app.jar\n");
+    contains(script, "cp='extra dir/x.jar'\n");
+    contains(script, "exec java -Dapp.version=3 -Xshare:auto -cp \"$cp\" -jar \"$app\" \"$@\"\n");
+    equal("app.version=3 args=[q]\n", ok(shell(work, Map.of(), "jar/run-app q")).out());
+    // Without --jar, a .jar input is recognised by its extension.
+    ok(javaw(dir, "lib/app.jar", "-o", "plain"));
+    equal("app.version=1 args=[]\n", ok(shell(dir, Map.of(), "./plain")).out());
+}
+
+void minJava() {
+    var dir = mkdirs("minjava");
+    write(dir.resolve("src/App.java"), APP);
+    ok(shell(dir, Map.of(), "javac -d classes src/App.java && jar --create --file app.jar --main-class App -C classes ."));
+    var feature = Runtime.version().feature();
+    ok(javaw(dir, "--min-java", "99", "app.jar", "-o", "too-new"));
+    var tooNew = shell(dir, Map.of(), "./too-new");
+    equal(1, tooNew.code());
+    equal("too-new: requires Java 99 or newer, but java (from the PATH) is Java " + feature + "\n", tooNew.err());
+    ok(javaw(dir, "--min-java", String.valueOf(feature), "app.jar", "-o", "fits"));
+    equal("app.version=1 args=[]\n", ok(shell(dir, Map.of(), "./fits")).out());
+
+    // A fake JDK whose `java -version` says $FAKE_VERSION and otherwise runs the real java.
+    var realJava = ok(shell(dir, Map.of(), "command -v java")).out().strip();
+    write(dir.resolve("fake/bin/java"), """
+            #!/bin/sh
+            if [ "$1" = -version ]; then printf "$FAKE_VERSION" >&2; exit 0; fi
+            exec %s "$@"
+            """.formatted(realJava));
+    shell(dir, Map.of(), "chmod +x fake/bin/java");
+    ok(javaw(dir, "--java-home", "fake", "--min-java", "28", "app.jar", "-o", "fake28"));
+    contains(read(dir.resolve("fake28")), "jdk=$(" + dir.resolve("fake/bin/java") + " -version 2>&1)");
+    var picked = Map.of("FAKE_VERSION", "Picked up JAVA_TOOL_OPTIONS: -Dversion=\"99\"\\nopenjdk version \"28-ea\" 2027-03-23\\nOpenJDK 64-Bit Server VM\\n");
+    equal("app.version=1 args=[]\n", ok(shell(dir, picked, "./fake28")).out(), "28-ea after a JAVA_TOOL_OPTIONS line");
+    var java8 = shell(dir, Map.of("FAKE_VERSION", "java version \"1.8.0_402\"\\n"), "./fake28");
+    equal("fake28: requires Java 28 or newer, but " + dir.resolve("fake/bin/java") + " is Java 8\n", java8.err());
+    var garbage = shell(dir, Map.of("FAKE_VERSION", "something odd\\n"), "./fake28");
+    equal(1, garbage.code());
+    contains(garbage.err(), "is missing or has no recognizable version\n");
+    write(dir.resolve("fake/bin/java"), "");
+    shell(dir, Map.of(), "rm fake/bin/java");
+    var missing = shell(dir, Map.of(), "./fake28");
+    equal(1, missing.code());
+    equal("fake28: requires Java 28 or newer, but " + dir.resolve("fake/bin/java") + " is missing or has no recognizable version\n", missing.err());
+}
+
+void rebuild() {
+    var dir = mkdirs("rebuild");
+    write(dir.resolve("App.java"), APP);
+    ok(javaw(dir, "App.java"));
+    equal("app.version=1 args=[]\n", ok(shell(dir, Map.of(), "./run-app")).out());
+    check(Files.isRegularFile(dir.resolve(".run-app/run-app.jar")), "jar built in .run-app/");
+    equal("*\n", read(dir.resolve(".run-app/.gitignore")));
+    write(dir.resolve("App.java"), APP.replace("app.version=", "changed version="));
+    equal("changed version=1 args=[]\n", ok(shell(dir, Map.of(), "./run-app")).out());
+    // A helper class next to the source counts as a source too (multi-file programs).
+    write(dir.resolve("App.java"), "void main() { IO.println(Helper.greet()); }\n");
+    write(dir.resolve("Helper.java"), "class Helper { static String greet() { return \"one\"; } }\n");
+    equal("one\n", ok(shell(dir, Map.of(), "./run-app")).out());
+    write(dir.resolve("Helper.java"), "class Helper { static String greet() { return \"two\"; } }\n");
+    equal("two\n", ok(shell(dir, Map.of(), "./run-app")).out());
+    write(dir.resolve("App.java"), "void main() { IO.println(missing); }\n");
+    var broken = shell(dir, Map.of(), "./run-app");
+    equal(1, broken.code());
+    contains(broken.err(), "cannot find symbol");
+    contains(broken.err(), "run-app: cannot build App.java");
+    check(!broken.out().contains("two"), "a failed build must not run the old jar");
+}
+
+void previewJdkChange() {
+    var other = System.getenv("OTHER_JDK_HOME");
+    if (other == null || !Files.isExecutable(Path.of(other, "bin/javac"))) throw new Skip("set OTHER_JDK_HOME to run it");
+    var dir = mkdirs("preview");
+    write(dir.resolve("App.java"), APP);
+    ok(javaw(dir, "--jvm-opts", "--enable-preview", "App.java"));
+    // With --enable-preview the jar is compiled with --release set to the running JDK, so a jar from the
+    // newer JDK cannot load on the older one. Going there and back hits that whichever JDK is older.
+    var env = Map.of("OTHER", other);
+    equal("app.version=1 args=[a]\n", ok(shell(dir, env, "./run-app a")).out());
+    equal("app.version=1 args=[b]\n", ok(shell(dir, env, "PATH=\"$OTHER/bin:$PATH\" ./run-app b")).out());
+    equal("app.version=1 args=[c]\n", ok(shell(dir, env, "./run-app c")).out());
+}
+
+void resources() {
+    var dir = mkdirs("resources");
+    // Prints each resource's contents, or "-" when getResource cannot find it (as under the source launcher).
+    write(dir.resolve("App.java"), """
+            void main() throws Exception {
+                for (var name : List.of("/a.json", "/data/b.json", "/c.csv", "/notes.txt", "/.hidden.json", "/lib/d.json")) {
+                    try (var in = getClass().getResourceAsStream(name)) {
+                        IO.print(in == null ? "-\\n" : new String(in.readAllBytes()));
+                    }
+                }
+            }
+            """);
+    write(dir.resolve("a.json"), "a\n");
+    write(dir.resolve("data/b.json"), "b\n");
+    write(dir.resolve("c.csv"), "c\n");
+    write(dir.resolve("notes.txt"), "notes\n");
+    write(dir.resolve(".hidden.json"), "hidden\n");
+    write(dir.resolve("lib/d.json"), "d\n");
+    ok(javaw(dir, "--profile", "fast-start", "-r", "*.json", "--resource", "c.csv", "App.java"));
+    var expected = "a\nb\nc\n-\n-\n-\n";
+    // First run records the AOT cache, the second uses it; resources come from the jar both times.
+    equal(expected, ok(shell(work, Map.of(), "resources/run-app")).out());
+    equal(expected, ok(shell(work, Map.of(), "resources/run-app")).out());
+    // Changing, adding, and removing resources rebuild the jar.
+    write(dir.resolve("a.json"), "a2\n");
+    write(dir.resolve("notes.txt"), "ignored\n");
+    equal("a2\nb\nc\n-\n-\n-\n", ok(shell(work, Map.of(), "resources/run-app")).out());
+    ok(shell(dir, Map.of(), "rm data/b.json"));
+    equal("a2\n-\nc\n-\n-\n-\n", ok(shell(work, Map.of(), "resources/run-app")).out());
+    // Without --resource the wrapper stays minimal: no resource scan.
+    ok(javaw(dir, "--force", "App.java"));
+    check(!read(dir.resolve("run-app")).contains("resources"), "no resource code without --resource");
+}
+
+void aotCache() {
+    var dir = mkdirs("aot");
+    write(dir.resolve("App.java"), APP);
+    ok(javaw(dir, "--aot", "--min-java", "25", "App.java"));
+    var first = ok(shell(dir, Map.of(), "./run-app 1"));
+    equal("app.version=1 args=[1]\n", first.out(), "first run prints only the program's output");
+    equal("", first.err(), "first run is quiet");
+    var cache = dir.resolve(".run-app/run-app.aot");
+    check(Files.isRegularFile(cache), "AOT cache created");
+    var stamp = read(dir.resolve(".run-app/aot.stamp"));
+    equal("app.version=1 args=[2]\n", ok(shell(dir, Map.of(), "./run-app 2")).out());
+    equal("app.version=2 args=[3]\n", ok(shell(dir, Map.of("JAVA_TOOL_OPTIONS", "-Dapp.version=2"), "./run-app 3")).out());
+    // Hot path: no version check or other JVM start before the final exec.
+    var trace = ok(shell(dir, Map.of(), "sh -x ./run-app 2")).err();
+    check(!trace.contains("-version"), "warm run must not run java -version:\n" + trace);
+    check(trace.lines().filter(l -> l.startsWith("+")).reduce((x, y) -> y).orElse("").startsWith("+ exec java "), "warm run ends in exec:\n" + trace);
+    // A stale stamp means a rebuild, never a run without the cache.
+    write(dir.resolve(".run-app/aot.stamp"), "stale\n");
+    equal("app.version=1 args=[4]\n", ok(shell(dir, Map.of(), "./run-app 4")).out());
+    equal(stamp, read(dir.resolve(".run-app/aot.stamp")), "cache rebuilt with the right stamp");
+    // Changing the wrapper's baked contents changes the stamp.
+    write(dir.resolve("run-app"), read(dir.resolve("run-app")) + "# edited\n");
+    ok(shell(dir, Map.of(), "./run-app 5"));
+    check(!stamp.equals(read(dir.resolve(".run-app/aot.stamp"))), "stamp covers the wrapper's contents");
+    // A different JDK (here: java's file metadata changes) means a new stamp and a rebuilt cache.
+    var java = ok(shell(dir, Map.of(), "command -v java")).out().strip();
+    write(dir.resolve("jdk/bin/java"), "#!/bin/sh\nexec " + java + " \"$@\"\n");
+    ok(shell(dir, Map.of(), "chmod +x jdk/bin/java && touch -t 202001010000 jdk/bin/java && "
+            + "ln -s \"$(command -v javac)\" \"$(command -v jar)\" jdk/bin/"));
+    ok(javaw(dir, "--aot", "--java-home", "jdk", "App.java", "-o", "jdk-app"));
+    ok(shell(dir, Map.of(), "./jdk-app"));
+    var jdkStamp = read(dir.resolve(".jdk-app/aot.stamp"));
+    var jarStamp = read(dir.resolve(".jdk-app/jar.stamp"));
+    ok(shell(dir, Map.of(), "touch -t 202101010000 jdk/bin/java"));
+    contains(ok(shell(dir, Map.of(), "sh -x ./jdk-app 2>&1")).out(), "AOTMode=record");
+    check(!jdkStamp.equals(read(dir.resolve(".jdk-app/aot.stamp"))), "stamp covers the JDK");
+    check(!jarStamp.equals(read(dir.resolve(".jdk-app/jar.stamp"))), "jar stamp covers the JDK");
+    // Rebuilding the jar (it was deleted, or its stamp rewritten) must rebuild the cache too, since the
+    // JVM rejects a cache whose jar changed.
+    ok(shell(dir, Map.of(), "rm .run-app/run-app.jar"));
+    equal("app.version=1 args=[jar]\n", ok(shell(dir, Map.of(), "./run-app jar")).out(), "deleted jar");
+    write(dir.resolve(".run-app/jar.stamp"), "old format\n");
+    equal("app.version=1 args=[jar]\n", ok(shell(dir, Map.of(), "./run-app jar")).out(), "rewritten jar stamp");
+    equal("app.version=1 args=[jar]\n", ok(shell(dir, Map.of(), "./run-app jar")).out(), "warm after the rebuild");
+    // A cache that matches its stamp but cannot be used is a loud error.
+    write(cache, "not an AOT cache");
+    var corrupt = shell(dir, Map.of(), "./run-app 6");
+    check(corrupt.code() != 0, "unusable cache must fail, not fall back");
+    contains(corrupt.all(), "Unable to use AOT cache");
+    check(!corrupt.out().contains("args=[6]"), "the program must not run without its cache");
+    try (var files = Files.list(dir.resolve(".run-app"))) {
+        var leftovers = files.map(p -> p.getFileName().toString()).filter(n -> n.contains(".tmp") || n.matches("(aot|build)\\.[0-9]+.*")).toList();
+        equal(List.of(), leftovers, "temporary files cleaned up");
+    } catch (IOException e) {
+        throw new UncheckedIOException(e);
+    }
+}
+
+void concurrentFirstRuns() {
+    var dir = mkdirs("concurrent");
+    write(dir.resolve("App.java"), APP);
+    ok(javaw(dir, "--aot", "App.java"));
+    var runs = IntStream.range(0, 6).parallel().mapToObj(i -> shell(dir, Map.of(), "./run-app " + i)).toList();
+    for (var i = 0; i < runs.size(); i++) equal("app.version=1 args=[" + i + "]\n", ok(runs.get(i)).out());
+    equal("app.version=1 args=[again]\n", ok(shell(dir, Map.of(), "./run-app again")).out());
+    var names = ok(shell(dir, Map.of(), "ls -A .run-app")).out();
+    equal(".gitignore\naot.stamp\njar.stamp\nrun-app.aot\nrun-app.jar\n", names, "only finished files remain");
+}
+
+void sharedDirectory() {
+    var dir = mkdirs("shared");
+    write(dir.resolve("One.java"), "void main() { IO.println(\"one\"); }\n");
+    write(dir.resolve("Two.java"), "void main() { IO.println(\"two\"); }\n");
+    ok(javaw(dir, "--aot", "One.java", "Two.java"));
+    contains(read(dir.resolve("run-one")), "#   javaw --aot One.java\n");
+    contains(read(dir.resolve("run-two")), "#   javaw --aot Two.java\n");
+    equal("one\n", ok(shell(dir, Map.of(), "./run-one")).out());
+    equal("two\n", ok(shell(dir, Map.of(), "./run-two")).out());
+    var oneCache = read(dir.resolve(".run-one/aot.stamp"));
+    write(dir.resolve("Two.java"), "void main() { IO.println(\"two again\"); }\n");
+    equal("two again\n", ok(shell(dir, Map.of(), "./run-two")).out());
+    equal(oneCache, read(dir.resolve(".run-one/aot.stamp")), "rebuilding run-two leaves run-one alone");
+    equal("one\n", ok(shell(dir, Map.of(), "./run-one")).out());
+}
+
+void profiles() {
+    var dir = mkdirs("profiles");
+    write(dir.resolve("App.java"), APP);
+    ok(javaw(dir, "--profile", "fast-start", "App.java", "-o", "fast"));
+    var fast = read(dir.resolve("fast"));
+    contains(fast, "-XX:AOTMode=on");
+    contains(fast, "-XX:TieredStopAtLevel=1 -XX:+UseSerialGC");
+    equal("app.version=1 args=[]\n", ok(shell(dir, Map.of(), "./fast")).out());
+    equal("app.version=1 args=[]\n", ok(shell(dir, Map.of(), "./fast")).out());
+    ok(javaw(dir, "--profile", "small-disk", "App.java", "-o", "small"));
+    contains(read(dir.resolve("small")), "exec java \"$dir\"/App.java \"$@\"");
+    ok(javaw(dir, "--profile=max-perf", "--jvm-opts", "-Dapp.version=9", "App.java", "-o", "max"));
+    contains(read(dir.resolve("max")), "-XX:+UseParallelGC -Dapp.version=9");
+    equal("app.version=9 args=[]\n", ok(shell(dir, Map.of(), "./max")).out());
+    ok(javaw(dir, "--profile", "portable", "App.java", "-o", "portable"));
+    check(!read(dir.resolve("portable")).contains("AOT"), "portable has no AOT cache");
+}
+
+void nativeFallback() {
+    if (shell(work, Map.of(), "command -v native-image").code() == 0) throw new Skip("native-image is installed");
+    var dir = mkdirs("native");
+    write(dir.resolve("App.java"), APP);
+    ok(javaw(dir, "--native", "App.java"));
+    contains(read(dir.resolve("run-app")), "native-image -cp \"$jar\" App -o \"$tmp/image\"");
+    var run = ok(shell(dir, Map.of(), "./run-app n"));
+    equal("app.version=1 args=[n]\n", run.out());
+    equal("", run.err(), "no noise when falling back");
+}
+
+void nativeImage() {
+    var graal = System.getenv("GRAALVM_HOME");
+    if (graal == null || !Files.isExecutable(Path.of(graal, "bin/native-image"))) throw new Skip("set GRAALVM_HOME to run it");
+    var dir = mkdirs("native-image");
+    write(dir.resolve("App.java"), APP.replace("System.getProperty(\"app.version\", \"1\")",
+            "(System.getProperty(\"org.graalvm.nativeimage.imagecode\") != null ? \"native\" : \"jvm\")"));
+    ok(javaw(dir, "--native", "--java-home", graal, "App.java"));
+    var first = ok(shell(work, Map.of(), "native-image/run-app 1"));
+    equal("app.version=native args=[1]\n", first.out());
+    contains(first.err(), "building a native image");
+    check(Files.isExecutable(dir.resolve(".run-app/run-app")), "native binary in .run-app/");
+    var second = ok(shell(work, Map.of(), "native-image/run-app 2"));
+    equal("app.version=native args=[2]\n", second.out());
+    equal("", second.err());
+}
+
+void dogfood() {
+    var dir = mkdirs("dogfood");
+    ok(run(javaw.getParent(), Map.of(), javaw.toString(), "javaw", "-o", dir + "/"));
+    var script = read(dir.resolve("run-javaw"));
+    contains(script, "--release 28 --enable-preview --add-modules jdk.incubator.json");
+    contains(script, "exec java --enable-preview --add-modules jdk.incubator.json -cp \"$jar\" javaw \"$@\"");
+    contains(ok(shell(dir, Map.of(), "./run-javaw --help")).out(), "Usage: javaw");
+    // The built javaw generates a working wrapper too.
+    write(dir.resolve("App.java"), APP);
+    ok(shell(dir, Map.of(), "./run-javaw App.java"));
+    equal("app.version=1 args=[ok]\n", ok(shell(dir, Map.of(), "./run-app ok")).out());
+}
+
+void dependencies() {
+    if (shell(work, Map.of(), "command -v jbang").code() != 0) throw new Skip("jbang is not installed");
+    if (shell(work, Map.of(), "curl -fsI https://repo1.maven.org/maven2/ >/dev/null").code() != 0) throw new Skip("Maven Central is unreachable");
+    var dir = mkdirs("deps");
+    var source = """
+            //DEPS org.slf4j:slf4j-simple:2.0.13
+            void main(String[] args) {
+                System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
+                org.slf4j.LoggerFactory.getLogger("demo").info("hello {}", List.of(args));
+            }
+            """;
+    write(dir.resolve("Log.java"), source);
+    write(dir.resolve("Log2.java"), source);
+    ok(javaw(dir, "Log.java", "Log2.java"));
+    var script = read(dir.resolve("run-log"));
+    var fetches = script.lines().filter(l -> l.startsWith("  fetch ")).toList();
+    equal(2, fetches.size(), "one line per jar, transitive slf4j-api included");
+    for (var f : fetches) check(f.matches("  fetch org/slf4j/[a-z0-9-]+/2\\.0\\.13/[a-z0-9.-]+\\.jar [0-9a-f]{64}"), "pinned line: " + f);
+    var first = ok(shell(dir, Map.of(), "./run-log a"));
+    equal("[main] INFO demo - hello [a]\n", first.out());
+    contains(first.err(), "downloading https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.13/slf4j-api-2.0.13.jar");
+    check(Files.isRegularFile(dir.resolve("lib/org/slf4j/slf4j-api/2.0.13/slf4j-api-2.0.13.jar")), "jar in lib/");
+    equal("*\n", read(dir.resolve("lib/.gitignore")));
+    check(Files.isRegularFile(dir.resolve(".run-log/deps.ok")), "completion marker");
+    var second = ok(shell(dir, Map.of(), "./run-log2 b"));
+    equal("", second.err(), "the second wrapper reuses lib/ without downloading");
+
+    // Offline first run: a clear error.
+    shell(dir, Map.of(), "rm -rf lib .run-log");
+    var proxy = Map.of("https_proxy", "http://127.0.0.1:9", "HTTPS_PROXY", "http://127.0.0.1:9");
+    var offline = shell(dir, proxy, "./run-log");
+    equal(1, offline.code());
+    contains(offline.err(), "run-log: cannot download https://repo1.maven.org/maven2/org/slf4j/slf4j-simple/2.0.13/slf4j-simple-2.0.13.jar (offline?)");
+    try (var files = Files.walk(dir.resolve("lib"))) {
+        check(files.noneMatch(p -> p.toString().endsWith(".jar") || p.getFileName().toString().matches(".*\\.jar\\.[0-9]+")), "no partial jars left");
+    } catch (IOException e) {
+        throw new UncheckedIOException(e);
+    }
+
+    // No curl: a clear error naming curl. PATH gets everything from /bin and /usr/bin except curl, plus java.
+    var tools = mkdirs("deps/no-curl");
+    ok(shell(tools, Map.of(), """
+            for f in /bin/* /usr/bin/*; do n=${f##*/}; [ "$n" = curl ] || [ -e "$n" ] || ln -s "$f" "$n"; done
+            for t in java javac jar; do ln -sf "$(command -v $t)" $t; done
+            """));
+    var noCurl = shell(dir, Map.of("PATH", tools.toString()), "./run-log");
+    equal(1, noCurl.code());
+    equal("run-log: curl is required to download dependencies, but it is not installed\n", noCurl.err());
+
+    // A tampered pin is refused.
+    write(dir.resolve("run-log"), script.replaceFirst(" [0-9a-f]{64}\n", " " + "0".repeat(64) + "\n"));
+    var tampered = shell(dir, Map.of(), "./run-log");
+    equal(1, tampered.code());
+    contains(tampered.err(), "SHA-256 mismatch");
+}
+
+// ---- Helpers ----
+
+static final class Skip extends RuntimeException {
+    Skip(String reason) { super(reason); }
+}
+
+static Result javaw(Path cwd, String... args) {
+    var command = new ArrayList<String>(List.of(javaw.toString()));
+    command.addAll(List.of(args));
+    return run(cwd, Map.of(), command.toArray(String[]::new));
+}
+
+static Result shell(Path cwd, Map<String, String> env, String script) {
+    return run(cwd, env, "/bin/sh", "-c", script);
+}
+
+static Result run(Path cwd, Map<String, String> env, String... command) {
+    try {
+        var err = Files.createTempFile(work, "stderr", ".txt");
+        var pb = new ProcessBuilder(command).directory(cwd.toFile()).redirectError(err.toFile());
+        pb.environment().remove("JAVA_TOOL_OPTIONS");
+        pb.environment().remove("CDPATH");
+        pb.environment().put("JAVAW", javaw.toString());
+        pb.environment().putAll(env);
+        var process = pb.start();
+        process.getOutputStream().close();
+        var out = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        if (!process.waitFor(5, TimeUnit.MINUTES)) {
+            process.destroyForcibly();
+            throw new AssertionError("timed out: " + String.join(" ", command));
+        }
+        var errText = Files.readString(err).lines()
+                .filter(l -> !l.equals("WARNING: Using incubator modules: jdk.incubator.json"))
+                .map(l -> l + "\n").collect(Collectors.joining());
+        Files.delete(err);
+        return new Result(process.exitValue(), out, errText);
+    } catch (IOException e) {
+        throw new UncheckedIOException(e);
+    } catch (InterruptedException e) {
+        throw new IllegalStateException(e);
+    }
+}
+
+/// The POSIX shells to run wrappers with: sh always, others when installed.
+static List<String> shells() {
+    return Stream.of("sh", "dash", "ksh", "bash").filter(s -> shell(work, Map.of(), "command -v " + s).code() == 0).toList();
+}
+
+static Result ok(Result r) {
+    if (r.code() != 0) throw new AssertionError("exit " + r.code() + "\nstdout: " + r.out() + "stderr: " + r.err());
+    return r;
+}
+
+static void check(boolean condition, String what) {
+    if (!condition) throw new AssertionError(what);
+}
+
+static void equal(Object expected, Object actual) {
+    equal(expected, actual, "");
+}
+
+static void equal(Object expected, Object actual, String what) {
+    if (!Objects.equals(expected, actual)) {
+        throw new AssertionError((what.isEmpty() ? "" : what + ": ") + "expected <" + expected + "> but was <" + actual + ">");
+    }
+}
+
+static void contains(String text, String part) {
+    if (!text.contains(part)) throw new AssertionError("expected to find <" + part + "> in:\n" + text);
+}
+
+static Path mkdirs(String relative) {
+    try {
+        return Files.createDirectories(work.resolve(relative));
+    } catch (IOException e) {
+        throw new UncheckedIOException(e);
+    }
+}
+
+static void write(Path file, String text) {
+    try {
+        Files.createDirectories(file.getParent());
+        Files.writeString(file, text);
+    } catch (IOException e) {
+        throw new UncheckedIOException(e);
+    }
+}
+
+static String read(Path file) {
+    try {
+        return Files.readString(file);
+    } catch (IOException e) {
+        throw new UncheckedIOException(e);
+    }
+}
+
+static void delete(Path root) throws IOException {
+    try (var paths = Files.walk(root)) {
+        for (var p : paths.sorted(Comparator.reverseOrder()).toList()) Files.delete(p);
+    }
+}

@@ -1,0 +1,20 @@
+{
+ "run_id": "B-jarsrc-sonnet-1",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-sonnet-1/opt/app.jar",
+ "main": "Jarsrc",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jarsrc-sonnet-1/app",
+ "build_seconds": 10.4,
+ "image_bytes": 7093088,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jarsrc-sonnet-1/app --help",
+  "median_ms": 2.4253707600000007,
+  "mean_ms": 2.700188931717172,
+  "stddev_ms": 1.1669193165881502,
+  "min_ms": 2.2350367600000007,
+  "runs": 693,
+  "load_avg_before": 8.31787109375,
+  "load_avg_after": 8.31787109375
+ }
+}

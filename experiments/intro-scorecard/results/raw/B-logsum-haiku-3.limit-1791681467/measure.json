@@ -1,0 +1,211 @@
+{
+  "run_id": "B-logsum-haiku-3.limit-1791681467",
+  "measured": "2026-10-11T09:09:32",
+  "run_command_reported": "You've hit your session limit \u00b7 resets 12:10am (America/Chicago)",
+  "run_command_used": "You've hit your session limit \u00b7 resets 12:10am (America/Chicago)",
+  "run_command_notes": [
+    "unparseable; used verbatim"
+  ],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": null,
+    "launch": {
+      "lang": null,
+      "entry": null,
+      "launch": null,
+      "wrapper": null,
+      "evidence": [],
+      "flags": [
+        "run command missing or unparseable"
+      ],
+      "java_opts": ""
+    },
+    "source_bytes_by_lang": {
+      "shell": 185,
+      "java": 12806
+    },
+    "flags": [
+      "run command missing or unparseable",
+      "language from dominant source (java); run command did not resolve it"
+    ],
+    "needs_review": true,
+    "java_style": {
+      "build": "build script",
+      "launch": "unknown",
+      "source": "classic",
+      "imports": "classic",
+      "files": "multiple files",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "none",
+      "combination": "build script / unknown",
+      "java_file_count": 2,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": null,
+      "evidence": {
+        "build": [
+          "build.sh"
+        ],
+        "launch": [],
+        "source": [
+          "src/logsum/Main.java:36 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/logsum/Main.java",
+          "src/logsum/Summary.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 4442
+    },
+    {
+      "path": "build.sh",
+      "kind": "build",
+      "lang": null,
+      "bytes": 225
+    },
+    {
+      "path": "bin/logsum",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 185
+    },
+    {
+      "path": "src/logsum/Main.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 7179
+    },
+    {
+      "path": "src/logsum/Summary.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 5627
+    },
+    {
+      "path": "tests/run-tests.sh",
+      "kind": "test",
+      "lang": "shell",
+      "bytes": 4683
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "logsum-basic",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "logsum-top3",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "logsum-level-error",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "logsum-since",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "logsum-stdin",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "logsum-bad-level",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 2,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "logsum-bad-since",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 2,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "logsum-missing-file",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 2,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "logsum-help",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      }
+    ],
+    "passed": 0,
+    "total": 9,
+    "warmup": {
+      "exit": 2,
+      "seconds": 0.0,
+      "stderr_tail": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+    },
+    "pass": false
+  },
+  "size": {
+    "source_tokens": 2788,
+    "build_file_tokens": 69,
+    "test_tokens": 1939,
+    "source_files": [
+      "bin/logsum",
+      "src/logsum/Main.java",
+      "src/logsum/Summary.java"
+    ],
+    "build_files": [
+      "build.sh"
+    ],
+    "source_bytes": 12991,
+    "build_file_bytes": 225
+  },
+  "disk": {
+    "source_and_build_files_bytes": 13216,
+    "build_output_bytes": 14561,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 27777
+  }
+}

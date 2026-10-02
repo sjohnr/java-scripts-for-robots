@@ -1,0 +1,89 @@
+{
+  "run_id": "A-treesum-haiku-2",
+  "condition": "A",
+  "task": "treesum",
+  "model_alias": "haiku",
+  "model_id": "claude-haiku-5-5",
+  "model_ids_used": [
+    "claude-haiku-5-5"
+  ],
+  "replicate": 2,
+  "seed": 20261010,
+  "seed_position": 49,
+  "started": "2026-10-11T01:09:48+00:00",
+  "ended": "2026-10-11T01:11:05+00:00",
+  "wall_s": 77.2,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 9,
+  "duration_ms": 76744,
+  "duration_api_ms": 75562,
+  "tokens": {
+    "input_tokens": 16,
+    "output_tokens": 19139,
+    "cache_creation_input_tokens": 25315,
+    "cache_read_input_tokens": 201122
+  },
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 16,
+      "outputTokens": 19139,
+      "cacheReadInputTokens": 201122,
+      "cacheCreationInputTokens": 25315,
+      "webSearchRequests": 0,
+      "costUSD": 0.016645319999999998,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 10186,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.016645319999999998,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "a5aa3003-2d99-4b84-bd18-e806af0e4b7e",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-treesum-haiku-2",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.2,
+    "cost_usd": 0.0005746000000000015,
+    "cost_usd_cumulative_reported": 0.01721992,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 108,
+      "cache_creation_input_tokens": 710,
+      "cache_read_input_tokens": 37840
+    },
+    "subtype": "success",
+    "reply": "```\n./treesum\n```",
+    "run_command": "./treesum",
+    "limit_hits": []
+  },
+  "run_command": "./treesum",
+  "excluded_from_copy": [],
+  "prompt": "Build the `treesum` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `treesum` command-line tool described in SPEC.md.",
+    "--model",
+    "haiku",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

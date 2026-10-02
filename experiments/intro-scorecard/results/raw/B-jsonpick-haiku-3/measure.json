@@ -1,0 +1,263 @@
+{
+  "run_id": "B-jsonpick-haiku-3",
+  "measured": "2026-10-10T20:00:40",
+  "run_command_reported": "build/jsonpick --help",
+  "run_command_used": "build/jsonpick",
+  "run_command_notes": [
+    "dropped trailing --help"
+  ],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "jsonpick.Main",
+    "launch": {
+      "lang": "java",
+      "entry": "jsonpick.Main",
+      "launch": "javac + java",
+      "wrapper": "build/jsonpick",
+      "evidence": [
+        "run command program: build/jsonpick",
+        "wrapper script build/jsonpick runs: java -cp \"/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/project/build/classes\" jsonpick.Main "
+      ],
+      "flags": [],
+      "java_opts": "-cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/project/build/classes",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "java": 22907
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "build script",
+      "launch": "javac + java",
+      "source": "classic",
+      "imports": "classic",
+      "files": "multiple files",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "build script / javac + java",
+      "java_file_count": 6,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "build/jsonpick",
+      "evidence": {
+        "build": [
+          "build.sh"
+        ],
+        "launch": [
+          "run command program: build/jsonpick",
+          "wrapper script build/jsonpick runs: java -cp \"/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/project/build/classes\" jsonpick.Main ",
+          "run command program: java",
+          "via wrapper script build/jsonpick"
+        ],
+        "source": [
+          "src/jsonpick/Main.java:31 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/jsonpick/Json.java",
+          "src/jsonpick/JsonObject.java",
+          "src/jsonpick/JsonParser.java",
+          "src/jsonpick/JsonPath.java",
+          "src/jsonpick/Main.java",
+          "src/jsonpick/Shape.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 3310
+    },
+    {
+      "path": "build.sh",
+      "kind": "build",
+      "lang": null,
+      "bytes": 439
+    },
+    {
+      "path": "src/jsonpick/Json.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 2610
+    },
+    {
+      "path": "src/jsonpick/JsonObject.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 715
+    },
+    {
+      "path": "src/jsonpick/JsonParser.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 9647
+    },
+    {
+      "path": "src/jsonpick/JsonPath.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 3355
+    },
+    {
+      "path": "src/jsonpick/Main.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 5073
+    },
+    {
+      "path": "src/jsonpick/Shape.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 1507
+    },
+    {
+      "path": "tests/run-tests.sh",
+      "kind": "test",
+      "lang": "shell",
+      "bytes": 7165
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jsonpick-string",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-number",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-array-index",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-object",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-root",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-shape",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-shape-depth0",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-notfound",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-stdin",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-bad-json",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-help",
+        "ok": true
+      }
+    ],
+    "passed": 11,
+    "total": 11,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.03,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 4900,
+    "build_file_tokens": 134,
+    "test_tokens": 2458,
+    "source_files": [
+      "src/jsonpick/Json.java",
+      "src/jsonpick/JsonObject.java",
+      "src/jsonpick/JsonParser.java",
+      "src/jsonpick/JsonPath.java",
+      "src/jsonpick/Main.java",
+      "src/jsonpick/Shape.java"
+    ],
+    "build_files": [
+      "build.sh"
+    ],
+    "source_bytes": 22907,
+    "build_file_bytes": 439
+  },
+  "disk": {
+    "source_and_build_files_bytes": 23346,
+    "build_output_bytes": 20979,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 44325
+  },
+  "load_avg_at_bench_start": 2.17724609375,
+  "startup": {
+    "command": "build/jsonpick --help",
+    "median_ms": 23.36756114,
+    "mean_ms": 23.49877456276423,
+    "stddev_ms": 0.6108092499720431,
+    "min_ms": 22.378478140000002,
+    "runs": 123,
+    "load_avg_before": 2.17724609375,
+    "load_avg_after": 2.16259765625
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/opt/app.jar",
+    "main": "jsonpick.Main",
+    "training": {
+      "args": [
+        "items[0]",
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/jsonpick.json"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 12091392,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/opt/app.jar jsonpick.Main --help",
+      "median_ms": 19.62916908,
+      "mean_ms": 20.06172258666666,
+      "stddev_ms": 1.2718069752654009,
+      "min_ms": 18.37910708,
+      "runs": 150,
+      "load_avg_before": 2.16259765625,
+      "load_avg_after": 2.1494140625
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-3/opt/app.jar jsonpick.Main --help",
+      "median_ms": 22.80146048,
+      "mean_ms": 24.050109662539676,
+      "stddev_ms": 4.262341487261606,
+      "min_ms": 21.561169480000004,
+      "runs": 126,
+      "load_avg_before": 2.1494140625,
+      "load_avg_after": 2.1494140625
+    }
+  },
+  "benchmarked": "2026-10-11T09:08:33"
+}

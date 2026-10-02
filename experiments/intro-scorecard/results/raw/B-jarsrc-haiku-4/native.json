@@ -1,0 +1,20 @@
+{
+ "run_id": "B-jarsrc-haiku-4",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-4/opt/app.jar",
+ "main": "jarsrc.Main",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jarsrc-haiku-4/app",
+ "build_seconds": 10.6,
+ "image_bytes": 7026752,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jarsrc-haiku-4/app --help",
+  "median_ms": 2.2938657399999998,
+  "mean_ms": 2.349738240683992,
+  "stddev_ms": 0.24321251058489243,
+  "min_ms": 2.14407274,
+  "runs": 731,
+  "load_avg_before": 5.0615234375,
+  "load_avg_after": 4.89599609375
+ }
+}

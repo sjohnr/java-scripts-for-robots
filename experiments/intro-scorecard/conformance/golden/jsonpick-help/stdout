@@ -1,0 +1,1 @@
+usage: jsonpick PATH [FILE] [--shape] [--depth N]

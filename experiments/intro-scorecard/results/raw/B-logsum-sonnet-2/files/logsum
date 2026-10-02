@@ -1,0 +1,4 @@
+#!/bin/sh
+d=$(cd "$(dirname "$0")" && pwd)
+[ -f "$d/Logsum.class" ] || javac -d "$d" "$d/Logsum.java" || exit 1
+exec java -cp "$d" Logsum "$@"

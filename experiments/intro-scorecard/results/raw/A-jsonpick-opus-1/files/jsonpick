@@ -1,0 +1,255 @@
+#!/usr/bin/env python3
+"""jsonpick: extract a value by path from JSON. See SPEC.md."""
+
+import json
+import re
+import sys
+from decimal import Decimal
+
+HELP = """\
+Usage: jsonpick PATH [FILE] [--shape] [--depth N]
+
+Extract a value by path from JSON.
+
+Arguments:
+  PATH        Path to select, e.g. a.b[0].c ("." or "" selects the root)
+  FILE        JSON file to read (omitted or "-" means stdin)
+
+Flags:
+  --shape     Print a type/array-length summary of the value at PATH
+  --depth N   Levels to describe in --shape mode (default 2)
+  --help      Show this help and exit
+"""
+
+
+class UsageError(Exception):
+    pass
+
+
+class NotFound(Exception):
+    pass
+
+
+# ---------------------------------------------------------------- arguments
+
+def parse_args(argv):
+    positionals = []
+    shape = False
+    depth = 2
+    i = 0
+    only_positionals = False
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if only_positionals or arg == "-" or not arg.startswith("-"):
+            positionals.append(arg)
+        elif arg == "--":
+            only_positionals = True
+        elif arg == "--help":
+            return None
+        elif arg == "--shape":
+            shape = True
+        elif arg == "--depth" or arg.startswith("--depth="):
+            if arg == "--depth":
+                if i >= len(argv):
+                    raise UsageError("missing value for --depth")
+                value = argv[i]
+                i += 1
+            else:
+                value = arg[len("--depth="):]
+            if not re.fullmatch(r"[0-9]+", value):
+                raise UsageError("invalid value for --depth: " + value)
+            depth = int(value)
+        else:
+            raise UsageError("unknown flag: " + arg)
+    if not positionals:
+        raise UsageError("missing required argument: PATH")
+    if len(positionals) > 2:
+        raise UsageError("unexpected argument: " + positionals[2])
+    path = positionals[0]
+    file = positionals[1] if len(positionals) == 2 else "-"
+    return path, file, shape, depth
+
+
+# --------------------------------------------------------------------- path
+
+_SEGMENT = re.compile(r"\[([0-9]+)\]|([^.\[\]]+)")
+
+
+def parse_path(path):
+    """Turn 'a.b[0][1].c' into ['a', 'b', 0, 1, 'c']."""
+    steps = []
+    rest = path[1:] if path.startswith(".") else path
+    pos = 0
+    expect_key = True  # at start or right after a '.'
+    while pos < len(rest):
+        if rest[pos] == ".":
+            if expect_key:
+                raise UsageError("invalid path: " + path)
+            expect_key = True
+            pos += 1
+            continue
+        m = _SEGMENT.match(rest, pos)
+        if not m or (m.group(2) is not None and not expect_key):
+            raise UsageError("invalid path: " + path)
+        if m.group(1) is not None:
+            if expect_key and steps:
+                # '.[0]' is not valid; '[0]' at the very start is.
+                raise UsageError("invalid path: " + path)
+            steps.append(int(m.group(1)))
+        else:
+            steps.append(m.group(2))
+        expect_key = False
+        pos = m.end()
+    if expect_key and steps:
+        raise UsageError("invalid path: " + path)  # trailing '.'
+    return steps
+
+
+def resolve(doc, steps, path):
+    node = doc
+    for step in steps:
+        if isinstance(step, int):
+            if not isinstance(node, list) or step >= len(node):
+                raise NotFound(path)
+            node = node[step]
+        else:
+            if not isinstance(node, dict) or step not in node:
+                raise NotFound(path)
+            node = node[step]
+    return node
+
+
+# --------------------------------------------------------------------- JSON
+
+def _reject_constant(name):
+    raise ValueError(name)
+
+
+def load_json(data):
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError as e:
+        raise UsageError(
+            "invalid JSON: invalid UTF-8 at byte offset %d" % e.start)
+    try:
+        return json.loads(
+            text,
+            parse_float=Decimal,
+            parse_int=int,
+            parse_constant=_reject_constant,
+        )
+    except json.JSONDecodeError as e:
+        raise UsageError("invalid JSON: %s at line %d column %d"
+                         % (e.msg, e.lineno, e.colno))
+    except ValueError as e:
+        # NaN / Infinity literals: locate the first one for the message.
+        m = re.search(r"-?(NaN|Infinity)", text)
+        offset = m.start() if m else 0
+        line = text.count("\n", 0, offset) + 1
+        col = offset - (text.rfind("\n", 0, offset) + 1) + 1
+        raise UsageError("invalid JSON: unexpected token %s at line %d "
+                         "column %d" % (e, line, col))
+
+
+def format_number(n):
+    if isinstance(n, int):
+        return str(n)
+    # Decimal from parse_float
+    f = float(n)
+    if f in (float("inf"), float("-inf")):
+        s = format(n.normalize(), "E")  # out of double range: keep exact
+        mant, exp = s.split("E")
+        return mant + "e" + str(int(exp))
+    if f.is_integer() and abs(f) < 1e21:
+        return str(int(f))
+    s = repr(f)
+    if "e" in s:
+        mant, exp = s.split("e")
+        s = mant + "e" + str(int(exp))
+    return s
+
+
+def dump(value):
+    if value is None:
+        return "null"
+    if value is True:
+        return "true"
+    if value is False:
+        return "false"
+    if isinstance(value, (int, Decimal)):
+        return format_number(value)
+    if isinstance(value, str):
+        return json.dumps(value, ensure_ascii=False)
+    if isinstance(value, list):
+        return "[" + ",".join(dump(v) for v in value) + "]"
+    return "{" + ",".join(json.dumps(k, ensure_ascii=False) + ":" + dump(v)
+                          for k, v in value.items()) + "}"
+
+
+def render(value):
+    if isinstance(value, str):
+        return value
+    return dump(value)
+
+
+def shape(value, budget):
+    if isinstance(value, str):
+        return "string"
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "boolean"
+    if isinstance(value, (int, Decimal)):
+        return "number"
+    if isinstance(value, list):
+        head = "array[%d]" % len(value)
+        if budget == 0 or not value:
+            return head
+        return head + " of " + shape(value[0], budget - 1)
+    if budget == 0:
+        return "object{%d keys}" % len(value)
+    return "object{" + ", ".join(
+        "%s: %s" % (k, shape(v, budget - 1)) for k, v in value.items()) + "}"
+
+
+# --------------------------------------------------------------------- main
+
+def write(stream, text):
+    stream.buffer.write(text.encode("utf-8", errors="replace"))
+    stream.flush()
+
+
+def main(argv):
+    try:
+        parsed = parse_args(argv)
+        if parsed is None:
+            write(sys.stdout, HELP)
+            return 0
+        path, file, shape_mode, depth = parsed
+        steps = parse_path(path)
+        if file == "-":
+            data = sys.stdin.buffer.read()
+        else:
+            try:
+                with open(file, "rb") as fh:
+                    data = fh.read()
+            except OSError as e:
+                raise UsageError("cannot read %s: %s" % (file, e.strerror))
+        doc = load_json(data)
+        value = resolve(doc, steps, path)
+    except UsageError as e:
+        write(sys.stderr, ("error: %s\n" if not str(e).startswith("unknown flag")
+                           else "%s\n") % e)
+        return 2
+    except NotFound as e:
+        write(sys.stderr, "error: path not found: %s\n" % e)
+        return 1
+    out = shape(value, depth) if shape_mode else render(value)
+    write(sys.stdout, out + "\n")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.set_int_max_str_digits(0)
+    sys.exit(main(sys.argv[1:]))

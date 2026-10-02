@@ -1,0 +1,94 @@
+{
+  "run_id": "B-jsonpick-haiku-4",
+  "condition": "B",
+  "task": "jsonpick",
+  "model_alias": "haiku",
+  "model_id": "claude-haiku-5-5",
+  "model_ids_used": [
+    "claude-haiku-5-5"
+  ],
+  "replicate": 4,
+  "seed": 20261010,
+  "seed_position": 7,
+  "started": "2026-10-11T00:51:56+00:00",
+  "ended": "2026-10-11T00:55:14+00:00",
+  "wall_s": 198.0,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 22,
+  "duration_ms": 197444,
+  "duration_api_ms": 187490,
+  "tokens": {
+    "input_tokens": 22,
+    "output_tokens": 48364,
+    "cache_creation_input_tokens": 57764,
+    "cache_read_input_tokens": 496955
+  },
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 22,
+      "outputTokens": 48364,
+      "cacheReadInputTokens": 496955,
+      "cacheCreationInputTokens": 57764,
+      "webSearchRequests": 0,
+      "costUSD": 0.04070655000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 30807,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.04070655000000001,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "462e6566-307c-4839-ac1c-36ec8c565a5f",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-4",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.1,
+    "cost_usd": 0.0010304699999999986,
+    "cost_usd_cumulative_reported": 0.04173702000000001,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 99,
+      "cache_creation_input_tokens": 1413,
+      "cache_read_input_tokens": 69817
+    },
+    "subtype": "success",
+    "reply": "```sh\n./bin/jsonpick\n```",
+    "run_command": "./bin/jsonpick",
+    "limit_hits": []
+  },
+  "run_command": "./bin/jsonpick",
+  "excluded_from_copy": [
+    {
+      "path": "build",
+      "bytes": 45194
+    }
+  ],
+  "prompt": "Build the `jsonpick` command-line tool described in SPEC.md. Write it in Java.",
+  "claude_args": [
+    "-p",
+    "Build the `jsonpick` command-line tool described in SPEC.md. Write it in Java.",
+    "--model",
+    "haiku",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

@@ -1,0 +1,199 @@
+#!/usr/bin/env python3
+"""treesum: compact repo overview. See SPEC.md."""
+
+import os
+import stat
+import sys
+
+IGNORED_DIRS = frozenset([
+    ".git", "node_modules", "build", ".gradle", "target",
+    "dist", ".venv", "__pycache__", ".idea", ".vscode",
+])
+
+HELP = """\
+usage: treesum [DIR] [--top N] [--ext-limit M]
+
+Print a compact overview of a directory tree: file and directory counts,
+files and lines of code per extension, and the largest files.
+
+arguments:
+  DIR              directory to summarize (default: .)
+
+options:
+  --top N          number of largest files to list (default: 10)
+  --ext-limit M    max distinct extensions shown in the by-extension table;
+                   the rest are folded into an "other" row (default: 20)
+  -h, --help       show this help message and exit
+
+Ignored directories (fixed, anywhere in the tree):
+  {ignored}
+Symlinks are never followed or counted.
+""".format(ignored=", ".join(sorted(IGNORED_DIRS)))
+
+
+class UsageError(Exception):
+    pass
+
+
+def write_out(text, stream):
+    stream.buffer.write(text.encode("utf-8", "surrogateescape"))
+    stream.buffer.flush()
+
+
+def parse_count(flag, value):
+    if value is None:
+        raise UsageError("missing value for {}".format(flag))
+    if not value.isascii() or not value.isdigit():
+        raise UsageError("invalid value for {}: {}".format(flag, value))
+    return int(value)
+
+
+def parse_args(argv):
+    opts = {"dir": None, "top": 10, "ext_limit": 20, "help": False}
+    flags = {"--top": "top", "--ext-limit": "ext_limit"}
+    i = 0
+    only_positional = False
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if not only_positional and arg == "--":
+            only_positional = True
+            continue
+        if not only_positional and arg.startswith("-") and arg != "-":
+            if arg in ("-h", "--help"):
+                opts["help"] = True
+                continue
+            name, eq, inline = arg.partition("=")
+            if name in flags:
+                if eq:
+                    value = inline
+                elif i < len(argv):
+                    value = argv[i]
+                    i += 1
+                else:
+                    value = None
+                opts[flags[name]] = parse_count(name, value)
+                continue
+            raise UsageError("unknown flag: {}".format(arg))
+        if opts["dir"] is not None:
+            raise UsageError("unexpected argument: {}".format(arg))
+        opts["dir"] = arg
+    if opts["dir"] is None:
+        opts["dir"] = "."
+    return opts
+
+
+def extension(name):
+    idx = name.rfind(".")
+    if idx <= 0:
+        # No dot, or a dotfile like ".gitignore" with no other dot.
+        return ""
+    return name[idx + 1:].lower()
+
+
+def count_loc(path):
+    newlines = 0
+    last = b""
+    with open(path, "rb") as f:
+        while True:
+            chunk = f.read(1 << 20)
+            if not chunk:
+                break
+            newlines += chunk.count(b"\n")
+            last = chunk[-1:]
+    if last and last != b"\n":
+        newlines += 1
+    return newlines
+
+
+def scan(root):
+    files = []  # (size, relpath)
+    by_ext = {}  # ext -> [files, loc]
+    dir_count = 0
+    stack = [(root, "")]
+    while stack:
+        abs_dir, rel_dir = stack.pop()
+        try:
+            entries = list(os.scandir(abs_dir))
+        except OSError:
+            continue
+        for entry in entries:
+            rel = rel_dir + "/" + entry.name if rel_dir else entry.name
+            try:
+                st = entry.stat(follow_symlinks=False)
+            except OSError:
+                continue
+            if stat.S_ISDIR(st.st_mode):
+                if entry.name in IGNORED_DIRS:
+                    continue
+                dir_count += 1
+                stack.append((entry.path, rel))
+            elif stat.S_ISREG(st.st_mode):
+                try:
+                    loc = count_loc(entry.path)
+                except OSError:
+                    continue
+                files.append((st.st_size, rel))
+                stats = by_ext.setdefault(extension(entry.name), [0, 0])
+                stats[0] += 1
+                stats[1] += loc
+            # Symlinks and special files are not counted.
+    return files, by_ext, dir_count
+
+
+def render(files, by_ext, dir_count, top, ext_limit):
+    lines = ["files: {}".format(len(files)), "dirs: {}".format(dir_count)]
+
+    lines.append("by extension:")
+    rows = sorted(by_ext.items(), key=lambda kv: (-kv[1][0], kv[0]))
+    shown, folded = rows[:ext_limit], rows[ext_limit:]
+    for ext, (n, loc) in shown:
+        lines.append("  {}  files={} loc={}".format(ext or "(none)", n, loc))
+    if folded:
+        n = sum(s[0] for _, s in folded)
+        loc = sum(s[1] for _, s in folded)
+        lines.append("  other  files={} loc={}".format(n, loc))
+
+    lines.append("largest files:")
+    for size, rel in sorted(files, key=lambda f: (-f[0], f[1]))[:top]:
+        lines.append("  {} {}".format(size, rel))
+
+    return "".join(line.rstrip() + "\n" for line in lines)
+
+
+def main(argv):
+    try:
+        opts = parse_args(argv)
+    except UsageError as e:
+        write_out("{}\n".format(e), sys.stderr)
+        return 2
+    if opts["help"]:
+        write_out(HELP, sys.stdout)
+        return 0
+
+    root = opts["dir"]
+    if not os.path.isdir(root):
+        write_out("error: cannot read {}\n".format(root), sys.stderr)
+        return 2
+    try:
+        os.scandir(root).close()
+    except OSError:
+        write_out("error: cannot read {}\n".format(root), sys.stderr)
+        return 2
+
+    files, by_ext, dir_count = scan(root)
+    write_out(render(files, by_ext, dir_count, opts["top"], opts["ext_limit"]),
+              sys.stdout)
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main(sys.argv[1:]))
+    except KeyboardInterrupt:
+        sys.exit(2)
+    except BrokenPipeError:
+        # Silence the interpreter's flush-at-exit warning.
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(devnull, sys.stdout.fileno())
+        sys.exit(0)

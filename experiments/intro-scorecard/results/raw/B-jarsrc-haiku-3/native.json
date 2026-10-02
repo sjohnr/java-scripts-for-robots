@@ -1,0 +1,20 @@
+{
+ "run_id": "B-jarsrc-haiku-3",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-3/opt/app.jar",
+ "main": "Jarsrc",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jarsrc-haiku-3/app",
+ "build_seconds": 10.9,
+ "image_bytes": 7043344,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jarsrc-haiku-3/app --help",
+  "median_ms": 2.20267356,
+  "mean_ms": 2.2322468315404693,
+  "stddev_ms": 0.20986020949946546,
+  "min_ms": 2.0775900599999995,
+  "runs": 766,
+  "load_avg_before": 3.63232421875,
+  "load_avg_after": 3.66162109375
+ }
+}

@@ -1,0 +1,7 @@
+#!/bin/sh
+# Launcher: compiles on first use, then runs.
+D=$(cd "$(dirname "$0")" && pwd)
+if [ ! -f "$D/out/Treesum.class" ] || [ "$D/src/Treesum.java" -nt "$D/out/Treesum.class" ]; then
+  mkdir -p "$D/out" && javac -d "$D/out" "$D/src/Treesum.java" || exit 1
+fi
+exec java -Xshare:auto -XX:TieredStopAtLevel=1 -cp "$D/out" Treesum "$@"

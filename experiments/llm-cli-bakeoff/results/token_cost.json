@@ -1,0 +1,357 @@
+{
+  "tokenizer": "tiktoken o200k_base (proxy)",
+  "source": {
+    "noop": {
+      "go": {
+        "bytes": 333,
+        "lines": 19,
+        "tokens": 100
+      },
+      "python": {
+        "bytes": 403,
+        "lines": 17,
+        "tokens": 104
+      },
+      "node": {
+        "bytes": 324,
+        "lines": 13,
+        "tokens": 85
+      },
+      "java-classic": {
+        "bytes": 304,
+        "lines": 10,
+        "tokens": 70
+      },
+      "java-compact": {
+        "bytes": 212,
+        "lines": 8,
+        "tokens": 58
+      }
+    },
+    "jarsrc": {
+      "go": {
+        "bytes": 11127,
+        "lines": 549,
+        "tokens": 3492
+      },
+      "python": {
+        "bytes": 10573,
+        "lines": 361,
+        "tokens": 2741
+      },
+      "node": {
+        "bytes": 12752,
+        "lines": 427,
+        "tokens": 3701
+      },
+      "java-classic": {
+        "bytes": 11432,
+        "lines": 264,
+        "tokens": 2786
+      },
+      "java-compact": {
+        "bytes": 11034,
+        "lines": 249,
+        "tokens": 2709
+      },
+      "java-multi": {
+        "bytes": 11983,
+        "lines": 281,
+        "tokens": 2898
+      }
+    },
+    "logsum": {
+      "go": {
+        "bytes": 6086,
+        "lines": 287,
+        "tokens": 2052
+      },
+      "python": {
+        "bytes": 5581,
+        "lines": 193,
+        "tokens": 1485
+      },
+      "node": {
+        "bytes": 4465,
+        "lines": 160,
+        "tokens": 1341
+      },
+      "java-classic": {
+        "bytes": 5262,
+        "lines": 126,
+        "tokens": 1324
+      }
+    },
+    "treesum": {
+      "go": {
+        "bytes": 5907,
+        "lines": 278,
+        "tokens": 1899
+      },
+      "python": {
+        "bytes": 5390,
+        "lines": 176,
+        "tokens": 1393
+      },
+      "node": {
+        "bytes": 4629,
+        "lines": 176,
+        "tokens": 1409
+      },
+      "java-classic": {
+        "bytes": 5326,
+        "lines": 121,
+        "tokens": 1275
+      }
+    },
+    "jsonpick": {
+      "go": {
+        "bytes": 13520,
+        "lines": 694,
+        "tokens": 4455
+      },
+      "python": {
+        "bytes": 6545,
+        "lines": 237,
+        "tokens": 1630
+      },
+      "node": {
+        "bytes": 5192,
+        "lines": 188,
+        "tokens": 1519
+      },
+      "java-classic": {
+        "bytes": 13505,
+        "lines": 351,
+        "tokens": 3077
+      },
+      "java-jbang": {
+        "bytes": 6261,
+        "lines": 168,
+        "tokens": 1478
+      }
+    }
+  },
+  "help": {
+    "noop": {
+      "go": {
+        "stdout": {
+          "bytes": 36,
+          "lines": 2,
+          "tokens": 13
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      },
+      "python": {
+        "stdout": {
+          "bytes": 36,
+          "lines": 2,
+          "tokens": 13
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      },
+      "node": {
+        "stdout": {
+          "bytes": 36,
+          "lines": 2,
+          "tokens": 13
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      }
+    },
+    "jarsrc": {
+      "go": {
+        "stdout": {
+          "bytes": 288,
+          "lines": 9,
+          "tokens": 96
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      },
+      "python": {
+        "stdout": {
+          "bytes": 290,
+          "lines": 8,
+          "tokens": 94
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      },
+      "node": {
+        "stdout": {
+          "bytes": 300,
+          "lines": 7,
+          "tokens": 91
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      }
+    },
+    "logsum": {
+      "go": {
+        "stdout": {
+          "bytes": 318,
+          "lines": 8,
+          "tokens": 79
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      },
+      "python": {
+        "stdout": {
+          "bytes": 316,
+          "lines": 6,
+          "tokens": 82
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      },
+      "node": {
+        "stdout": {
+          "bytes": 307,
+          "lines": 5,
+          "tokens": 77
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      }
+    },
+    "treesum": {
+      "go": {
+        "stdout": {
+          "bytes": 377,
+          "lines": 10,
+          "tokens": 100
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      },
+      "python": {
+        "stdout": {
+          "bytes": 440,
+          "lines": 9,
+          "tokens": 113
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      },
+      "node": {
+        "stdout": {
+          "bytes": 338,
+          "lines": 5,
+          "tokens": 97
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      }
+    },
+    "jsonpick": {
+      "go": {
+        "stdout": {
+          "bytes": 339,
+          "lines": 9,
+          "tokens": 94
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      },
+      "python": {
+        "stdout": {
+          "bytes": 338,
+          "lines": 7,
+          "tokens": 94
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      },
+      "node": {
+        "stdout": {
+          "bytes": 291,
+          "lines": 5,
+          "tokens": 83
+        },
+        "stderr": {
+          "bytes": 0,
+          "lines": 0,
+          "tokens": 0
+        }
+      }
+    }
+  },
+  "naive_shell_flailing": {
+    "jarsrc_task": {
+      "naive_command_count": 3,
+      "naive_output": {
+        "bytes": 2046,
+        "lines": 27,
+        "tokens": 749
+      },
+      "cli_command_count": 1,
+      "cli_output": {
+        "bytes": 116,
+        "lines": 7,
+        "tokens": 29
+      }
+    },
+    "treesum_task": {
+      "naive_command_count": 11,
+      "naive_output": {
+        "bytes": 96,
+        "lines": 10,
+        "tokens": 42
+      },
+      "cli_command_count": 1,
+      "cli_output": {
+        "bytes": 565,
+        "lines": 23,
+        "tokens": 252
+      }
+    }
+  }
+}

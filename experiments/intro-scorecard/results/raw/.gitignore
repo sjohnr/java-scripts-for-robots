@@ -1,0 +1,5 @@
+# The repository ignores bin/, build/ and out/; keep generated files that live there.
+!bin/
+!out/
+# Agent-generated stress-test input, 171,045,608 bytes, sha256 09105b9a96f84a6e0eb8d215d0900cd1f1dcfbabfd2ef3e3a989d26ea9b17f5a; kept locally, too large for git.
+B-logsum-haiku-3/files/big.log

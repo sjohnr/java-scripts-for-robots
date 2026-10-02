@@ -1,0 +1,1 @@
+Build the `logsum` command-line tool described in SPEC.md. Write it in Java.

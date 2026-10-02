@@ -1,0 +1,89 @@
+{
+  "run_id": "A-treesum-sonnet-3",
+  "condition": "A",
+  "task": "treesum",
+  "model_alias": "sonnet",
+  "model_id": "claude-sonnet-5-5",
+  "model_ids_used": [
+    "claude-sonnet-5-5"
+  ],
+  "replicate": 3,
+  "seed": 20261010,
+  "seed_position": 43,
+  "started": "2026-10-11T01:08:54+00:00",
+  "ended": "2026-10-11T01:09:16+00:00",
+  "wall_s": 21.5,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 5,
+  "duration_ms": 20893,
+  "duration_api_ms": 20166,
+  "tokens": {
+    "input_tokens": 8,
+    "output_tokens": 2908,
+    "cache_creation_input_tokens": 7645,
+    "cache_read_input_tokens": 62531
+  },
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 2908,
+      "cacheReadInputTokens": 62531,
+      "cacheCreationInputTokens": 7645,
+      "webSearchRequests": 0,
+      "costUSD": 0.06592909999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 322,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.06592909999999999,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "c95acd47-bca9-46a0-915a-67cc0d703ab1",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-treesum-sonnet-3",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.3,
+    "cost_usd": 0.0036671000000000065,
+    "cost_usd_cumulative_reported": 0.0695962,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 8,
+      "cache_creation_input_tokens": 411,
+      "cache_read_input_tokens": 19391
+    },
+    "subtype": "success",
+    "reply": "`./treesum`",
+    "run_command": "./treesum",
+    "limit_hits": []
+  },
+  "run_command": "./treesum",
+  "excluded_from_copy": [],
+  "prompt": "Build the `treesum` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `treesum` command-line tool described in SPEC.md.",
+    "--model",
+    "sonnet",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

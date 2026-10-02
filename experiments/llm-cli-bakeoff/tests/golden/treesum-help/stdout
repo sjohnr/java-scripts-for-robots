@@ -1,0 +1,2 @@
+usage: treesum [DIR] [--top N] [--ext-limit M]
+ignores: .git node_modules build .gradle target dist .venv __pycache__ .idea .vscode

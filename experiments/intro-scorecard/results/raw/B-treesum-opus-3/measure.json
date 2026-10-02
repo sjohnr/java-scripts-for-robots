@@ -1,0 +1,198 @@
+{
+  "run_id": "B-treesum-opus-3",
+  "measured": "2026-10-10T19:54:07",
+  "run_command_reported": "./treesum",
+  "run_command_used": "./treesum",
+  "run_command_notes": [],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "out/treesum.jar",
+    "launch": {
+      "lang": "java",
+      "entry": "out/treesum.jar",
+      "launch": "jar",
+      "wrapper": "treesum",
+      "evidence": [
+        "run command program: ./treesum",
+        "wrapper script treesum runs: java -Xshare:auto -XX:TieredStopAtLevel=1 -jar \"out/treesum.jar\" "
+      ],
+      "flags": [],
+      "java_opts": "-Xshare:auto -XX:TieredStopAtLevel=1",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 337,
+      "java": 11954
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "build script",
+      "launch": "jar",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "build script / jar",
+      "java_file_count": 1,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "treesum",
+      "evidence": {
+        "build": [
+          "build.sh"
+        ],
+        "launch": [
+          "run command program: ./treesum",
+          "wrapper script treesum runs: java -Xshare:auto -XX:TieredStopAtLevel=1 -jar \"out/treesum.jar\" ",
+          "run command program: java",
+          "via wrapper script treesum"
+        ],
+        "source": [
+          "src/Treesum.java:54 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/Treesum.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 3091
+    },
+    {
+      "path": "build.sh",
+      "kind": "build",
+      "lang": null,
+      "bytes": 325
+    },
+    {
+      "path": "treesum",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 337
+    },
+    {
+      "path": "src/Treesum.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 11954
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "treesum-basic",
+        "ok": true
+      },
+      {
+        "id": "treesum-top3",
+        "ok": true
+      },
+      {
+        "id": "treesum-extlimit",
+        "ok": true
+      },
+      {
+        "id": "treesum-missing-dir",
+        "ok": true
+      },
+      {
+        "id": "treesum-help",
+        "ok": true
+      }
+    ],
+    "passed": 5,
+    "total": 5,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.03,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 2699,
+    "build_file_tokens": 100,
+    "test_tokens": 0,
+    "source_files": [
+      "treesum",
+      "src/Treesum.java"
+    ],
+    "build_files": [
+      "build.sh"
+    ],
+    "source_bytes": 12291,
+    "build_file_bytes": 325
+  },
+  "disk": {
+    "source_and_build_files_bytes": 12616,
+    "build_output_bytes": 25174,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 37790
+  },
+  "load_avg_at_bench_start": 2.8251953125,
+  "startup": {
+    "command": "./treesum --help",
+    "median_ms": 27.303427320000004,
+    "mean_ms": 27.344833516078427,
+    "stddev_ms": 0.4956649327528148,
+    "min_ms": 26.11603132,
+    "runs": 102,
+    "load_avg_before": 2.8251953125,
+    "load_avg_after": 2.6787109375
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-opus-3/opt/app.jar",
+    "main": "Treesum",
+    "training": {
+      "args": [
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/treesum"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-opus-3/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-opus-3/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-opus-3/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 11550720,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-opus-3/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-opus-3/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-opus-3/opt/app.jar Treesum --help",
+      "median_ms": 20.498125860000002,
+      "mean_ms": 20.636176536258986,
+      "stddev_ms": 0.5936632708642338,
+      "min_ms": 19.50766786,
+      "runs": 139,
+      "load_avg_before": 2.6787109375,
+      "load_avg_after": 2.7041015625
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-opus-3/opt/app.jar Treesum --help",
+      "median_ms": 23.3320207,
+      "mean_ms": 23.406178033333326,
+      "stddev_ms": 0.40229347655552616,
+      "min_ms": 21.8013957,
+      "runs": 120,
+      "load_avg_before": 2.7041015625,
+      "load_avg_after": 2.7041015625
+    }
+  },
+  "benchmarked": "2026-10-11T09:11:58"
+}

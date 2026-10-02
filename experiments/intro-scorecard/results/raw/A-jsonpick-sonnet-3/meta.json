@@ -1,0 +1,89 @@
+{
+  "run_id": "A-jsonpick-sonnet-3",
+  "condition": "A",
+  "task": "jsonpick",
+  "model_alias": "sonnet",
+  "model_id": "claude-sonnet-5-5",
+  "model_ids_used": [
+    "claude-sonnet-5-5"
+  ],
+  "replicate": 3,
+  "seed": 20261010,
+  "seed_position": 77,
+  "started": "2026-10-11T14:02:13+00:00",
+  "ended": "2026-10-11T14:02:50+00:00",
+  "wall_s": 37.6,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 5,
+  "duration_ms": 36907,
+  "duration_api_ms": 36004,
+  "tokens": {
+    "input_tokens": 8,
+    "output_tokens": 5215,
+    "cache_creation_input_tokens": 10595,
+    "cache_read_input_tokens": 64466
+  },
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 5215,
+      "cacheReadInputTokens": 64466,
+      "cacheCreationInputTokens": 10595,
+      "webSearchRequests": 0,
+      "costUSD": 0.10099260000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1416,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.10099260000000002,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "b29d030a-c563-4cfd-9e3e-45b1b496b6e3",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-jsonpick-sonnet-3",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.5,
+    "cost_usd": 0.004736799999999999,
+    "cost_usd_cumulative_reported": 0.10572940000000002,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 29,
+      "cache_creation_input_tokens": 564,
+      "cache_read_input_tokens": 21868
+    },
+    "subtype": "success",
+    "reply": "`./jsonpick PATH [FILE] [--shape] [--depth N]`",
+    "run_command": "./jsonpick PATH [FILE] [--shape] [--depth N]",
+    "limit_hits": []
+  },
+  "run_command": "./jsonpick PATH [FILE] [--shape] [--depth N]",
+  "excluded_from_copy": [],
+  "prompt": "Build the `jsonpick` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `jsonpick` command-line tool described in SPEC.md.",
+    "--model",
+    "sonnet",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

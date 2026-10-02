@@ -1,0 +1,141 @@
+{
+  "duration_api_ms": 137677,
+  "stop_reason": "end_turn",
+  "session_id": "4ec484f1-71a0-4b5b-9d22-8aaf22bf4cf2",
+  "total_cost_usd": 0.25429670000000004,
+  "usage": {
+    "input_tokens": 210,
+    "cache_creation_input_tokens": 34931,
+    "cache_read_input_tokens": 919747,
+    "output_tokens": 18450,
+    "output_tokens_details": {
+      "thinking_tokens": 9644
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 34931,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 8,
+        "output_tokens": 749,
+        "cache_read_input_tokens": 45531,
+        "cache_creation_input_tokens": 2948,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2948
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 210,
+      "outputTokens": 18450,
+      "cacheReadInputTokens": 919747,
+      "cacheCreationInputTokens": 34931,
+      "webSearchRequests": 0,
+      "costUSD": 0.25429670000000004,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 9644,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 27,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Perfect! The `logsum` CLI implementation is complete and ready. Here's what was implemented:\n\n## Summary\n\nI've created a **Java 25 compact source file** (`Tool.java`) that implements the `logsum` CLI specification exactly as described:\n\n### Key Features:\n- **Streaming log summarization** - processes input line-by-line without buffering the entire file\n- **Flexible input** - reads from files or stdin (default `-`)\n- **Filtering** - `--since TIMESTAMP` and `--level LEVEL` flags filter logs before statistics\n- **Top-N grouping** - ERROR lines grouped by normalized message, sorted by count then message\n- **Message normalization** - applies three regex transformations in order:\n  1. UUIDs \u2192 `<uuid>`\n  2. Hex blobs (6+ chars with a-f) \u2192 `<hex>`\n  3. Digits \u2192 `<num>`\n- **Robust parsing** - silently skips invalid lines, validates timestamps and levels\n- **Complete output** - total count, per-level breakdown, first/last timestamps, top N errors\n\n### Technical Details:\n- \u2705 Java 25 - uses compact source file format with top-level `void main()`\n- \u2705 Single file - no build system, runs with `java Tool.java`\n- \u2705 Stdlib only - uses `java.lang.IO` for output\n- \u2705 Proper exit codes - 0 for success, 2 for usage errors\n- \u2705 UTF-8 with LF line endings, no trailing whitespace\n\nThe implementation has been thoroughly tested with various edge cases including UUIDs, hex blobs, digit normalization, filtering, and error conditions.",
+  "ttft_ms": 1142,
+  "type": "result",
+  "duration_ms": 143476,
+  "uuid": "e0c63d84-db62-4b99-8fd3-95f5f5a9d8e4",
+  "ttft_stream_ms": 639,
+  "time_to_request_ms": 33,
+  "first_content_frame_ms": 639,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "_wall_s_measured": 144.0433042049408,
+  "condition": "B-c",
+  "trial": 2,
+  "trial_dir": "/private/tmp/claude-501/-Users-sriesenberg-git-ai-cli-experiment/4fe6da76-a1a1-4877-9783-663ab9fb5447/scratchpad/agent-B-y8_hufie",
+  "conformance": {
+    "lang_detected": "java",
+    "passed": 8,
+    "total": 8,
+    "details": [
+      {
+        "case": "logsum-basic",
+        "ok": true
+      },
+      {
+        "case": "logsum-top3",
+        "ok": true
+      },
+      {
+        "case": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "case": "logsum-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-missing-file",
+        "ok": true
+      }
+    ]
+  },
+  "success": true
+}

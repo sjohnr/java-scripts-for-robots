@@ -1,0 +1,153 @@
+{
+  "run_id": "B-jsonpick-opus-2.limit-1791681446",
+  "measured": "2026-10-11T09:08:52",
+  "run_command_reported": "You've hit your session limit \u00b7 resets 12:10am (America/Chicago)",
+  "run_command_used": "You've hit your session limit \u00b7 resets 12:10am (America/Chicago)",
+  "run_command_notes": [
+    "unparseable; used verbatim"
+  ],
+  "classification": {
+    "language": null,
+    "language_group": "other",
+    "entry": null,
+    "launch": {
+      "lang": null,
+      "entry": null,
+      "launch": null,
+      "wrapper": null,
+      "evidence": [],
+      "flags": [
+        "run command missing or unparseable"
+      ],
+      "java_opts": ""
+    },
+    "source_bytes_by_lang": {},
+    "flags": [
+      "run command missing or unparseable",
+      "language from dominant source (None); run command did not resolve it",
+      "no source files found"
+    ],
+    "needs_review": true
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 3310
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jsonpick-string",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-number",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-array-index",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-object",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-root",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-shape",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-shape-depth0",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-notfound",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 1,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-stdin",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-bad-json",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-help",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      }
+    ],
+    "passed": 1,
+    "total": 11,
+    "warmup": {
+      "exit": 2,
+      "seconds": 0.0,
+      "stderr_tail": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+    },
+    "pass": false
+  },
+  "size": {
+    "source_tokens": 0,
+    "build_file_tokens": 0,
+    "test_tokens": 0,
+    "source_files": [],
+    "build_files": [],
+    "source_bytes": 0,
+    "build_file_bytes": 0
+  },
+  "disk": {
+    "source_and_build_files_bytes": 0,
+    "build_output_bytes": 0,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 0
+  }
+}

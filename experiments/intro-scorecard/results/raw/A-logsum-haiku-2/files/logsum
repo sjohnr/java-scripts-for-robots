@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+"""logsum: streaming summary of a log file (or stdin). Behaviour is defined by SPEC.md."""
+
+import heapq
+import io
+import re
+import sys
+from dataclasses import dataclass, field
+from datetime import datetime
+from types import SimpleNamespace
+from typing import Optional
+
+LEVELS = ("DEBUG", "INFO", "WARN", "ERROR")
+VALUE_FLAGS = ("--since", "--level", "--top")
+DEFAULT_TOP = 5
+
+USAGE = """\
+usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]
+
+Summarize a log file, or stdin, whose lines look like:
+    YYYY-MM-DDTHH:MM:SS LEVEL MESSAGE
+
+positional arguments:
+  FILE               log file to read; omitted or "-" reads stdin
+
+options:
+  --since TIMESTAMP  only count lines at or after TIMESTAMP (YYYY-MM-DDTHH:MM:SS)
+  --level LEVEL      only count lines at exactly LEVEL (DEBUG, INFO, WARN, ERROR)
+  --top N            number of error groups to list (default 5)
+  --help             show this help and exit
+"""
+
+TIMESTAMP_RE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}")
+LINE_RE = re.compile(r"(\S+) (\S+) (.*)")
+TOP_RE = re.compile(r"[0-9]+")
+
+# Applied in order; the UUID rule must run before the hex and digit rules.
+NORMALIZERS = (
+    (re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"), "<uuid>"),
+    (re.compile(r"\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\b", re.ASCII), "<hex>"),
+    (re.compile(r"[0-9]+"), "<num>"),
+)
+
+
+class UsageError(Exception):
+    """Printed verbatim to stderr; the process exits with status 2."""
+
+
+@dataclass
+class Stats:
+    total: int = 0
+    counts: dict = field(default_factory=lambda: dict.fromkeys(LEVELS, 0))
+    first: Optional[str] = None
+    last: Optional[str] = None
+    errors: dict = field(default_factory=dict)  # normalized message -> [count, first-seen message]
+
+
+def valid_timestamp(text):
+    if TIMESTAMP_RE.fullmatch(text) is None:
+        return False
+    try:
+        datetime.strptime(text, "%Y-%m-%dT%H:%M:%S")
+    except ValueError:
+        return False
+    return True
+
+
+def parse_line(line):
+    """Return (timestamp, level, message), or None if the line is skipped."""
+    match = LINE_RE.match(line)
+    if match is None or len(line.split()) < 3:
+        return None
+    timestamp, level, message = match.groups()
+    if level not in LEVELS or not valid_timestamp(timestamp):
+        return None
+    return timestamp, level, message.rstrip()
+
+
+def normalize(message):
+    for pattern, replacement in NORMALIZERS:
+        message = pattern.sub(replacement, message)
+    return message
+
+
+def summarize(lines, since=None, level=None):
+    """Consume lines once, keeping only the counters needed for the report."""
+    stats = Stats()
+    for raw in lines:
+        parsed = parse_line(raw.rstrip("\r\n"))
+        if parsed is None:
+            continue
+        timestamp, line_level, message = parsed
+        if since is not None and timestamp < since:
+            continue
+        if level is not None and line_level != level:
+            continue
+        stats.total += 1
+        stats.counts[line_level] += 1
+        if stats.first is None:
+            stats.first = timestamp
+        stats.last = timestamp
+        if line_level == "ERROR":
+            key = normalize(message)
+            if key in stats.errors:
+                stats.errors[key][0] += 1
+            else:
+                stats.errors[key] = [1, message]
+    return stats
+
+
+def render(stats, top):
+    lines = [
+        f"total: {stats.total}",
+        "by level: " + " ".join(f"{name}={stats.counts[name]}" for name in LEVELS),
+        f"first: {stats.first or 'n/a'}",
+        f"last: {stats.last or 'n/a'}",
+        "top errors:",
+    ]
+    ranked = heapq.nsmallest(top, stats.errors.values(), key=lambda entry: (-entry[0], entry[1]))
+    lines.extend(f"  {count} {message}" for count, message in ranked)
+    return "\n".join(lines) + "\n"
+
+
+def parse_args(argv):
+    args = SimpleNamespace(file=None, since=None, level=None, top=None, help=False)
+    positional = []
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if arg == "-" or not arg.startswith("-"):
+            positional.append(arg)
+            continue
+        flag, has_value, value = arg.partition("=")
+        if flag == "--help":
+            args.help = True
+            return args
+        if flag not in VALUE_FLAGS:
+            raise UsageError(f"unknown flag: {flag}")
+        if not has_value:
+            if i == len(argv):
+                raise UsageError(f"error: missing value for {flag}")
+            value = argv[i]
+            i += 1
+        setattr(args, flag[2:], value)
+    if len(positional) > 1:
+        raise UsageError(f"unexpected argument: {positional[1]}")
+    if positional:
+        args.file = positional[0]
+    return args
+
+
+def text_lines(binary):
+    # newline="\n" splits only on LF and leaves any CR in place; the CR is stripped per line.
+    return io.TextIOWrapper(binary, encoding="utf-8", errors="replace", newline="\n")
+
+
+def read_stats(path, since, level):
+    if path is None or path == "-":
+        return summarize(text_lines(sys.stdin.buffer), since, level)
+    try:
+        binary = open(path, "rb")
+    except OSError:
+        raise UsageError(f"error: cannot read {path}")
+    with text_lines(binary) as lines:
+        return summarize(lines, since, level)
+
+
+def emit(text):
+    sys.stdout.buffer.write(text.encode("utf-8"))
+    sys.stdout.buffer.flush()
+
+
+def emit_error(text):
+    sys.stderr.buffer.write((text + "\n").encode("utf-8", "surrogateescape"))
+    sys.stderr.buffer.flush()
+
+
+def main(argv):
+    try:
+        args = parse_args(argv)
+        if args.help:
+            emit(USAGE)
+            return 0
+        if args.since is not None and not valid_timestamp(args.since):
+            raise UsageError(f"error: invalid value for --since: {args.since}")
+        if args.level is not None and args.level not in LEVELS:
+            raise UsageError(f"error: invalid value for --level: {args.level}")
+        top = DEFAULT_TOP
+        if args.top is not None:
+            if TOP_RE.fullmatch(args.top) is None:
+                raise UsageError(f"error: invalid value for --top: {args.top}")
+            top = int(args.top)
+        stats = read_stats(args.file, args.since, args.level)
+    except UsageError as err:
+        emit_error(str(err))
+        return 2
+    emit(render(stats, top))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

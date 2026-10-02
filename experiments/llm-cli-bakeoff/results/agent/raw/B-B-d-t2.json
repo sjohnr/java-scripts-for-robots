@@ -1,0 +1,239 @@
+{
+  "first_turn": {
+    "duration_api_ms": 24133,
+    "stop_reason": "end_turn",
+    "session_id": "f685dab1-2934-4378-b735-50749d565b4c",
+    "total_cost_usd": 0.054559800000000006,
+    "usage": {
+      "input_tokens": 42,
+      "cache_creation_input_tokens": 13260,
+      "cache_read_input_tokens": 110228,
+      "output_tokens": 3395,
+      "output_tokens_details": {
+        "thinking_tokens": 585
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 13260,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 8,
+          "output_tokens": 274,
+          "cache_read_input_tokens": 26300,
+          "cache_creation_input_tokens": 508,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 508
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    },
+    "modelUsage": {
+      "claude-haiku-4-5-20251001": {
+        "inputTokens": 42,
+        "outputTokens": 3395,
+        "cacheReadInputTokens": 110228,
+        "cacheCreationInputTokens": 13260,
+        "webSearchRequests": 0,
+        "costUSD": 0.054559800000000006,
+        "contextWindow": 200000,
+        "maxOutputTokens": 32000,
+        "thinkingTokens": 585,
+        "canonicalModel": "claude-haiku-4-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "is_error": false,
+    "num_turns": 6,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "Perfect! I've successfully implemented the `logsum` CLI according to the specifications.\n\n**Language: Python 3**  \n**Filename: `logsum`**\n\nThe implementation includes:\n- Manual argument parsing for `--since`, `--level`, and `--top` flags\n- Streaming log processing with proper validation of timestamps and log levels\n- Message normalization for error grouping (UUIDs \u2192 `<uuid>`, hex blobs \u2192 `<hex>`, digits \u2192 `<num>`)\n- Statistics tracking (total count, breakdown by level, first/last timestamps)\n- Top-N error messages sorted by count (descending) then by original message (ascending)\n- Proper error handling and exit codes per the spec\n- UTF-8 input/output with LF line endings",
+    "ttft_ms": 1150,
+    "type": "result",
+    "duration_ms": 24748,
+    "uuid": "b30eed2b-c16a-4b48-af3f-d2a1770f56c7",
+    "ttft_stream_ms": 665,
+    "time_to_request_ms": 32,
+    "first_content_frame_ms": 666,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "_wall_s_measured": 25.338857889175415
+  },
+  "duration_api_ms": 45280,
+  "stop_reason": "end_turn",
+  "session_id": "f685dab1-2934-4378-b735-50749d565b4c",
+  "total_cost_usd": 0.1464972,
+  "usage": {
+    "input_tokens": 34,
+    "cache_creation_input_tokens": 4117,
+    "cache_read_input_tokens": 114646,
+    "output_tokens": 3529,
+    "output_tokens_details": {
+      "thinking_tokens": 380
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 4117,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 8,
+        "output_tokens": 300,
+        "cache_read_input_tokens": 30421,
+        "cache_creation_input_tokens": 504,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 504
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 76,
+      "outputTokens": 6924,
+      "thinkingTokens": 965,
+      "cacheReadInputTokens": 224874,
+      "cacheCreationInputTokens": 17377,
+      "webSearchRequests": 0,
+      "costUSD": 0.0919374,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 10,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Perfect! I've rewritten the `logsum` CLI in Java. The Java version produces identical output to the Python version.\n\n**Language: Java**  \n**Filename: `Logsum.java`**\n\nKey features:\n- Manual argument parsing without external frameworks\n- Stream-based log processing for memory efficiency\n- Full regex support for message normalization (UUIDs, hex, digits)\n- Identical behavior to the Python implementation\n- Proper error handling and exit codes\n\nTo use it:\n```bash\njavac Logsum.java\njava Logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n```",
+  "ttft_ms": 2301,
+  "type": "result",
+  "duration_ms": 21814,
+  "uuid": "b8ac00e7-2b7f-4e48-9ff5-de698b1ad5f5",
+  "ttft_stream_ms": 662,
+  "time_to_request_ms": 35,
+  "first_content_frame_ms": 662,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "_wall_s_measured": 47.794994831085205,
+  "condition": "B-d",
+  "trial": 2,
+  "trial_dir": "/private/tmp/claude-501/-Users-sriesenberg-git-ai-cli-experiment/4fe6da76-a1a1-4877-9783-663ab9fb5447/scratchpad/agent-B-l43wc3ij",
+  "conformance": {
+    "lang_detected": "java",
+    "passed": 8,
+    "total": 8,
+    "details": [
+      {
+        "case": "logsum-basic",
+        "ok": true
+      },
+      {
+        "case": "logsum-top3",
+        "ok": true
+      },
+      {
+        "case": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "case": "logsum-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-missing-file",
+        "ok": true
+      }
+    ]
+  },
+  "success": true
+}

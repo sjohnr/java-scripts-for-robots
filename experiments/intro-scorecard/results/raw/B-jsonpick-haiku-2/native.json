@@ -1,0 +1,20 @@
+{
+ "run_id": "B-jsonpick-haiku-2",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-2/opt/app.jar",
+ "main": "jsonpick.Main",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jsonpick-haiku-2/app",
+ "build_seconds": 10.4,
+ "image_bytes": 6546368,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jsonpick-haiku-2/app --help",
+  "median_ms": 2.49854668,
+  "mean_ms": 2.5091506321126764,
+  "stddev_ms": 0.10172763847654144,
+  "min_ms": 2.33781818,
+  "runs": 710,
+  "load_avg_before": 9.400390625,
+  "load_avg_after": 9.400390625
+ }
+}

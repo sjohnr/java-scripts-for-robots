@@ -1,0 +1,20 @@
+{
+ "run_id": "B-treesum-sonnet-2",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-sonnet-2/opt/app.jar",
+ "main": "Treesum",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-treesum-sonnet-2/app",
+ "build_seconds": 9.5,
+ "image_bytes": 5306768,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-treesum-sonnet-2/app --help",
+  "median_ms": 2.5536520600000006,
+  "mean_ms": 2.5669925528977275,
+  "stddev_ms": 0.09581924501406476,
+  "min_ms": 2.37538156,
+  "runs": 704,
+  "load_avg_before": 9.26025390625,
+  "load_avg_after": 8.8388671875
+ }
+}

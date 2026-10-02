@@ -1,0 +1,20 @@
+{
+ "run_id": "B-logsum-haiku-2",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-2/opt/app.jar",
+ "main": "Logsum",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-logsum-haiku-2/app",
+ "build_seconds": 12.8,
+ "image_bytes": 11359792,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-logsum-haiku-2/app --help",
+  "median_ms": 2.6412528200000005,
+  "mean_ms": 2.9103564886131372,
+  "stddev_ms": 1.2781274117652874,
+  "min_ms": 2.4622528200000002,
+  "runs": 685,
+  "load_avg_before": 9.384765625,
+  "load_avg_after": 8.712890625
+ }
+}

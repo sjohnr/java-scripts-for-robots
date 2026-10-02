@@ -1,0 +1,889 @@
+#!/usr/bin/env -S java --source 28 --enable-preview --add-modules jdk.incubator.json
+// javaw: generates a POSIX sh launcher ("wrapper") for a Java program.
+// The wrapper is the product: javaw never builds, bundles, or launches anything itself.
+
+import module java.base;
+import module jdk.compiler;
+import module jdk.incubator.json;
+import javax.tools.ToolProvider;
+
+static final String USAGE = """
+    Usage: javaw [options] <input>...
+
+    Writes an executable POSIX sh wrapper that launches a Java program.
+    An input is a source file (Tool.java), a jar (tool.jar or --jar FILE),
+    or a script whose shebang runs java (like javaw itself).
+
+    Options:
+      --jar FILE          treat FILE as an executable jar
+      --classpath PATH    add PATH, recorded as-is, to the class path (-cp)
+      --java-home DIR     launch DIR/bin/java instead of java from the PATH
+      --jvm-opts "OPTS"   JVM options placed before the program
+      --min-java N        fail with a clear error if Java is older than N
+      --aot               create an AOT cache on the first run and use it later
+      --native            build a GraalVM native image on the first run when
+                          native-image is installed; otherwise run the jar
+      --no-build          run a source input with the source launcher instead
+                          of building a jar on the first run
+      -r, --resource PAT  copy files under the source root matching PAT (a
+                          file name glob, or a path glob if it has a /) into
+                          the built jar for getResource; repeatable
+      --profile NAME      start from a profile (listed below); options win
+      -o, --output NAME   wrapper path, or a directory (ends in / or exists)
+      --force             overwrite existing files
+      -h, --help          show this help
+
+    The default wrapper name is run- plus the input's kebab-cased base name.
+    Source inputs are compiled into .NAME/NAME.jar on the wrapper's first run
+    and rebuilt when they change. JBang //DEPS lines are resolved now (with
+    JBang) and baked in as pinned Maven Central downloads into lib/.
+
+    Profiles:
+    """;
+
+// Profiles are opinionated generation options; javaw reads them, wrappers never do.
+// "forbid" lists options that contradict the profile.
+static final String PROFILES = """
+    {
+      "fast-start": {
+        "description": "AOT cache plus C1-only JIT and Serial GC for quick startup",
+        "aot": true,
+        "jvmOpts": "-XX:TieredStopAtLevel=1 -XX:+UseSerialGC"
+      },
+      "small-disk": {
+        "description": "no jar, AOT cache, or native image: run sources directly",
+        "build": false,
+        "forbid": ["--aot", "--native"]
+      },
+      "max-perf": {
+        "description": "AOT cache plus the throughput collector",
+        "aot": true,
+        "jvmOpts": "-XX:+UseParallelGC"
+      },
+      "portable": {
+        "description": "a plain jar on any JDK; nothing tied to this machine",
+        "build": true,
+        "forbid": ["--java-home", "--aot", "--native"]
+      }
+    }
+    """;
+
+static final String CENTRAL = "https://repo1.maven.org/maven2/";
+
+void main(String[] args) {
+    try {
+        switch (parse(args)) {
+            case Help() -> IO.print(USAGE + profileList());
+            case Generate g -> generate(g);
+        }
+    } catch (Failure f) {
+        System.err.println("javaw: " + f.getMessage());
+        if (f.usage) System.err.println("Try 'javaw --help' for more information.");
+        System.exit(f.usage ? 2 : 1);
+    }
+}
+
+// ---- Model ----
+
+static final class Failure extends RuntimeException {
+    final boolean usage;
+    Failure(String message) { this(message, false); }
+    Failure(String message, boolean usage) { super(message); this.usage = usage; }
+}
+
+sealed interface Command permits Help, Generate {}
+record Help() implements Command {}
+/// `argv` is kept so each wrapper can record the command that regenerates it.
+record Generate(List<Input> inputs, Settings settings, String output, boolean force, List<String> argv) implements Command {}
+
+/// An input as typed, plus the argv positions it occupies (`--jar FILE` takes two).
+record Input(String arg, boolean jar, List<Integer> argIndexes) {}
+
+record Settings(String classpath, Path javaHome, List<String> jvmOpts, Integer minJava,
+                boolean build, boolean aot, boolean nativeImage, List<String> resources) {}
+
+record Profile(String name, String description, Boolean build, Boolean aot, Boolean nativeImage,
+               List<String> jvmOpts, List<String> forbid) {}
+
+/// What a wrapper launches.
+sealed interface Program permits Source, JarFile {
+    Path path();
+}
+sealed interface Source extends Program permits JavaSource, ScriptSource {
+    String mainClass();
+    List<Dependency> deps();
+}
+/// A `.java` file; `root` is its source root (the directory above its package).
+record JavaSource(Path path, String mainClass, Path root, List<Dependency> deps) implements Source {}
+/// An extensionless script with a java shebang; `javaOpts` and `release` come from that line.
+record ScriptSource(Path path, String mainClass, List<String> javaOpts, String release, List<Dependency> deps) implements Source {}
+record JarFile(Path path) implements Program {}
+
+/// A jar on Maven Central: its repository path (group/artifact/version/file.jar) and SHA-256.
+record Dependency(String path, String sha256) {}
+
+record Plan(Input input, Path target, List<String> command) {
+    String name() { return target.getFileName().toString(); }
+}
+
+// ---- Command line ----
+
+static final Set<String> WITH_VALUE = Set.of("-r", "--resource", "--jar", "--classpath", "--java-home", "--jvm-opts", "--min-java", "-o", "--output", "--profile");
+
+static Command parse(String[] args) {
+    var inputs = new ArrayList<Input>();
+    String classpath = null, javaHome = null, jvmOpts = null, minJava = null, output = null, profile = null;
+    Boolean build = null, aot = null, nativeImage = null;
+    var force = false;
+    var resources = new ArrayList<String>();
+    var given = new HashSet<String>();
+    var options = true;
+    for (var i = 0; i < args.length; i++) {
+        var arg = args[i];
+        if (!options || !arg.startsWith("-") || arg.equals("-")) {
+            inputs.add(new Input(arg, false, List.of(i)));
+            continue;
+        }
+        // --name=value or --name value
+        var eq = arg.startsWith("--") ? arg.indexOf('=') : -1;
+        var name = eq > 0 ? arg.substring(0, eq) : arg;
+        var value = eq > 0 ? arg.substring(eq + 1) : null;
+        var start = i;
+        if (WITH_VALUE.contains(name) && value == null) {
+            if (i + 1 >= args.length) throw new Failure("option " + name + " needs a value", true);
+            value = args[++i];
+        } else if (!WITH_VALUE.contains(name) && value != null) {
+            throw new Failure("option " + name + " does not take a value", true);
+        }
+        given.add(name.equals("-o") ? "--output" : name.equals("-r") ? "--resource" : name);
+        switch (name) {
+            case "-h", "--help" -> { return new Help(); }
+            case "--" -> options = false;
+            case "--jar" -> inputs.add(new Input(value, true, IntStream.rangeClosed(start, i).boxed().toList()));
+            case "--classpath" -> classpath = value;
+            case "--java-home" -> javaHome = value;
+            case "--jvm-opts" -> jvmOpts = value;
+            case "--min-java" -> minJava = value;
+            case "-o", "--output" -> output = value;
+            case "--profile" -> profile = value;
+            case "-r", "--resource" -> {
+                if (value.isEmpty() || value.startsWith("/") || List.of(value.split("/")).contains("..")) {
+                    throw new Failure("--resource expects a glob relative to the source root, not '" + value + "'", true);
+                }
+                resources.add(value);
+            }
+            case "--force" -> force = true;
+            case "--aot" -> aot = true;
+            case "--native" -> nativeImage = true;
+            case "--no-build" -> build = false;
+            default -> throw new Failure("unknown option: " + arg, true);
+        }
+    }
+    if (inputs.isEmpty()) throw new Failure("missing input: give a .java source, a .jar, or a java script", true);
+
+    var p = profile == null ? null : profiles().get(profile);
+    if (profile != null && p == null) throw new Failure("unknown profile: " + profile + " (known: " + String.join(", ", profiles().keySet()) + ")", true);
+    if (p != null) for (var option : p.forbid()) {
+        if (given.contains(option)) throw new Failure("profile " + p.name() + " does not allow " + option, true);
+    }
+
+    Integer min = null;
+    if (minJava != null) {
+        if (!minJava.matches("[1-9][0-9]{0,3}")) throw new Failure("--min-java expects a Java version number, not '" + minJava + "'", true);
+        min = Integer.valueOf(minJava);
+    }
+    Path home = null;
+    if (javaHome != null) {
+        home = Path.of(javaHome).toAbsolutePath().normalize();
+        if (!Files.isExecutable(home.resolve("bin/java"))) throw new Failure("--java-home: " + javaHome + "/bin/java does not exist");
+    }
+    var opts = new ArrayList<String>();
+    if (p != null) opts.addAll(p.jvmOpts());
+    if (jvmOpts != null) opts.addAll(words(jvmOpts));
+    var settings = new Settings(classpath, home, List.copyOf(opts), min,
+            firstNonNull(build, p == null ? null : p.build(), true),
+            firstNonNull(aot, p == null ? null : p.aot(), false),
+            firstNonNull(nativeImage, p == null ? null : p.nativeImage(), false), List.copyOf(resources));
+    if (!settings.build() && (settings.aot() || settings.nativeImage())) {
+        throw new Failure("--aot and --native need a built jar, so they cannot be combined with --no-build", true);
+    }
+    if (!settings.build() && !resources.isEmpty()) {
+        throw new Failure("--resource adds files to the built jar; with --no-build the source launcher already finds them", true);
+    }
+    return new Generate(List.copyOf(inputs), settings, output, force, List.of(args));
+}
+
+static <T> T firstNonNull(T a, T b, T fallback) {
+    return a != null ? a : b != null ? b : fallback;
+}
+
+/// Splits an option string like a shell would: whitespace separates, quotes and backslashes group.
+static List<String> words(String s) {
+    var out = new ArrayList<String>();
+    var word = new StringBuilder();
+    var inWord = false;
+    var quote = (char) 0;
+    for (var i = 0; i < s.length(); i++) {
+        var c = s.charAt(i);
+        if (quote != 0) {
+            if (c == quote) quote = 0;
+            else if (c == '\\' && quote == '"' && i + 1 < s.length()) word.append(s.charAt(++i));
+            else word.append(c);
+        } else if (c == '\'' || c == '"') {
+            quote = c;
+            inWord = true;
+        } else if (c == '\\' && i + 1 < s.length()) {
+            word.append(s.charAt(++i));
+            inWord = true;
+        } else if (Character.isWhitespace(c)) {
+            if (inWord) out.add(word.toString());
+            word.setLength(0);
+            inWord = false;
+        } else {
+            word.append(c);
+            inWord = true;
+        }
+    }
+    if (quote != 0) throw new Failure("unbalanced quote in: " + s, true);
+    if (inWord) out.add(word.toString());
+    return out;
+}
+
+// ---- Profiles (JSON) ----
+
+static Map<String, Profile> profiles() {
+    var profiles = new LinkedHashMap<String, Profile>();
+    Json.parse(PROFILES).asMap().forEach((name, json) -> {
+        var fields = json.asMap();
+        profiles.put(name, new Profile(name, fields.get("description").asString(),
+                flag(fields.get("build")), flag(fields.get("aot")), flag(fields.get("native")),
+                fields.containsKey("jvmOpts") ? words(fields.get("jvmOpts").asString()) : List.of(),
+                fields.containsKey("forbid") ? fields.get("forbid").asList().stream().map(JsonValue::asString).toList() : List.of()));
+    });
+    return profiles;
+}
+
+static Boolean flag(JsonValue value) {
+    return switch (value) {
+        case null -> null;
+        case JsonBoolean b -> b.asBoolean();
+        default -> throw new IllegalStateException("not a boolean: " + value);
+    };
+}
+
+static String profileList() {
+    var out = new StringBuilder();
+    profiles().values().forEach(p -> out.append("  %-12s%s%n".formatted(p.name(), p.description())));
+    return out.toString();
+}
+
+// ---- Generation ----
+
+void generate(Generate g) {
+    var plans = plan(g);
+    for (var plan : plans) {
+        if (Files.exists(plan.target(), LinkOption.NOFOLLOW_LINKS) && !g.force()) {
+            throw new Failure(plan.target() + " already exists (use --force to overwrite)");
+        }
+    }
+    // Read every input before writing anything, so a bad input leaves no wrappers behind.
+    var scripts = plans.stream().map(plan -> script(plan, program(plan), g.settings())).toList();
+    for (var i = 0; i < plans.size(); i++) {
+        write(plans.get(i).target(), scripts.get(i));
+        IO.println("wrote " + plans.get(i).target());
+    }
+}
+
+static List<Plan> plan(Generate g) {
+    var out = g.output();
+    var toDirectory = out != null && (out.endsWith("/") || Files.isDirectory(Path.of(out)));
+    if (out != null && g.inputs().size() > 1 && !toDirectory) {
+        throw new Failure("with several inputs, -o must be a directory (end it with /)", true);
+    }
+    var plans = new ArrayList<Plan>();
+    var seen = new HashMap<Path, String>();
+    for (var input : g.inputs()) {
+        var target = out == null ? Path.of(defaultName(input.arg()))
+                : toDirectory ? Path.of(out, defaultName(input.arg()))
+                : Path.of(out);
+        target = target.toAbsolutePath().normalize();
+        var clash = seen.put(target, input.arg());
+        if (clash != null) throw new Failure(clash + " and " + input.arg() + " would both be written to " + target, true);
+        var others = g.inputs().stream().filter(o -> o != input).flatMap(o -> o.argIndexes().stream()).collect(Collectors.toSet());
+        var command = IntStream.range(0, g.argv().size()).filter(i -> !others.contains(i)).mapToObj(g.argv()::get).toList();
+        plans.add(new Plan(input, target, command));
+    }
+    return plans;
+}
+
+static String defaultName(String input) {
+    var base = Path.of(input).getFileName().toString();
+    var dot = base.lastIndexOf('.');
+    var kebab = kebab(dot > 0 ? base.substring(0, dot) : base);
+    if (kebab.isEmpty()) throw new Failure("cannot derive a wrapper name from " + input + "; use -o NAME", true);
+    return "run-" + kebab;
+}
+
+/// FooBar -> foo-bar, HTTPServer -> http-server, example1_assert -> example1-assert.
+static String kebab(String name) {
+    return name.replaceAll("([a-z0-9])([A-Z])", "$1-$2")
+            .replaceAll("([A-Z])([A-Z][a-z])", "$1-$2")
+            .replaceAll("[-_.\\s]+", "-")
+            .replaceAll("^-|-$", "")
+            .toLowerCase(Locale.ROOT);
+}
+
+static Program program(Plan plan) {
+    var input = plan.input();
+    var path = Path.of(input.arg()).toAbsolutePath().normalize();
+    if (!Files.isRegularFile(path)) throw new Failure("no such file: " + input.arg());
+    if (path.equals(plan.target())) throw new Failure("the wrapper would overwrite its own input " + input.arg(), true);
+    var file = path.getFileName().toString();
+    if (input.jar() || file.endsWith(".jar")) return new JarFile(path);
+    String text;
+    try {
+        text = Files.readString(path);
+    } catch (IOException | UncheckedIOException e) {
+        throw new Failure("cannot read " + input.arg() + ": " + e.getMessage());
+    }
+    if (file.endsWith(".java")) {
+        var unit = parseSource(path, file, text);
+        var pkg = unit.getPackageName() == null ? "" : unit.getPackageName().toString();
+        // The source root is the directory above the package's directories, when they match.
+        var root = path.getParent();
+        var pkgDir = Path.of("", pkg.split("\\."));
+        if (!pkg.isEmpty() && root.endsWith(pkgDir)) {
+            for (var n = 0; n < pkgDir.getNameCount(); n++) root = root.getParent();
+        }
+        return new JavaSource(path, mainClass(input, unit), root, dependencies(path, text));
+    }
+    var shebang = text.lines().findFirst().orElse("");
+    var words = shebang.startsWith("#!") ? List.of(shebang.substring(2).trim().split("\\s+")) : List.<String>of();
+    var java = IntStream.range(0, words.size()).filter(i -> words.get(i).equals("java") || words.get(i).endsWith("/java")).findFirst();
+    if (java.isEmpty()) {
+        throw new Failure("cannot tell what " + input.arg() + " is: expected a .java source, a .jar, or a script with a java shebang");
+    }
+    var javaOpts = new ArrayList<String>();
+    String release = null;
+    for (var i = java.getAsInt() + 1; i < words.size(); i++) {
+        var w = words.get(i);
+        if (w.equals("--source") && i + 1 < words.size()) release = words.get(++i);
+        else if (w.startsWith("--source=")) release = w.substring("--source=".length());
+        else javaOpts.add(w);
+    }
+    // The source launcher ignores the shebang line; the parser and javac must not see it.
+    var body = "\n" + text.substring(Math.min(text.length(), shebang.length() + 1));
+    var unit = parseSource(path, file + ".java", body);
+    return new ScriptSource(path, mainClass(input, unit), List.copyOf(javaOpts), release, dependencies(path, text));
+}
+
+/// Parses (without compiling) a source file with javac's tree API.
+static CompilationUnitTree parseSource(Path path, String fileName, String text) {
+    var errors = new ArrayList<String>();
+    var source = new SimpleJavaFileObject(URI.create("string:///" + fileName.replace(" ", "%20")), JavaFileObject.Kind.SOURCE) {
+        @Override public CharSequence getCharContent(boolean ignoreEncodingErrors) { return text; }
+    };
+    var options = List.of("--enable-preview", "--release", String.valueOf(Runtime.version().feature()));
+    var task = (JavacTask) ToolProvider.getSystemJavaCompiler().getTask(null, null, d -> {
+        if (d.getKind() == Diagnostic.Kind.ERROR) errors.add("line " + d.getLineNumber() + ": " + d.getMessage(Locale.ROOT));
+    }, options, null, List.of(source));
+    try {
+        var units = task.parse().iterator();
+        if (!errors.isEmpty()) throw new Failure("cannot parse " + path + ": " + String.join("; ", errors));
+        return units.next();
+    } catch (IOException e) {
+        throw new Failure("cannot parse " + path + ": " + e.getMessage());
+    }
+}
+
+/// Like the source launcher: the first top-level class runs (for a compact file, the implicit class).
+static String mainClass(Input input, CompilationUnitTree unit) {
+    var type = unit.getTypeDecls().stream()
+            .flatMap(t -> t instanceof ClassTree c ? Stream.of(c) : Stream.empty())
+            .findFirst()
+            .orElseThrow(() -> new Failure(input.arg() + " declares no class to run"));
+    var pkg = unit.getPackageName();
+    return (pkg == null ? "" : pkg + ".") + type.getSimpleName();
+}
+
+// ---- Dependency adapter: JBang //DEPS, resolved now, pinned for the wrapper ----
+
+static List<Dependency> dependencies(Path source, String text) {
+    var coordinates = new ArrayList<String>();
+    for (var line : text.lines().toList()) {
+        if (line.startsWith("//REPOS ")) {
+            throw new Failure(source + ": //REPOS is not supported; wrappers only download from Maven Central");
+        }
+        if (line.startsWith("//DEPS ")) coordinates.addAll(List.of(line.substring(7).trim().split("[\\s,]+")));
+    }
+    if (coordinates.isEmpty()) return List.of();
+
+    System.err.println("javaw: resolving " + String.join(", ", coordinates) + " with JBang");
+    String json;
+    try {
+        var jbang = new ProcessBuilder("jbang", "--quiet", "info", "tools", "--source-type", "java", source.toString())
+                .redirectError(ProcessBuilder.Redirect.INHERIT)
+                .start();
+        json = new String(jbang.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        if (jbang.waitFor() != 0) throw new Failure("JBang could not resolve the //DEPS of " + source);
+    } catch (IOException e) {
+        throw new Failure(source + " has //DEPS lines; resolving them needs JBang (https://jbang.dev) on the PATH");
+    } catch (InterruptedException e) {
+        throw new Failure("interrupted");
+    }
+    var repository = Optional.ofNullable(System.getenv("JBANG_REPO")).map(Path::of)
+            .orElse(Path.of(System.getProperty("user.home"), ".m2", "repository"));
+    return switch (Json.parse(json).tryGet("resolvedDependencies").orElse(JsonArray.of(List.of()))) {
+        case JsonArray jars -> jars.asList().stream().map(jar -> switch (jar) {
+            case JsonString s -> dependency(repository, Path.of(s.asString()));
+            default -> throw new Failure("unexpected JBang output: " + jar);
+        }).toList();
+        default -> throw new Failure("unexpected JBang output: " + json);
+    };
+}
+
+static Dependency dependency(Path repository, Path jar) {
+    if (!jar.startsWith(repository) || !jar.toString().endsWith(".jar")) {
+        throw new Failure("dependency " + jar + " is not a jar in the local Maven repository " + repository);
+    }
+    var path = repository.relativize(jar).toString().replace(File.separatorChar, '/');
+    if (!path.matches("[A-Za-z0-9_.+-]+(/[A-Za-z0-9_.+-]+)+\\.jar")) throw new Failure("unexpected dependency path: " + path);
+    try {
+        return new Dependency(path, sha256(Files.readAllBytes(jar)));
+    } catch (IOException e) {
+        throw new Failure("cannot read " + jar + ": " + e.getMessage());
+    }
+}
+
+static String sha256(byte[] bytes) {
+    try {
+        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+    } catch (NoSuchAlgorithmException e) {
+        throw new IllegalStateException(e);
+    }
+}
+
+// ---- Writing ----
+
+static void write(Path target, String script) {
+    try {
+        Files.createDirectories(target.getParent());
+        var tmp = Files.createTempFile(target.getParent(), "." + target.getFileName(), ".tmp");
+        try {
+            Files.writeString(tmp, script);
+            Files.setPosixFilePermissions(tmp, PosixFilePermissions.fromString("rwxr-xr-x"));
+            Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+        } finally {
+            Files.deleteIfExists(tmp);
+        }
+    } catch (IOException e) {
+        throw new Failure("cannot write " + target + ": " + e.getMessage());
+    }
+}
+
+// ---- The wrapper script ----
+
+/// Quotes a word for POSIX sh, leaving plain words bare.
+static String sh(String word) {
+    if (word.indexOf('\n') >= 0 || word.indexOf('\r') >= 0 || word.indexOf(0) >= 0) {
+        throw new Failure("line breaks are not supported in arguments or paths: " + word.strip());
+    }
+    return word.matches("[A-Za-z0-9_@%+=:,./-]+") ? word : "'" + word.replace("'", "'\\''") + "'";
+}
+
+static String fill(String template, String... pairs) {
+    for (var i = 0; i < pairs.length; i += 2) template = template.replace("@" + pairs[i] + "@", pairs[i + 1]);
+    return template;
+}
+
+static final String RESOLVE_DIR = """
+    # Find the directory of this script's real file, following symlinks (POSIX only).
+    self=$0
+    case $self in /*) ;; *) self=./$self ;; esac
+    while [ -L "$self" ]; do
+      link=$(ls -ld -- "$self")
+      link=${link#*" $self -> "}
+      case $link in /*) self=$link ;; *) self=${self%/*}/$link ;; esac
+    done
+    dir=$(CDPATH= cd -P -- "${self%/*}" && pwd -P) || exit 1
+
+    """;
+
+static final String DIE = """
+    die() { printf '%s: %s\\n' @name@ "$*" >&2; exit 1; }
+
+    """;
+
+static final String JAVA_VERSION = """
+    # Java's feature version, from the `version "..."` line only (1.8.0_x is 8, 28-ea is 28).
+    java_version() {
+      jdk=$(@java@ -version 2>&1)
+      version=$(printf '%s\\n' "$jdk" | sed -n '/^[^ ]* version "/{s/^[^ ]* version "\\(1\\.\\)\\{0,1\\}\\([0-9]*\\).*/\\2/p;q;}')
+    }
+
+    """;
+
+static final String MIN_JAVA = """
+    java_version
+    [ "${version:-0}" -ge @min@ ] ||
+      die "requires Java @min@ or newer, but" @javadesc@ "is ${version:+Java }${version:-missing or has no recognizable version}"
+
+    """;
+
+/// A wrapper that builds checks the version only while building, so a warm run starts no extra JVM.
+static final String CHECK_JAVA = """
+    # Checked only before building (jar, AOT cache, native image), never on a warm run.
+    check_java() {
+      java_version
+      [ "${version:-0}" -ge @min@ ] ||
+        die "requires Java @min@ or newer, but" @javadesc@ "is ${version:+Java }${version:-missing or has no recognizable version}"
+    }
+
+    """;
+
+/// The JDK's identity for the jar and AOT stamps, from file metadata only, so checking it starts no JVM.
+static final String JDK_ID = """
+    # The JDK's identity from file metadata (no JVM start): java's real path (symlinks followed),
+    # plus ls -lL of it and of the JDK's lib/modules.@javahome@
+    j=$(command -v @java@) || j=
+    while [ -L "$j" ]; do
+      link=$(ls -ld -- "$j")
+      link=${link#*" $j -> "}
+      case $link in /*) j=$link ;; *) j=${j%/*}/$link ;; esac
+    done
+    jdkid=$( { printf '%s\\n' "$j"@javahomeid@; ls -lL -- "$j" "${j%/bin/*}/lib/modules" 2>/dev/null; } | cksum)
+
+    """;
+
+static final String STATE = """
+    # Per-wrapper files (built jar, caches) live in a git-ignored directory named after the wrapper.
+    state="$dir"/@state@
+    mkstate() {
+      [ -d "$state" ] || { mkdir -p "$state" && printf '*\\n' >"$state/.gitignore"; } || die "cannot create $state"
+    }
+
+    """;
+
+static final String DEPS = """
+    # Dependencies: jars from Maven Central pinned by SHA-256, shared by all wrappers in lib/.
+    lib="$dir"/lib
+    if [ "$(cat "$state/deps.ok" 2>/dev/null)" != @stamp@ ]; then
+      command -v curl >/dev/null 2>&1 || die "curl is required to download dependencies, but it is not installed"
+      sha256() { if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1"; else shasum -a 256 "$1"; fi | sed 's/ .*//'; }
+      fetch() {
+        [ -f "$lib/$1" ] && [ "$(sha256 "$lib/$1")" = "$2" ] && return
+        url=@central@$1
+        printf '%s: downloading %s\\n' @name@ "$url" >&2
+        mkdir -p "$lib/${1%/*}" || die "cannot create $lib"
+        curl -fsSL --proto =https --tlsv1.2 -o "$lib/$1.$$" "$url" || { rm -f "$lib/$1.$$"; die "cannot download $url (offline?)"; }
+        [ "$(sha256 "$lib/$1.$$")" = "$2" ] || { rm -f "$lib/$1.$$"; die "SHA-256 mismatch for $url"; }
+        mv -f "$lib/$1.$$" "$lib/$1" || die "cannot write $lib/$1"
+      }
+    @fetches@
+      [ -f "$lib/.gitignore" ] || printf '*\\n' >"$lib/.gitignore"
+      mkstate
+      printf '%s\\n' @stamp@ >"$state/deps.ok.$$" && mv -f "$state/deps.ok.$$" "$state/deps.ok"
+    fi
+
+    """;
+
+static final String RESOURCES = """
+    # Resources: files under the source root matching --resource go into the jar, so getResource finds
+    # them as it does under the source launcher (hidden files and the wrappers' lib/ are skipped).
+    root=@root@
+    resources() { (CDPATH= cd -- "$root" && find . \\( -name '.?*'@prune@ \\) -prune -o -type f \\( @match@ \\) "$@"); }
+
+    """;
+
+static final String BUILD = """
+    # Build a jar on the first run, and again whenever @changes@.
+    # $stamp covers the sources alone; the jar's stamp adds the JDK (its class files and --release depend on it).
+    src=@src@
+    jar="$state"/@jarname@
+    stamp=$(@stampcmd@)
+    jstamp="$stamp $jdkid"
+    @readstamp@if [ ! -f "$jar" ] || [ @builtstamp@ != "$jstamp" ]; then
+      command -v @javac@ >/dev/null 2>&1 && command -v @jartool@ >/dev/null 2>&1 ||
+        die "building" @srcname@ "needs javac and jar from a JDK"
+      mkstate
+      tmp=$state/build.$$
+      @check@@newbuild@rm -rf "$tmp" && mkdir "$tmp" || die "cannot create $tmp"
+    @prepare@  if @copy@@javac@ -d "$tmp/classes" @javacopts@ >@javaclog@"$tmp/log" 2>&1 &&@nativeres@
+        @jartool@ --create --file "$tmp/jar" --main-class @main@ -C "$tmp/classes" . >>"$tmp/log" 2>&1 &&
+        printf '%s\\n' "$jstamp"@jbuild@ >"$tmp/stamp" && mv -f "$tmp/jar" "$jar" && mv -f "$tmp/stamp" "$state/jar.stamp"
+      then rm -rf "$tmp"
+      else cat "$tmp/log" >&2; rm -rf "$tmp"; die "cannot build" @srcname@
+      fi
+    fi
+
+    """;
+
+/// With --aot, jar.stamp's second line names this build of the jar, so its AOT cache can follow it.
+static final String AOT_JAR_BUILD = """
+    # Line 1 of jar.stamp is what the jar was built from; line 2 names that build, for the AOT stamp.
+    jbuilt= jbuild=
+    { read -r jbuilt; read -r jbuild; } 2>/dev/null <"$state/jar.stamp"
+    """;
+
+/// native-image leaves out class path resources unless they are registered, so the jar lists its own.
+static final String NATIVE_RESOURCES = """
+
+        mkdir -p "$tmp/classes/META-INF/native-image/javaw" &&
+        { printf '{"resources":{"includes":[\\n'
+          resources -print | sed -e 's|^\\./||' -e 's/[\\\\"]/\\\\&/g' -e 's/.*/{"pattern":"\\\\\\\\Q&\\\\\\\\E"},/' -e '$s/,$//'
+          printf ']}}\\n'; } >"$tmp/classes/META-INF/native-image/javaw/resource-config.json" &&
+    """;
+
+static final String NATIVE = """
+    # Native image: built once with GraalVM if native-image is installed; otherwise the jar runs.
+    native="$state"/@nativename@
+    nstamp=$( { cksum <"$self"; @appstamp@; } | cksum)
+    if { [ ! -x "$native" ] || [ "$(cat "$state/native.stamp" 2>/dev/null)" != "$nstamp" ]; } &&
+       [ "$(cat "$state/native.failed" 2>/dev/null)" != "$nstamp" ] && command -v @nativeimage@ >/dev/null 2>&1; then
+      @check@printf '%s: building a native image (first run only; this takes a while)\\n' @name@ >&2
+      mkstate
+      tmp=$state/native.$$
+      rm -rf "$tmp" && mkdir "$tmp" || die "cannot create $tmp"
+      if @nativeimage@ @nativeopts@ -o "$tmp/image" >"$tmp/log" 2>&1 &&
+        printf '%s\\n' "$nstamp" >"$tmp/stamp" && mv -f "$tmp/image" "$native" && mv -f "$tmp/stamp" "$state/native.stamp"
+      then :
+      else
+        cat "$tmp/log" >&2
+        printf '%s: native-image failed; running on the JVM until this wrapper or its program changes\\n' @name@ >&2
+        printf '%s\\n' "$nstamp" >"$state/native.failed"
+      fi
+      rm -rf "$tmp"
+    fi
+    if [ -x "$native" ] && [ "$(cat "$state/native.stamp" 2>/dev/null)" = "$nstamp" ]; then exec "$native" "$@"; fi
+
+    """;
+
+static final String AOT = """
+    # AOT cache: stamped with this wrapper's contents (pinned checksums included), the program, and the JDK.
+    aot="$state"/@aotname@
+    astamp=$( { cksum <"$self"; printf '%s\\n' "$jdkid"; @appstamp@; } | cksum)
+    if [ -f "$aot" ] && [ "$(cat "$state/aot.stamp" 2>/dev/null)" = "$astamp" ]; then
+      # AOTMode=on: an unusable cache is an error, never a silent run without it.
+      exec @java@ -XX:AOTMode=on -XX:AOTCache="$aot" @launch@
+    fi
+    # No valid cache: this run records a training profile (VM chatter off), then the cache is assembled.
+    @check@mkstate
+    tmp=$state/aot.$$
+    @java@ -XX:+UnlockDiagnosticVMOptions -XX:-DisplayVMOutput -XX:AOTMode=record -XX:AOTConfiguration="$tmp.conf" @launch@
+    status=$?
+    if @java@ -XX:AOTMode=create -XX:AOTConfiguration="$tmp.conf" -XX:AOTCache="$tmp.aot" @createopts@ >"$tmp.log" 2>&1 &&
+      printf '%s\\n' "$astamp" >"$tmp.stamp" && mv -f "$tmp.aot" "$aot" && mv -f "$tmp.stamp" "$state/aot.stamp"
+    then :
+    else
+      cat "$tmp.log" >&2 2>/dev/null
+      printf '%s: could not create the AOT cache %s; the next run will try again\\n' @name@ "$aot" >&2
+    fi
+    rm -f "$tmp.conf" "$tmp.aot" "$tmp.log" "$tmp.stamp"
+    exit "$status"
+    """;
+
+/// Options that matter to javac and native-image as well as to java.
+static final Set<String> COMPILE_OPTIONS = Set.of("--enable-preview", "--add-modules", "--add-exports", "--add-reads");
+
+/// java's assertion switches, which native-image accepts with the same syntax.
+static final Set<String> ASSERTION_OPTIONS = Set.of("-ea", "-enableassertions", "-da", "-disableassertions",
+        "-esa", "-enablesystemassertions", "-dsa", "-disablesystemassertions");
+
+static String script(Plan plan, Program program, Settings s) {
+    var name = plan.name();
+    var outDir = realDir(plan.target().getParent());
+    UnaryOperator<String> tool = cmd -> s.javaHome() == null ? cmd : sh(s.javaHome().resolve("bin").resolve(cmd).toString());
+    var java = tool.apply("java");
+    var deps = program instanceof Source src ? src.deps() : List.<Dependency>of();
+    var built = s.build() && program instanceof Source;
+    if (program instanceof JarFile && !s.resources().isEmpty()) {
+        throw new Failure("--resource applies to source inputs, not the jar " + plan.input().arg(), true);
+    }
+    var release = program instanceof ScriptSource script ? script.release() : null;
+
+    // Runtime options: the shebang's options (--source only for the source launcher), then --jvm-opts.
+    var runtimeOpts = new ArrayList<String>();
+    if (program instanceof ScriptSource script) {
+        if (!built && release != null) runtimeOpts.addAll(List.of("--source", release));
+        runtimeOpts.addAll(script.javaOpts());
+    }
+    runtimeOpts.addAll(s.jvmOpts());
+    var compileOpts = compileOptions(runtimeOpts);
+    // Preview features need javac --release to match the JDK, which the wrapper must then ask java for.
+    var previewRelease = built && release == null && compileOpts.contains("--enable-preview");
+
+    var classpath = new ArrayList<String>();
+    deps.forEach(d -> classpath.add("\"$lib\"/" + sh(d.path())));
+    if (s.classpath() != null) classpath.add(sh(s.classpath()));
+    var cp = classpath.isEmpty() ? null : "\"$cp\"";
+
+    var out = new StringBuilder("#!/bin/sh\n# Generated by javaw. Regenerate with:\n#   javaw");
+    plan.command().forEach(arg -> out.append(' ').append(sh(arg)));
+    out.append("\n\n").append(RESOLVE_DIR);
+    var usesState = built || !deps.isEmpty() || s.aot() || s.nativeImage();
+    if (usesState || s.minJava() != null) out.append(fill(DIE, "name", sh(name)));
+    // A wrapper that builds something checks --min-java only then; one that never builds checks every run.
+    var builds = built || s.aot() || s.nativeImage();
+    if (s.minJava() != null || previewRelease) out.append(fill(JAVA_VERSION, "java", java));
+    if (s.minJava() != null) {
+        out.append(fill(builds ? CHECK_JAVA : MIN_JAVA, "min", s.minJava().toString(),
+                "javadesc", s.javaHome() == null ? "'java (from the PATH)'" : java));
+    }
+    var check = s.minJava() != null ? "check_java\n" : "";
+    if (built || s.aot()) {
+        // macOS's /usr/bin/java stub picks its JDK from JAVA_HOME, so that counts too unless --java-home is set.
+        var pathJava = s.javaHome() == null;
+        out.append(fill(JDK_ID, "java", java, "javahome", pathJava ? "\n# JAVA_HOME counts too: macOS's /usr/bin/java picks its JDK from it." : "",
+                "javahomeid", pathJava ? " \"${JAVA_HOME-}\"" : ""));
+    }
+    if (usesState) out.append(fill(STATE, "state", sh("." + name)));
+    if (!deps.isEmpty()) {
+        var fetches = new StringBuilder();
+        deps.forEach(d -> fetches.append("  fetch ").append(sh(d.path())).append(' ').append(d.sha256()).append('\n'));
+        out.append(fill(DEPS, "stamp", sha256(fetches.toString().getBytes(StandardCharsets.UTF_8)).substring(0, 16),
+                "central", CENTRAL, "name", sh(name), "fetches", fetches.toString().stripTrailing()));
+    }
+    if (cp != null) out.append("cp=").append(String.join(":", classpath)).append("\n\n");
+
+    // The java command line, plus (for caches) the program's class path, its stamp, and native-image's target.
+    var launch = new ArrayList<String>();
+    runtimeOpts.forEach(o -> launch.add(sh(o)));
+    String appCp = null, appStamp = null, nativeTarget = null;
+    switch (program) {
+        case JarFile jar -> {
+            out.append("app=").append(at(outDir, jar.path())).append("\n\n");
+            if (cp != null) launch.addAll(List.of("-cp", cp));
+            launch.addAll(List.of("-jar", "\"$app\""));
+            appCp = "\"$app\"";
+            appStamp = "cksum <\"$app\"";
+            nativeTarget = "-jar \"$app\"";
+        }
+        case Source src when !built -> {
+            if (cp != null) launch.addAll(List.of("-cp", cp));
+            launch.add(at(outDir, src.path()));
+        }
+        case Source src -> {
+            out.append(build(name, src, outDir, tool, compileOpts, cp, previewRelease, s.resources(), s.nativeImage(), s.aot(), check));
+            appCp = cp == null ? "\"$jar\"" : "\"$jar:$cp\"";
+            launch.addAll(List.of("-cp", appCp, sh(src.mainClass())));
+            appStamp = "printf '%s\\n' \"$stamp\"";
+            nativeTarget = "-cp " + appCp + " " + sh(src.mainClass());
+        }
+    }
+    launch.add("\"$@\"");
+
+    if (s.nativeImage()) {
+        var nativeOpts = new ArrayList<String>();
+        compileOpts.forEach(o -> nativeOpts.add(sh(o)));
+        // Assertions are fixed when the image is built, so their switches go to native-image.
+        runtimeOpts.stream().filter(o -> ASSERTION_OPTIONS.contains(o.contains(":") ? o.substring(0, o.indexOf(':')) : o))
+                .forEach(o -> nativeOpts.add(sh(o)));
+        nativeOpts.add(nativeTarget);
+        out.append(fill(NATIVE, "nativename", sh(name), "appstamp", appStamp, "nativeimage", tool.apply("native-image"),
+                "nativeopts", String.join(" ", nativeOpts), "name", sh(name), "check", check.isEmpty() ? "" : check + "  "));
+    }
+    if (s.aot()) {
+        var createOpts = new ArrayList<String>();
+        runtimeOpts.forEach(o -> createOpts.add(sh(o)));
+        createOpts.addAll(List.of("-cp", appCp));
+        // The JVM rejects a cache once its jar is rewritten, so the cache follows each build of the jar.
+        var aotAppStamp = built ? appStamp + "; printf '%s\\n' \"$jbuild\"" : appStamp;
+        out.append(fill(AOT, "aotname", sh(name + ".aot"), "appstamp", aotAppStamp, "java", java,
+                "launch", String.join(" ", launch), "createopts", String.join(" ", createOpts), "name", sh(name),
+                "check", check));
+    } else {
+        out.append("exec ").append(java).append(' ').append(String.join(" ", launch)).append('\n');
+    }
+    return out.toString();
+}
+
+static String build(String name, Source src, Path outDir, UnaryOperator<String> tool, List<String> compileOpts,
+                    String cp, boolean previewRelease, List<String> resources, boolean nativeImage, boolean aot,
+                    String check) {
+    var javac = new ArrayList<String>();
+    if (src instanceof ScriptSource script && script.release() != null) javac.addAll(List.of("--release", sh(script.release())));
+    if (previewRelease) javac.addAll(List.of("--release", "\"$version\""));
+    compileOpts.forEach(o -> javac.add(sh(o)));
+    if (cp != null) javac.addAll(List.of("-cp", cp));
+    var prepare = previewRelease ? "  java_version\n" : "";
+    String stamp, plainStamp;
+    Path root;
+    switch (src) {
+        case JavaSource java -> {
+            root = realDir(java.root());
+            javac.addAll(List.of("-sourcepath", place(outDir, root), "\"$src\""));
+            stamp = "cat \"$src\" \"${src%/*}\"/*.java";
+            plainStamp = stamp + " 2>/dev/null | cksum";
+        }
+        case ScriptSource script -> {
+            // The source launcher's source root for a script is the script's directory.
+            root = realDir(script.path().getParent());
+            // javac cannot read the shebang line, and an implicit class is named after its file.
+            var copy = "\"$tmp\"/" + sh(src.mainClass().substring(src.mainClass().lastIndexOf('.') + 1) + ".java");
+            prepare += "  sed '1s/^#!.*//' \"$src\" >" + copy + " || die \"cannot read $src\"\n";
+            javac.add(copy);
+            stamp = "cat \"$src\"";
+            plainStamp = "cksum <\"$src\"";
+        }
+    }
+    var out = "";
+    var copy = "";
+    if (resources.isEmpty()) {
+        stamp = plainStamp;
+    } else {
+        // A pattern with a / matches the path from the source root; otherwise it matches the file name.
+        var match = resources.stream()
+                .map(r -> r.contains("/") ? "-path " + sh("./" + r) : "-name " + sh(r))
+                .collect(Collectors.joining(" -o "));
+        // Wrappers download dependencies into lib/ next to themselves; never bundle those.
+        var lib = outDir.resolve("lib");
+        var prune = lib.startsWith(root) ? " -o -path " + sh("./" + root.relativize(lib)) : "";
+        out = fill(RESOURCES, "root", place(outDir, root), "prune", prune, "match", match);
+        // The jar's contents differ when it carries native-image metadata, so that goes in the stamp too.
+        stamp = "{ " + (nativeImage ? "echo native-image; " : "") + stamp + "; resources -print -exec cat {} +; } 2>/dev/null | cksum";
+        copy = "resources -exec sh -c 'for f; do mkdir -p \"$0/${f%/*}\" && cp \"$f\" \"$0/$f\" || exit 1; done' \"$tmp/classes\" {} + >\"$tmp/log\" 2>&1 &&\n    ";
+    }
+    return out + fill(BUILD, "src", at(outDir, src.path()), "jarname", sh(name + ".jar"), "stampcmd", stamp,
+            "changes", resources.isEmpty() ? "the source or the JDK changes" : "the source, its resources, or the JDK change",
+            "copy", copy, "nativeres", nativeImage && !resources.isEmpty() ? NATIVE_RESOURCES.stripTrailing() : "",
+            "javaclog", copy.isEmpty() ? "" : ">",
+            "javac", tool.apply("javac"), "jartool", tool.apply("jar"), "srcname", sh(src.path().getFileName().toString()),
+            "readstamp", aot ? AOT_JAR_BUILD : "", "builtstamp", aot ? "\"$jbuilt\"" : "\"$(cat \"$state/jar.stamp\" 2>/dev/null)\"",
+            "newbuild", aot ? "jbuild=\"$$ $(date +%s)\"\n  " : "", "jbuild", aot ? " \"$jbuild\"" : "",
+            "check", check.isEmpty() ? "" : check + "  ", "prepare", prepare, "javacopts", String.join(" ", javac), "main", sh(src.mainClass()));
+}
+
+/// A file's location in the wrapper, relative to the wrapper's own directory.
+static String at(Path outDir, Path file) {
+    return place(outDir, realDir(file.getParent()).resolve(file.getFileName()));
+}
+
+/// Relative to the wrapper's directory, unless the only common ancestor is the root.
+static String place(Path outDir, Path real) {
+    if (outDir.getNameCount() > 0 && real.getNameCount() > 0 && !outDir.getName(0).equals(real.getName(0))) {
+        return sh(real.toString());
+    }
+    var rel = outDir.relativize(real).toString();
+    return rel.isEmpty() ? "\"$dir\"" : "\"$dir\"/" + sh(rel);
+}
+
+/// The subset of java options that javac and native-image need too, with their values.
+static List<String> compileOptions(List<String> opts) {
+    var out = new ArrayList<String>();
+    for (var i = 0; i < opts.size(); i++) {
+        var o = opts.get(i);
+        var key = o.contains("=") ? o.substring(0, o.indexOf('=')) : o;
+        if (!COMPILE_OPTIONS.contains(key)) continue;
+        out.add(o);
+        if (!o.contains("=") && !o.equals("--enable-preview") && i + 1 < opts.size()) out.add(opts.get(++i));
+    }
+    return out;
+}
+
+static Path realDir(Path dir) {
+    try {
+        return dir.toRealPath();
+    } catch (IOException e) {
+        return dir.toAbsolutePath().normalize();
+    }
+}

@@ -1,0 +1,89 @@
+{
+  "run_id": "A-jarsrc-opus-1",
+  "condition": "A",
+  "task": "jarsrc",
+  "model_alias": "opus",
+  "model_id": "claude-opus-5-5",
+  "model_ids_used": [
+    "claude-opus-5-5"
+  ],
+  "replicate": 1,
+  "seed": 20261010,
+  "seed_position": 23,
+  "started": "2026-10-11T01:01:10+00:00",
+  "ended": "2026-10-11T01:03:15+00:00",
+  "wall_s": 124.8,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 8,
+  "duration_ms": 124237,
+  "duration_api_ms": 122876,
+  "tokens": {
+    "input_tokens": 12,
+    "output_tokens": 10823,
+    "cache_creation_input_tokens": 17948,
+    "cache_read_input_tokens": 122328
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 10823,
+      "cacheReadInputTokens": 122328,
+      "cacheCreationInputTokens": 17948,
+      "webSearchRequests": 0,
+      "costUSD": 0.38455760000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2645,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.38455760000000005,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "57de73a6-150d-4b5c-9c9d-13f86eb3f8bd",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-jarsrc-opus-1",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 8.1,
+    "cost_usd": 0.03543479999999999,
+    "cost_usd_cumulative_reported": 0.41999240000000004,
+    "num_turns": 3,
+    "tokens": {
+      "input_tokens": 6,
+      "output_tokens": 289,
+      "cache_creation_input_tokens": 1422,
+      "cache_read_input_tokens": 91274
+    },
+    "subtype": "success",
+    "reply": "`./jarsrc`",
+    "run_command": "./jarsrc",
+    "limit_hits": []
+  },
+  "run_command": "./jarsrc",
+  "excluded_from_copy": [],
+  "prompt": "Build the `jarsrc` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `jarsrc` command-line tool described in SPEC.md.",
+    "--model",
+    "opus",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

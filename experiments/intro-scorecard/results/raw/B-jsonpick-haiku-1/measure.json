@@ -1,0 +1,217 @@
+{
+  "run_id": "B-jsonpick-haiku-1",
+  "measured": "2026-10-10T20:09:40",
+  "run_command_reported": "bin/jsonpick --help",
+  "run_command_used": "bin/jsonpick",
+  "run_command_notes": [
+    "dropped trailing --help"
+  ],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "jsonpick.Main",
+    "launch": {
+      "lang": "java",
+      "entry": "jsonpick.Main",
+      "launch": "javac + java",
+      "wrapper": "bin/jsonpick",
+      "evidence": [
+        "run command program: bin/jsonpick",
+        "wrapper script bin/jsonpick runs: java -cp \"build/classes\" jsonpick.Main "
+      ],
+      "flags": [],
+      "java_opts": "-cp build/classes",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 166,
+      "java": 23940
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "Make",
+      "launch": "javac + java",
+      "source": "classic",
+      "imports": "classic",
+      "files": "multiple files",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "Make / javac + java",
+      "java_file_count": 5,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "bin/jsonpick",
+      "evidence": {
+        "build": [
+          "Makefile"
+        ],
+        "launch": [
+          "run command program: bin/jsonpick",
+          "wrapper script bin/jsonpick runs: java -cp \"build/classes\" jsonpick.Main ",
+          "run command program: java",
+          "via wrapper script bin/jsonpick"
+        ],
+        "source": [
+          "src/jsonpick/Main.java:56 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/jsonpick/JsonParser.java",
+          "src/jsonpick/JsonPath.java",
+          "src/jsonpick/JsonWriter.java",
+          "src/jsonpick/Main.java",
+          "src/jsonpick/Shape.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "Makefile",
+      "kind": "build",
+      "lang": null,
+      "bytes": 321
+    },
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 3310
+    },
+    {
+      "path": "bin/jsonpick",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 166
+    },
+    {
+      "path": "src/jsonpick/JsonParser.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 8393
+    },
+    {
+      "path": "src/jsonpick/JsonPath.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 3666
+    },
+    {
+      "path": "src/jsonpick/JsonWriter.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 3500
+    },
+    {
+      "path": "src/jsonpick/Main.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 6927
+    },
+    {
+      "path": "src/jsonpick/Shape.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 1454
+    },
+    {
+      "path": "tests/run-tests.sh",
+      "kind": "test",
+      "lang": "shell",
+      "bytes": 8319
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jsonpick-string",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-number",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-array-index",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-object",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-root",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-shape",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-shape-depth0",
+        "ok": false,
+        "exit": 0,
+        "want_exit": 0,
+        "stdout_head": "object{2}\n",
+        "stderr_head": ""
+      },
+      {
+        "id": "jsonpick-notfound",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-stdin",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-bad-json",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-help",
+        "ok": true
+      }
+    ],
+    "passed": 10,
+    "total": 11,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.03,
+      "stderr_tail": ""
+    },
+    "pass": false
+  },
+  "size": {
+    "source_tokens": 5246,
+    "build_file_tokens": 104,
+    "test_tokens": 2939,
+    "source_files": [
+      "bin/jsonpick",
+      "src/jsonpick/JsonParser.java",
+      "src/jsonpick/JsonPath.java",
+      "src/jsonpick/JsonWriter.java",
+      "src/jsonpick/Main.java",
+      "src/jsonpick/Shape.java"
+    ],
+    "build_files": [
+      "Makefile"
+    ],
+    "source_bytes": 24106,
+    "build_file_bytes": 321
+  },
+  "disk": {
+    "source_and_build_files_bytes": 24427,
+    "build_output_bytes": 23177,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 47604
+  }
+}

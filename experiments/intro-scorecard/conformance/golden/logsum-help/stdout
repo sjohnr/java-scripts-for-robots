@@ -1,0 +1,1 @@
+usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]

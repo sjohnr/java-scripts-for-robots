@@ -1,0 +1,8 @@
+total: 1000
+by level: DEBUG=288 INFO=488 WARN=171 ERROR=53
+first: 2026-01-01T00:00:03
+last: 2026-01-01T00:26:11
+top errors:
+  16 checksum mismatch: expected 0b36bf7a got 2abf5819
+  15 null pointer in handler for user 674131
+  9 failed to connect to host3.local after 3323 attempts

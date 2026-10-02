@@ -1,0 +1,11 @@
+#!/bin/sh
+# Launcher for jsonpick. Builds the jar on first use if it is missing.
+set -e
+DIR=$(cd "$(dirname "$0")" && pwd)
+JAR="$DIR/build/jsonpick.jar"
+if [ ! -f "$JAR" ]; then
+    "$DIR/build.sh" >&2
+fi
+# The JVM prints "Picked up ..." notices to stderr when these are set.
+unset JAVA_TOOL_OPTIONS _JAVA_OPTIONS JDK_JAVA_OPTIONS
+exec java -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xshare:auto -jar "$JAR" "$@"

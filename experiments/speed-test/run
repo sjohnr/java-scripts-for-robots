@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+# Speed test for the "Today: Performance" slides: the CSV example (Commons CSV) under each javaw
+# profile, against the Python version. Writes results/ and prints results/summary.md.
+#
+#   experiments/speed-test/run
+#
+# JDKs come from sdkman: 28-open runs javaw itself, 25-graalce runs every wrapper (and native-image).
+# Env knobs: COLD_RUNS (default 3), WARM_RUNS (default 30).
+set -euo pipefail
+
+# sdk is a shell function, so load it here (sdkman's init script does not like set -u).
+set +u
+. "${SDKMAN_DIR:-$HOME/.sdkman}/bin/sdkman-init.sh"
+JAVAW_JAVA_HOME=$(sdk home java 28-open || true)
+BENCH_JAVA_HOME=$(sdk home java 25-graalce || true)
+set -u
+[ -d "$JAVAW_JAVA_HOME" ] || { echo "sdk java 28-open not installed: sdk install java 28-open" >&2; exit 1; }
+[ -d "$BENCH_JAVA_HOME" ] || { echo "sdk java 25-graalce not installed: sdk install java 25-graalce" >&2; exit 1; }
+COLD_RUNS=${COLD_RUNS:-3}
+WARM_RUNS=${WARM_RUNS:-30}
+
+here=$(cd "$(dirname "$0")" && pwd)
+root=$(cd "$here/../.." && pwd)
+ex=$root/examples/jbang
+py=$root/examples/python/example5_csv.py
+out=$here/results
+for tool in hyperfine javaw python3; do
+  command -v "$tool" >/dev/null || { echo "missing: $tool" >&2; exit 1; }
+done
+[ -x "$BENCH_JAVA_HOME/bin/native-image" ] || { echo "no native-image in $BENCH_JAVA_HOME/bin" >&2; exit 1; }
+mkdir -p "$out"
+
+echo "== 1. Generate wrappers (javaw on $JAVAW_JAVA_HOME)"
+cd "$ex"
+gen() { PATH="$JAVAW_JAVA_HOME/bin:$PATH" javaw --force --jvm-opts -ea --min-java 25 "$@" example5_csv.java; }
+gen --profile small-disk -o csv-small-disk
+gen -r '*.csv' --profile portable -o csv-portable
+gen -r '*.csv' --profile fast-start -o csv-fast-start
+gen -r '*.csv' --aot --native -o csv-native
+
+# Everything below runs on the benchmark JDK.
+export PATH="$BENCH_JAVA_HOME/bin:$PATH"
+wrappers="csv-small-disk csv-portable csv-fast-start csv-native"
+
+# Download the dependency jars once, so no run below times the network.
+./csv-small-disk >/dev/null
+
+{
+  echo "date: $(date)"
+  echo "machine: $(uname -mrs)"
+  echo "hyperfine: $(hyperfine --version)"
+  echo "python: $(python3 --version 2>&1)"
+  echo "java:"; java -version 2>&1 | sed 's/^/  /'
+} >"$out/env.txt"
+
+echo "== 2. First run: state directory removed before every run ($COLD_RUNS runs each; native takes minutes)"
+for w in csv-portable csv-fast-start csv-native; do
+  hyperfine -N --runs "$COLD_RUNS" --prepare "rm -rf $ex/.$w" --export-json "$out/first-$w.json" -n "$w" "$ex/$w"
+done
+
+# Make sure the fast paths really got built, or the warm numbers are lying.
+ls "$ex"/.csv-fast-start/*.aot >/dev/null 2>&1 || { echo "csv-fast-start has no AOT cache" >&2; exit 1; }
+[ -x "$ex/.csv-native/csv-native" ] || { echo "csv-native has no native binary (native-image failed?)" >&2; exit 1; }
+
+echo "== 3. Warm runs ($WARM_RUNS runs each)"
+hyperfine -N --warmup 3 --runs "$WARM_RUNS" --export-json "$out/warm.json" \
+  -n python "python3 $py" \
+  -n small-disk "$ex/csv-small-disk" \
+  -n portable "$ex/csv-portable" \
+  -n fast-start "$ex/csv-fast-start" \
+  -n native "$ex/csv-native"
+
+echo "== 4. Disk and wrapper size"
+{
+  for w in $wrappers; do
+    kb=$( [ -d "$ex/.$w" ] && du -sk "$ex/.$w" | cut -f1 || echo 0 )
+    printf '%s %s %s\n' "$w" "$kb" "$(wc -l <"$ex/$w" | tr -d ' ')"
+  done
+  printf 'lib %s 0\n' "$(du -sk "$ex/lib" | cut -f1)"
+} >"$out/sizes.txt"
+
+python3 "$here/summarize.py" "$out" | tee "$out/summary.md"
+
+# Refresh the slides' copy of the numbers (data/speed.json); a running `npm run dev` picks it up.
+node "$root/slides/scripts/speed-data.mjs"

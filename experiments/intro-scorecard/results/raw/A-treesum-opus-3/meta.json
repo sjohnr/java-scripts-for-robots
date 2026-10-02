@@ -1,0 +1,89 @@
+{
+  "run_id": "A-treesum-opus-3",
+  "condition": "A",
+  "task": "treesum",
+  "model_alias": "opus",
+  "model_id": "claude-opus-5-5",
+  "model_ids_used": [
+    "claude-opus-5-5"
+  ],
+  "replicate": 3,
+  "seed": 20261010,
+  "seed_position": 8,
+  "started": "2026-10-11T00:55:22+00:00",
+  "ended": "2026-10-11T00:56:10+00:00",
+  "wall_s": 48.6,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 7,
+  "duration_ms": 47927,
+  "duration_api_ms": 46886,
+  "tokens": {
+    "input_tokens": 12,
+    "output_tokens": 5376,
+    "cache_creation_input_tokens": 10761,
+    "cache_read_input_tokens": 101690
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 12,
+      "outputTokens": 5376,
+      "cacheReadInputTokens": 101690,
+      "cacheCreationInputTokens": 10761,
+      "webSearchRequests": 0,
+      "costUSD": 0.21399400000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1065,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.21399400000000002,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "8db30b51-674e-42a9-8628-a5fa08846c31",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-treesum-opus-3",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.0,
+    "cost_usd": 0.010654799999999992,
+    "cost_usd_cumulative_reported": 0.2246488,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 10,
+      "cache_creation_input_tokens": 755,
+      "cache_read_input_tokens": 22034
+    },
+    "subtype": "success",
+    "reply": "```\n./treesum\n```",
+    "run_command": "./treesum",
+    "limit_hits": []
+  },
+  "run_command": "./treesum",
+  "excluded_from_copy": [],
+  "prompt": "Build the `treesum` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `treesum` command-line tool described in SPEC.md.",
+    "--model",
+    "opus",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

@@ -1,0 +1,4 @@
+#!/bin/sh
+d=$(cd "$(dirname "$0")" && pwd)
+[ -f "$d/out/Treesum.class" ] || { mkdir -p "$d/out" && javac -d "$d/out" "$d/Treesum.java" || exit 1; }
+exec java -cp "$d/out" Treesum "$@"

@@ -1,0 +1,89 @@
+{
+  "run_id": "A-logsum-sonnet-2",
+  "condition": "A",
+  "task": "logsum",
+  "model_alias": "sonnet",
+  "model_id": "claude-sonnet-5-5",
+  "model_ids_used": [
+    "claude-sonnet-5-5"
+  ],
+  "replicate": 2,
+  "seed": 20261010,
+  "seed_position": 61,
+  "started": "2026-10-11T01:15:15+00:00",
+  "ended": "2026-10-11T01:15:40+00:00",
+  "wall_s": 25.4,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 5,
+  "duration_ms": 24789,
+  "duration_api_ms": 24160,
+  "tokens": {
+    "input_tokens": 8,
+    "output_tokens": 3493,
+    "cache_creation_input_tokens": 8796,
+    "cache_read_input_tokens": 64267
+  },
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 3493,
+      "cacheReadInputTokens": 64267,
+      "cacheCreationInputTokens": 8796,
+      "webSearchRequests": 0,
+      "costUSD": 0.0765567,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 607,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.0765567,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "fdd7275e-32f0-450a-86d5-19fe16cc59f5",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-logsum-sonnet-2",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.2,
+    "cost_usd": 0.004162200000000005,
+    "cost_usd_cumulative_reported": 0.08071890000000001,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 8,
+      "cache_creation_input_tokens": 506,
+      "cache_read_input_tokens": 20542
+    },
+    "subtype": "success",
+    "reply": "`./logsum`",
+    "run_command": "./logsum",
+    "limit_hits": []
+  },
+  "run_command": "./logsum",
+  "excluded_from_copy": [],
+  "prompt": "Build the `logsum` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `logsum` command-line tool described in SPEC.md.",
+    "--model",
+    "sonnet",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

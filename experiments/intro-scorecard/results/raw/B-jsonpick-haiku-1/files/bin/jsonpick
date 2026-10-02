@@ -1,0 +1,4 @@
+#!/bin/sh
+# Launches the jsonpick classes built by `make` (see Makefile).
+dir=$(cd "$(dirname "$0")/.." && pwd)
+exec java -cp "$dir/build/classes" jsonpick.Main "$@"

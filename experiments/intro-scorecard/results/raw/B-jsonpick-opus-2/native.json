@@ -1,0 +1,20 @@
+{
+ "run_id": "B-jsonpick-opus-2",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-opus-2/opt/app.jar",
+ "main": "JsonPick",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jsonpick-opus-2/app",
+ "build_seconds": 9.4,
+ "image_bytes": 5488272,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-jsonpick-opus-2/app --help",
+  "median_ms": 2.40492754,
+  "mean_ms": 2.4255911844759197,
+  "stddev_ms": 0.12747648241366197,
+  "min_ms": 2.22203204,
+  "runs": 706,
+  "load_avg_before": 9.19140625,
+  "load_avg_after": 8.53515625
+ }
+}

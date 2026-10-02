@@ -1,0 +1,4 @@
+usage: jarsrc <find|cat|ls> ... [--root DIR] [--lines A:B]
+  find <fqcn-or-glob> [--root DIR]
+  cat <fqcn> [--lines A:B] [--root DIR]
+  ls <group:artifact[:version]> [--root DIR]

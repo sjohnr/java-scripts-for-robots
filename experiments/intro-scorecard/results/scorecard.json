@@ -1,0 +1,492 @@
+{
+  "generated": "2026-10-11T09:14:39",
+  "runs": {
+    "total": 84,
+    "A": 36,
+    "B": 48
+  },
+  "expectations": [
+    {
+      "id": "H1.python",
+      "hypothesis": 1,
+      "expectation": "Python is produced in at least 50% of runs.",
+      "n": 36,
+      "count": 36,
+      "share": 1.0,
+      "ci_low": 0.9035813700311206,
+      "ci_high": 1.0,
+      "exceptions": null,
+      "threshold": 0.5,
+      "comparison": ">=",
+      "verdict": "supported"
+    },
+    {
+      "id": "H1.scripting",
+      "hypothesis": 1,
+      "expectation": "A scripting language (Python, JavaScript, TypeScript or a shell script) is produced in at least two-thirds of runs.",
+      "n": 36,
+      "count": 36,
+      "share": 1.0,
+      "ci_low": 0.9035813700311206,
+      "ci_high": 1.0,
+      "exceptions": null,
+      "threshold": 0.6666666666666666,
+      "comparison": ">=",
+      "verdict": "supported"
+    },
+    {
+      "id": "H1.compiled",
+      "hypothesis": 1,
+      "expectation": "A compiled language other than Java (for example Go or Rust) is produced in at most 25% of runs.",
+      "n": 36,
+      "count": 0,
+      "share": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.09641862996887933,
+      "exceptions": null,
+      "threshold": 0.25,
+      "comparison": "<=",
+      "verdict": "supported"
+    },
+    {
+      "id": "H1.java",
+      "hypothesis": 1,
+      "expectation": "Java is produced in fewer than 10% of runs.",
+      "n": 36,
+      "count": 0,
+      "share": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.09641862996887933,
+      "exceptions": null,
+      "threshold": 0.1,
+      "comparison": "<",
+      "verdict": "supported"
+    },
+    {
+      "id": "H2.java",
+      "hypothesis": 2,
+      "expectation": "Appending \"Write it in Java.\" to the prompt produces Java in every run.",
+      "n": 48,
+      "count": 48,
+      "share": 1.0,
+      "ci_low": null,
+      "ci_high": null,
+      "exceptions": 0,
+      "threshold": null,
+      "comparison": "every",
+      "verdict": "supported",
+      "exception_ids": []
+    },
+    {
+      "id": "H2.pass",
+      "hypothesis": 2,
+      "expectation": "At least 85% of those runs pass the task's conformance tests.",
+      "n": 48,
+      "count": 40,
+      "share": 0.8333333333333334,
+      "ci_low": 0.7042217148214244,
+      "ci_high": 0.9130448646795889,
+      "exceptions": null,
+      "threshold": 0.85,
+      "comparison": ">=",
+      "verdict": "inconclusive"
+    },
+    {
+      "id": "H3.distinct",
+      "hypothesis": 3,
+      "expectation": "At least four distinct style combinations are produced.",
+      "n": 48,
+      "count": 5,
+      "share": null,
+      "ci_low": null,
+      "ci_high": null,
+      "exceptions": null,
+      "threshold": 4,
+      "comparison": "count >=",
+      "verdict": "supported"
+    },
+    {
+      "id": "H3.max_share",
+      "hypothesis": 3,
+      "expectation": "No single style combination accounts for more than two-thirds of runs.",
+      "n": 48,
+      "count": 22,
+      "share": 0.4583333333333333,
+      "ci_low": 0.3257524219824218,
+      "ci_high": 0.5970892555799516,
+      "exceptions": null,
+      "threshold": 0.6666666666666666,
+      "comparison": "<=",
+      "verdict": "supported",
+      "most_common": "build script / jar"
+    },
+    {
+      "id": "H4.startup.bake-off",
+      "hypothesis": 4,
+      "expectation": "Startup: every unoptimized Java program starts more slowly than the median Go, Python and Node programs for the same task.",
+      "n": 40,
+      "count": 40,
+      "share": 1.0,
+      "ci_low": null,
+      "ci_high": null,
+      "exceptions": 0,
+      "threshold": null,
+      "comparison": "every",
+      "verdict": "supported",
+      "baseline_set": "bake-off",
+      "exception_ids": []
+    },
+    {
+      "id": "H4.source.bake-off",
+      "hypothesis": 4,
+      "expectation": "Source size: the median Java program is more than 25% larger, in tokens, than the median of the smallest competing language for the same task.",
+      "n": 40,
+      "count": 35,
+      "share": 0.875,
+      "ci_low": 0.7388788003201471,
+      "ci_high": 0.9454049978360052,
+      "exceptions": null,
+      "threshold": 0.5,
+      "comparison": ">",
+      "verdict": "supported",
+      "baseline_set": "bake-off",
+      "method": "share of Java programs above 1.25x the smallest per-language median, against 50%"
+    },
+    {
+      "id": "H4.disk.bake-off",
+      "hypothesis": 4,
+      "expectation": "Disk: Java programs that use dependencies occupy more disk space than the median competing program for the same task.",
+      "n": 0,
+      "count": 0,
+      "share": null,
+      "ci_low": null,
+      "ci_high": null,
+      "exceptions": 0,
+      "threshold": null,
+      "comparison": "every",
+      "verdict": "inconclusive (n=0)",
+      "baseline_set": "bake-off",
+      "exception_ids": []
+    },
+    {
+      "id": "H4.optimization.bake-off",
+      "hypothesis": 4,
+      "expectation": "Optimization: with optimization applied, median Java startup is within twice the median Python and Node startup.",
+      "n": 40,
+      "count": 40,
+      "share": 1.0,
+      "ci_low": 0.9123783975415363,
+      "ci_high": 1.0,
+      "exceptions": null,
+      "threshold": 0.5,
+      "comparison": ">",
+      "verdict": "supported",
+      "baseline_set": "bake-off",
+      "method": "share of AOT-optimized Java programs within 2x of the Python and Node medians, against 50%"
+    },
+    {
+      "id": "H4.startup.condA",
+      "hypothesis": 4,
+      "expectation": "Startup: every unoptimized Java program starts more slowly than the median Go, Python and Node programs for the same task.",
+      "n": 40,
+      "count": 40,
+      "share": 1.0,
+      "ci_low": null,
+      "ci_high": null,
+      "exceptions": 0,
+      "threshold": null,
+      "comparison": "every",
+      "verdict": "supported",
+      "baseline_set": "condition A",
+      "exception_ids": []
+    },
+    {
+      "id": "H4.source.condA",
+      "hypothesis": 4,
+      "expectation": "Source size: the median Java program is more than 25% larger, in tokens, than the median of the smallest competing language for the same task.",
+      "n": 40,
+      "count": 38,
+      "share": 0.95,
+      "ci_low": 0.8349612250489412,
+      "ci_high": 0.9861793327384413,
+      "exceptions": null,
+      "threshold": 0.5,
+      "comparison": ">",
+      "verdict": "supported",
+      "baseline_set": "condition A",
+      "method": "share of Java programs above 1.25x the smallest per-language median, against 50%"
+    },
+    {
+      "id": "H4.disk.condA",
+      "hypothesis": 4,
+      "expectation": "Disk: Java programs that use dependencies occupy more disk space than the median competing program for the same task.",
+      "n": 0,
+      "count": 0,
+      "share": null,
+      "ci_low": null,
+      "ci_high": null,
+      "exceptions": 0,
+      "threshold": null,
+      "comparison": "every",
+      "verdict": "inconclusive (n=0)",
+      "baseline_set": "condition A",
+      "exception_ids": []
+    },
+    {
+      "id": "H4.optimization.condA",
+      "hypothesis": 4,
+      "expectation": "Optimization: with optimization applied, median Java startup is within twice the median Python and Node startup.",
+      "n": 40,
+      "count": 40,
+      "share": 1.0,
+      "ci_low": 0.9123783975415363,
+      "ci_high": 1.0,
+      "exceptions": null,
+      "threshold": 0.5,
+      "comparison": ">",
+      "verdict": "supported",
+      "baseline_set": "condition A",
+      "method": "share of AOT-optimized Java programs within 2x of the Python and Node medians, against 50%"
+    }
+  ],
+  "h4_by_language": [
+    {
+      "task": "logsum",
+      "set": "bake-off",
+      "language": "go",
+      "n": 1,
+      "startup_median_ms": 1.5454278800000003,
+      "source_tokens_median": 2052,
+      "disk_median_bytes": 3049193
+    },
+    {
+      "task": "logsum",
+      "set": "bake-off",
+      "language": "javascript",
+      "n": 1,
+      "startup_median_ms": 20.6764954,
+      "source_tokens_median": 1341,
+      "disk_median_bytes": 4465
+    },
+    {
+      "task": "logsum",
+      "set": "bake-off",
+      "language": "python",
+      "n": 1,
+      "startup_median_ms": 12.98207646,
+      "source_tokens_median": 1485,
+      "disk_median_bytes": 5581
+    },
+    {
+      "task": "logsum",
+      "set": "condition A",
+      "language": "python",
+      "n": 9,
+      "startup_median_ms": 14.559961140000002,
+      "source_tokens_median": 1457,
+      "disk_median_bytes": 5603
+    },
+    {
+      "task": "logsum",
+      "set": "generated",
+      "language": "java",
+      "n": 12,
+      "startup_median_ms": 28.244927080000004,
+      "source_tokens_median": 2642.5,
+      "disk_median_bytes": 26363.5
+    },
+    {
+      "task": "logsum",
+      "set": "generated",
+      "language": "java (AOT)",
+      "n": 12,
+      "startup_median_ms": 20.307934770000003,
+      "source_tokens_median": null,
+      "disk_median_bytes": null
+    },
+    {
+      "task": "treesum",
+      "set": "bake-off",
+      "language": "go",
+      "n": 1,
+      "startup_median_ms": 1.3533853200000001,
+      "source_tokens_median": 1899,
+      "disk_median_bytes": 2559223
+    },
+    {
+      "task": "treesum",
+      "set": "bake-off",
+      "language": "javascript",
+      "n": 1,
+      "startup_median_ms": 20.722814380000003,
+      "source_tokens_median": 1409,
+      "disk_median_bytes": 4629
+    },
+    {
+      "task": "treesum",
+      "set": "bake-off",
+      "language": "python",
+      "n": 1,
+      "startup_median_ms": 13.02994482,
+      "source_tokens_median": 1393,
+      "disk_median_bytes": 5390
+    },
+    {
+      "task": "treesum",
+      "set": "condition A",
+      "language": "python",
+      "n": 9,
+      "startup_median_ms": 14.01024456,
+      "source_tokens_median": 1372,
+      "disk_median_bytes": 5313
+    },
+    {
+      "task": "treesum",
+      "set": "generated",
+      "language": "java",
+      "n": 12,
+      "startup_median_ms": 26.33349708,
+      "source_tokens_median": 2517.5,
+      "disk_median_bytes": 36249.0
+    },
+    {
+      "task": "treesum",
+      "set": "generated",
+      "language": "java (AOT)",
+      "n": 12,
+      "startup_median_ms": 19.47023232,
+      "source_tokens_median": null,
+      "disk_median_bytes": null
+    },
+    {
+      "task": "jsonpick",
+      "set": "bake-off",
+      "language": "go",
+      "n": 1,
+      "startup_median_ms": 1.4557160200000003,
+      "source_tokens_median": 4455,
+      "disk_median_bytes": 3831747
+    },
+    {
+      "task": "jsonpick",
+      "set": "bake-off",
+      "language": "javascript",
+      "n": 1,
+      "startup_median_ms": 20.6687768,
+      "source_tokens_median": 1519,
+      "disk_median_bytes": 5192
+    },
+    {
+      "task": "jsonpick",
+      "set": "bake-off",
+      "language": "python",
+      "n": 1,
+      "startup_median_ms": 13.888871300000002,
+      "source_tokens_median": 1630,
+      "disk_median_bytes": 6545
+    },
+    {
+      "task": "jsonpick",
+      "set": "condition A",
+      "language": "python",
+      "n": 7,
+      "startup_median_ms": 16.120036400000004,
+      "source_tokens_median": 1961,
+      "disk_median_bytes": 8894
+    },
+    {
+      "task": "jsonpick",
+      "set": "generated",
+      "language": "java",
+      "n": 6,
+      "startup_median_ms": 25.746327840000003,
+      "source_tokens_median": 5096.0,
+      "disk_median_bytes": 51064.5
+    },
+    {
+      "task": "jsonpick",
+      "set": "generated",
+      "language": "java (AOT)",
+      "n": 6,
+      "startup_median_ms": 19.73733399,
+      "source_tokens_median": null,
+      "disk_median_bytes": null
+    },
+    {
+      "task": "jarsrc",
+      "set": "bake-off",
+      "language": "go",
+      "n": 1,
+      "startup_median_ms": 1.5199275200000004,
+      "source_tokens_median": 3492,
+      "disk_median_bytes": 3448761
+    },
+    {
+      "task": "jarsrc",
+      "set": "bake-off",
+      "language": "javascript",
+      "n": 1,
+      "startup_median_ms": 21.38271016,
+      "source_tokens_median": 3701,
+      "disk_median_bytes": 12752
+    },
+    {
+      "task": "jarsrc",
+      "set": "bake-off",
+      "language": "python",
+      "n": 1,
+      "startup_median_ms": 19.451368900000002,
+      "source_tokens_median": 2741,
+      "disk_median_bytes": 10573
+    },
+    {
+      "task": "jarsrc",
+      "set": "condition A",
+      "language": "python",
+      "n": 9,
+      "startup_median_ms": 19.971495680000004,
+      "source_tokens_median": 2302,
+      "disk_median_bytes": 10319
+    },
+    {
+      "task": "jarsrc",
+      "set": "generated",
+      "language": "java",
+      "n": 10,
+      "startup_median_ms": 26.80454117,
+      "source_tokens_median": 3761.0,
+      "disk_median_bytes": 43978.5
+    },
+    {
+      "task": "jarsrc",
+      "set": "generated",
+      "language": "java (AOT)",
+      "n": 10,
+      "startup_median_ms": 19.40437678,
+      "source_tokens_median": null,
+      "disk_median_bytes": null
+    }
+  ],
+  "h3_sensitivity": {
+    "rule": "Make and build script counted as build none",
+    "combinations": {
+      "none / jar": 26,
+      "none / javac + java": 22
+    },
+    "distinct": 2,
+    "distinct_verdict": "not supported",
+    "max_share": 0.5416666666666666,
+    "max_share_ci": [
+      0.4029107444200485,
+      0.6742475780175782
+    ],
+    "max_share_verdict": "inconclusive"
+  },
+  "h3_combinations": {
+    "build script / jar": 22,
+    "none / javac + java": 15,
+    "build script / javac + java": 6,
+    "Make / javac + java": 1,
+    "Make / jar": 4
+  }
+}

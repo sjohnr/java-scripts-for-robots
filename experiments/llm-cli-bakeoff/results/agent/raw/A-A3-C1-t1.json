@@ -1,0 +1,108 @@
+{
+  "duration_api_ms": 7848,
+  "stop_reason": "end_turn",
+  "session_id": "0afd0ebe-d765-428b-858c-358f16b9494d",
+  "total_cost_usd": 0.0239173,
+  "usage": {
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 8243,
+    "cache_read_input_tokens": 34283,
+    "output_tokens": 797,
+    "output_tokens_details": {
+      "thinking_tokens": 555
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 8243,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 8,
+        "output_tokens": 153,
+        "cache_read_input_tokens": 20735,
+        "cache_creation_input_tokens": 1056,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1056
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 18,
+      "outputTokens": 797,
+      "cacheReadInputTokens": 34283,
+      "cacheCreationInputTokens": 8243,
+      "webSearchRequests": 0,
+      "costUSD": 0.0239173,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 555,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 3,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**VersionCompare** is defined in: `repo/java-multi/VersionCompare.java`\n\n**File with the most lines**: `./main.go` with **470 lines**",
+  "ttft_ms": 4927,
+  "type": "result",
+  "duration_ms": 8224,
+  "uuid": "cebd71db-549c-427b-b358-fcf495a32b9a",
+  "ttft_stream_ms": 972,
+  "time_to_request_ms": 34,
+  "first_content_frame_ms": 972,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "_wall_s_measured": 9.00413990020752,
+  "task": "A3",
+  "condition": "C1",
+  "trial": 1,
+  "trial_dir": "/private/tmp/claude-501/-Users-sriesenberg-git-ai-cli-experiment/4fe6da76-a1a1-4877-9783-663ab9fb5447/scratchpad/agent-A3-jqq2p77i",
+  "check_hits": [
+    "VersionCompare.java",
+    "main.go"
+  ],
+  "check_total": 2,
+  "success": true
+}

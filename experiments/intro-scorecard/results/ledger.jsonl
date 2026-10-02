@@ -1,0 +1,201 @@
+{"run_id": "B-logsum-haiku-1", "started": "2026-10-11T00:08:22+00:00", "event": "start"}
+{"run_id": "B-logsum-haiku-1", "ended": "2026-10-11T00:10:46+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.03223229}
+{"run_id": "B-logsum-opus-1", "started": "2026-10-11T00:10:46+00:00", "event": "start"}
+{"run_id": "B-logsum-opus-1", "ended": "2026-10-11T00:12:37+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.4078458000000001}
+{"run_id": "A-logsum-haiku-1", "started": "2026-10-11T00:12:38+00:00", "event": "start"}
+{"run_id": "A-logsum-haiku-1", "ended": "2026-10-11T00:14:08+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.01844467}
+{"run_id": "A-logsum-opus-1", "started": "2026-10-11T00:14:09+00:00", "event": "start"}
+{"run_id": "A-logsum-opus-1", "ended": "2026-10-11T00:15:05+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.2269612}
+{"run_id": "B-logsum-sonnet-1", "started": "2026-10-11T00:15:05+00:00", "event": "start"}
+{"run_id": "B-logsum-sonnet-1", "ended": "2026-10-11T00:15:46+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.12193739999999999}
+{"run_id": "A-logsum-sonnet-1", "started": "2026-10-11T00:15:47+00:00", "event": "start"}
+{"run_id": "A-logsum-sonnet-1", "ended": "2026-10-11T00:16:11+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.07287260000000001}
+{"run_id": "A-logsum-haiku-1", "event": "superseded", "time": "2026-10-11T00:35:24Z", "reason": "D4: calibration rerun on JDK 25 GA"}
+{"run_id": "A-logsum-opus-1", "event": "superseded", "time": "2026-10-11T00:35:24Z", "reason": "D4: calibration rerun on JDK 25 GA"}
+{"run_id": "A-logsum-sonnet-1", "event": "superseded", "time": "2026-10-11T00:35:24Z", "reason": "D4: calibration rerun on JDK 25 GA"}
+{"run_id": "B-logsum-haiku-1", "event": "superseded", "time": "2026-10-11T00:35:24Z", "reason": "D4: calibration rerun on JDK 25 GA"}
+{"run_id": "B-logsum-opus-1", "event": "superseded", "time": "2026-10-11T00:35:24Z", "reason": "D4: calibration rerun on JDK 25 GA"}
+{"run_id": "B-logsum-sonnet-1", "event": "superseded", "time": "2026-10-11T00:35:24Z", "reason": "D4: calibration rerun on JDK 25 GA"}
+{"run_id": "B-logsum-haiku-1", "started": "2026-10-11T00:35:28+00:00", "event": "start"}
+{"run_id": "B-logsum-haiku-1", "ended": "2026-10-11T00:38:36+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.03851697}
+{"run_id": "B-logsum-opus-1", "started": "2026-10-11T00:38:36+00:00", "event": "start"}
+{"run_id": "B-logsum-opus-1", "ended": "2026-10-11T00:40:43+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.33531979999999995}
+{"run_id": "A-logsum-haiku-1", "started": "2026-10-11T00:40:43+00:00", "event": "start"}
+{"run_id": "A-logsum-haiku-1", "ended": "2026-10-11T00:42:31+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.019589020000000002}
+{"run_id": "A-logsum-opus-1", "started": "2026-10-11T00:42:31+00:00", "event": "start"}
+{"run_id": "A-logsum-opus-1", "ended": "2026-10-11T00:43:55+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.22364940000000003}
+{"run_id": "B-logsum-sonnet-1", "started": "2026-10-11T00:43:56+00:00", "event": "start"}
+{"run_id": "B-logsum-sonnet-1", "ended": "2026-10-11T00:44:31+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.0873858}
+{"run_id": "A-logsum-sonnet-1", "started": "2026-10-11T00:44:32+00:00", "event": "start"}
+{"run_id": "A-logsum-sonnet-1", "ended": "2026-10-11T00:45:00+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.0626144}
+{"run_id": "A-jarsrc-sonnet-1", "started": "2026-10-11T00:46:18+00:00", "event": "start"}
+{"run_id": "A-jarsrc-sonnet-1", "ended": "2026-10-11T00:47:01+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.114615}
+{"run_id": "B-treesum-opus-3", "started": "2026-10-11T00:47:01+00:00", "event": "start"}
+{"run_id": "B-treesum-opus-3", "ended": "2026-10-11T00:48:17+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.3077166}
+{"run_id": "A-treesum-haiku-3", "started": "2026-10-11T00:48:17+00:00", "event": "start"}
+{"run_id": "A-treesum-haiku-3", "ended": "2026-10-11T00:49:41+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.01633361}
+{"run_id": "A-treesum-sonnet-2", "started": "2026-10-11T00:49:42+00:00", "event": "start"}
+{"run_id": "A-treesum-sonnet-2", "ended": "2026-10-11T00:50:14+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.08957630000000001}
+{"run_id": "A-jarsrc-opus-2", "started": "2026-10-11T00:50:14+00:00", "event": "start"}
+{"run_id": "A-jarsrc-opus-2", "ended": "2026-10-11T00:51:55+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.3886836}
+{"run_id": "B-jsonpick-haiku-4", "started": "2026-10-11T00:51:56+00:00", "event": "start"}
+{"run_id": "B-jsonpick-haiku-4", "ended": "2026-10-11T00:55:16+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.04070655000000001}
+{"run_id": "B-treesum-opus-2", "started": "2026-10-11T00:55:22+00:00", "event": "start"}
+{"run_id": "B-jarsrc-sonnet-4", "started": "2026-10-11T00:55:22+00:00", "event": "start"}
+{"run_id": "A-treesum-opus-3", "started": "2026-10-11T00:55:22+00:00", "event": "start"}
+{"run_id": "A-jsonpick-haiku-2", "started": "2026-10-11T00:55:22+00:00", "event": "start"}
+{"run_id": "A-treesum-opus-3", "ended": "2026-10-11T00:56:12+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.21399400000000002}
+{"run_id": "B-jarsrc-haiku-1", "started": "2026-10-11T00:56:13+00:00", "event": "start"}
+{"run_id": "B-jarsrc-sonnet-4", "ended": "2026-10-11T00:56:27+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.16777340000000002}
+{"run_id": "B-logsum-haiku-4", "started": "2026-10-11T00:56:27+00:00", "event": "start"}
+{"run_id": "B-treesum-opus-2", "ended": "2026-10-11T00:56:48+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.3160114}
+{"run_id": "B-jsonpick-haiku-3", "started": "2026-10-11T00:56:49+00:00", "event": "start"}
+{"run_id": "A-jsonpick-haiku-2", "ended": "2026-10-11T00:57:20+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.02448347}
+{"run_id": "B-logsum-haiku-2", "started": "2026-10-11T00:57:20+00:00", "event": "start"}
+{"run_id": "B-logsum-haiku-4", "ended": "2026-10-11T00:59:06+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.03159283}
+{"run_id": "A-jarsrc-sonnet-2", "started": "2026-10-11T00:59:07+00:00", "event": "start"}
+{"run_id": "B-jarsrc-haiku-1", "ended": "2026-10-11T00:59:15+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.036793940000000004}
+{"run_id": "A-jarsrc-haiku-3", "started": "2026-10-11T00:59:16+00:00", "event": "start"}
+{"run_id": "B-logsum-haiku-2", "ended": "2026-10-11T00:59:35+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.02615799}
+{"run_id": "B-jsonpick-opus-4", "started": "2026-10-11T00:59:36+00:00", "event": "start"}
+{"run_id": "A-jarsrc-sonnet-2", "ended": "2026-10-11T00:59:53+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.12254739999999997}
+{"run_id": "B-jsonpick-sonnet-1", "started": "2026-10-11T00:59:54+00:00", "event": "start"}
+{"run_id": "B-jsonpick-haiku-3", "ended": "2026-10-11T01:00:40+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.04717359}
+{"run_id": "B-jarsrc-opus-1", "started": "2026-10-11T01:00:41+00:00", "event": "start"}
+{"run_id": "B-jsonpick-sonnet-1", "ended": "2026-10-11T01:00:53+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.1711483}
+{"run_id": "B-treesum-haiku-1", "started": "2026-10-11T01:00:54+00:00", "event": "start"}
+{"run_id": "A-jarsrc-haiku-3", "ended": "2026-10-11T01:01:10+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.022643999999999997}
+{"run_id": "A-jarsrc-opus-1", "started": "2026-10-11T01:01:10+00:00", "event": "start"}
+{"run_id": "B-jsonpick-opus-4", "ended": "2026-10-11T01:02:00+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.5577567999999999}
+{"run_id": "B-jarsrc-sonnet-3", "started": "2026-10-11T01:02:01+00:00", "event": "start"}
+{"run_id": "B-jarsrc-opus-1", "ended": "2026-10-11T01:02:51+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.48282620000000004}
+{"run_id": "B-treesum-sonnet-3", "started": "2026-10-11T01:02:52+00:00", "event": "start"}
+{"run_id": "B-jarsrc-sonnet-3", "ended": "2026-10-11T01:02:53+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.13751790000000003}
+{"run_id": "A-logsum-haiku-2", "started": "2026-10-11T01:02:54+00:00", "event": "start"}
+{"run_id": "B-treesum-haiku-1", "ended": "2026-10-11T01:03:07+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.02699758}
+{"run_id": "B-jarsrc-sonnet-2", "started": "2026-10-11T01:03:07+00:00", "event": "start"}
+{"run_id": "A-jarsrc-opus-1", "ended": "2026-10-11T01:03:23+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.38455760000000005}
+{"run_id": "A-jsonpick-opus-2", "started": "2026-10-11T01:03:24+00:00", "event": "start"}
+{"run_id": "B-treesum-sonnet-3", "ended": "2026-10-11T01:03:28+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.09238170000000001}
+{"run_id": "A-logsum-haiku-3", "started": "2026-10-11T01:03:29+00:00", "event": "start"}
+{"run_id": "B-jarsrc-sonnet-2", "ended": "2026-10-11T01:04:19+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.1846722}
+{"run_id": "B-jarsrc-haiku-2", "started": "2026-10-11T01:04:19+00:00", "event": "start"}
+{"run_id": "A-jsonpick-opus-2", "ended": "2026-10-11T01:04:53+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.346931}
+{"run_id": "A-logsum-opus-2", "started": "2026-10-11T01:04:54+00:00", "event": "start"}
+{"run_id": "A-logsum-haiku-2", "ended": "2026-10-11T01:04:57+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.023642100000000003}
+{"run_id": "B-treesum-haiku-4", "started": "2026-10-11T01:04:58+00:00", "event": "start"}
+{"run_id": "A-logsum-haiku-3", "ended": "2026-10-11T01:04:58+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.019399260000000005}
+{"run_id": "B-jarsrc-opus-3", "started": "2026-10-11T01:04:59+00:00", "event": "start"}
+{"run_id": "A-logsum-opus-2", "ended": "2026-10-11T01:05:57+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.24123039999999996}
+{"run_id": "B-logsum-sonnet-3", "started": "2026-10-11T01:05:57+00:00", "event": "start"}
+{"run_id": "B-logsum-sonnet-3", "ended": "2026-10-11T01:06:30+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.08985279999999998}
+{"run_id": "B-jsonpick-haiku-1", "started": "2026-10-11T01:06:31+00:00", "event": "start"}
+{"run_id": "B-jarsrc-opus-3", "ended": "2026-10-11T01:06:41+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.41529479999999996}
+{"run_id": "A-treesum-haiku-1", "started": "2026-10-11T01:06:42+00:00", "event": "start"}
+{"run_id": "B-treesum-haiku-4", "ended": "2026-10-11T01:06:50+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.0219776}
+{"run_id": "B-jarsrc-sonnet-1", "started": "2026-10-11T01:06:50+00:00", "event": "start"}
+{"run_id": "B-jarsrc-haiku-2", "ended": "2026-10-11T01:07:35+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.04328197}
+{"run_id": "B-jsonpick-sonnet-3", "started": "2026-10-11T01:07:39+00:00", "event": "start"}
+{"run_id": "B-jarsrc-sonnet-1", "ended": "2026-10-11T01:07:47+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.14519790000000002}
+{"run_id": "B-jsonpick-sonnet-2", "started": "2026-10-11T01:07:48+00:00", "event": "start"}
+{"run_id": "A-treesum-haiku-1", "ended": "2026-10-11T01:07:59+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.015787960000000004}
+{"run_id": "A-logsum-opus-3", "started": "2026-10-11T01:08:00+00:00", "event": "start"}
+{"run_id": "B-jsonpick-sonnet-3", "ended": "2026-10-11T01:08:32+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.14994700000000002}
+{"run_id": "B-treesum-sonnet-1", "started": "2026-10-11T01:08:33+00:00", "event": "start"}
+{"run_id": "B-jsonpick-sonnet-2", "ended": "2026-10-11T01:08:54+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.1770426}
+{"run_id": "A-treesum-sonnet-3", "started": "2026-10-11T01:08:54+00:00", "event": "start"}
+{"run_id": "B-treesum-sonnet-1", "ended": "2026-10-11T01:09:02+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.0819257}
+{"run_id": "B-jsonpick-haiku-2", "started": "2026-10-11T01:09:02+00:00", "event": "start"}
+{"run_id": "A-logsum-opus-3", "ended": "2026-10-11T01:09:06+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.239077}
+{"run_id": "B-treesum-haiku-2", "started": "2026-10-11T01:09:07+00:00", "event": "start"}
+{"run_id": "A-treesum-sonnet-3", "ended": "2026-10-11T01:09:18+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.06592909999999999}
+{"run_id": "B-treesum-sonnet-2", "started": "2026-10-11T01:09:18+00:00", "event": "start"}
+{"run_id": "B-jsonpick-haiku-1", "ended": "2026-10-11T01:09:40+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.03783478999999999}
+{"run_id": "B-treesum-sonnet-4", "started": "2026-10-11T01:09:41+00:00", "event": "start"}
+{"run_id": "B-treesum-sonnet-2", "ended": "2026-10-11T01:09:48+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.0814637}
+{"run_id": "A-treesum-haiku-2", "started": "2026-10-11T01:09:48+00:00", "event": "start"}
+{"run_id": "B-treesum-sonnet-4", "ended": "2026-10-11T01:10:11+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.08404969999999999}
+{"run_id": "A-jsonpick-haiku-1", "started": "2026-10-11T01:10:12+00:00", "event": "start"}
+{"run_id": "B-treesum-haiku-2", "ended": "2026-10-11T01:10:57+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.021957489999999993}
+{"run_id": "B-treesum-haiku-3", "started": "2026-10-11T01:10:59+00:00", "event": "start"}
+{"run_id": "A-treesum-haiku-2", "ended": "2026-10-11T01:11:08+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.016645319999999998}
+{"run_id": "A-jsonpick-opus-3", "started": "2026-10-11T01:11:08+00:00", "event": "start"}
+{"run_id": "A-jsonpick-haiku-1", "ended": "2026-10-11T01:11:47+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.017890529999999998}
+{"run_id": "A-jsonpick-sonnet-2", "started": "2026-10-11T01:11:47+00:00", "event": "start"}
+{"run_id": "B-jsonpick-haiku-2", "ended": "2026-10-11T01:12:21+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.039743980000000005}
+{"run_id": "B-jarsrc-haiku-3", "started": "2026-10-11T01:12:21+00:00", "event": "start"}
+{"run_id": "A-jsonpick-sonnet-2", "ended": "2026-10-11T01:12:28+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.10349219999999999}
+{"run_id": "B-jarsrc-opus-4", "started": "2026-10-11T01:12:28+00:00", "event": "start"}
+{"run_id": "A-jsonpick-opus-3", "ended": "2026-10-11T01:13:01+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.4471725999999999}
+{"run_id": "B-jarsrc-opus-2", "started": "2026-10-11T01:13:02+00:00", "event": "start"}
+{"run_id": "B-treesum-haiku-3", "ended": "2026-10-11T01:13:06+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.026852090000000002}
+{"run_id": "B-logsum-opus-2", "started": "2026-10-11T01:13:07+00:00", "event": "start"}
+{"run_id": "B-jarsrc-opus-4", "ended": "2026-10-11T01:14:16+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.4163226}
+{"run_id": "B-logsum-opus-3", "started": "2026-10-11T01:14:17+00:00", "event": "start"}
+{"run_id": "B-logsum-opus-2", "ended": "2026-10-11T01:14:27+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.30995399999999995}
+{"run_id": "A-jarsrc-haiku-1", "started": "2026-10-11T01:14:28+00:00", "event": "start"}
+{"run_id": "B-jarsrc-haiku-3", "ended": "2026-10-11T01:15:14+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.03721021}
+{"run_id": "A-logsum-sonnet-2", "started": "2026-10-11T01:15:15+00:00", "event": "start"}
+{"run_id": "B-jarsrc-opus-2", "ended": "2026-10-11T01:15:38+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.5649458}
+{"run_id": "B-logsum-haiku-3", "started": "2026-10-11T01:15:39+00:00", "event": "start"}
+{"run_id": "A-logsum-sonnet-2", "ended": "2026-10-11T01:15:42+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.0765567}
+{"run_id": "B-jsonpick-opus-1", "started": "2026-10-11T01:15:43+00:00", "event": "start"}
+{"run_id": "B-logsum-opus-3", "ended": "2026-10-11T01:15:43+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.3335668}
+{"run_id": "A-jsonpick-opus-1", "started": "2026-10-11T01:15:44+00:00", "event": "start"}
+{"run_id": "A-jarsrc-haiku-1", "ended": "2026-10-11T01:16:52+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.030199009999999995}
+{"run_id": "B-jsonpick-opus-2", "started": "2026-10-11T01:16:53+00:00", "event": "start"}
+{"run_id": "A-jsonpick-opus-1", "ended": "2026-10-11T01:16:54+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.2726326}
+{"run_id": "B-jsonpick-sonnet-4", "started": "2026-10-11T01:16:54+00:00", "event": "start"}
+{"run_id": "B-jsonpick-opus-2", "ended": "2026-10-11T01:17:24+00:00", "event": "end", "limit_hits": ["usage_or_rate_limit"], "cost_usd": 0.09900139999999999}
+{"run_id": "B-jsonpick-opus-2", "event": "superseded", "time": "2026-10-11T01:17:24+00:00", "reason": "D9: hit a usage or rate limit; retried", "kept_as": "B-jsonpick-opus-2.limit-1791681444"}
+{"run_id": "B-jsonpick-opus-2", "started": "2026-10-11T01:17:24+00:00", "event": "start"}
+{"run_id": "B-jsonpick-opus-2", "ended": "2026-10-11T01:17:26+00:00", "event": "end", "limit_hits": ["usage_or_rate_limit"], "cost_usd": 0}
+{"run_id": "B-jsonpick-opus-2", "event": "superseded", "time": "2026-10-11T01:17:26+00:00", "reason": "D9: hit a usage or rate limit; retried", "kept_as": "B-jsonpick-opus-2.limit-1791681446"}
+{"run_id": "B-jsonpick-opus-1", "ended": "2026-10-11T01:17:30+00:00", "event": "end", "limit_hits": ["usage_or_rate_limit"], "cost_usd": 0.4278234}
+{"run_id": "B-jsonpick-opus-1", "event": "superseded", "time": "2026-10-11T01:17:30+00:00", "reason": "D9: hit a usage or rate limit; retried", "kept_as": "B-jsonpick-opus-1.limit-1791681450"}
+{"run_id": "B-jsonpick-sonnet-4", "ended": "2026-10-11T01:17:39+00:00", "event": "end", "limit_hits": ["usage_or_rate_limit"], "cost_usd": 0.10036170000000001}
+{"run_id": "B-jsonpick-sonnet-4", "event": "superseded", "time": "2026-10-11T01:17:39+00:00", "reason": "D9: hit a usage or rate limit; retried", "kept_as": "B-jsonpick-sonnet-4.limit-1791681459"}
+{"run_id": "B-logsum-haiku-3", "ended": "2026-10-11T01:17:47+00:00", "event": "end", "limit_hits": ["usage_or_rate_limit"], "cost_usd": 0.02138701}
+{"run_id": "B-logsum-haiku-3", "event": "superseded", "time": "2026-10-11T01:17:47+00:00", "reason": "D9: hit a usage or rate limit; retried", "kept_as": "B-logsum-haiku-3.limit-1791681467"}
+{"run_id": "B-jsonpick-opus-2", "started": "2026-10-11T13:56:51+00:00", "event": "start"}
+{"run_id": "B-jsonpick-opus-1", "started": "2026-10-11T13:56:51+00:00", "event": "start"}
+{"run_id": "B-logsum-haiku-3", "started": "2026-10-11T13:56:51+00:00", "event": "start"}
+{"run_id": "B-jsonpick-sonnet-4", "started": "2026-10-11T13:56:51+00:00", "event": "start"}
+{"run_id": "B-jsonpick-sonnet-4", "ended": "2026-10-11T13:57:49+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.1626037}
+{"run_id": "A-jarsrc-sonnet-3", "started": "2026-10-11T13:57:50+00:00", "event": "start"}
+{"run_id": "A-jarsrc-sonnet-3", "ended": "2026-10-11T13:58:38+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.118611}
+{"run_id": "B-logsum-sonnet-2", "started": "2026-10-11T13:58:39+00:00", "event": "start"}
+{"run_id": "B-jsonpick-opus-1", "ended": "2026-10-11T13:58:55+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.481833}
+{"run_id": "B-jsonpick-opus-3", "started": "2026-10-11T13:58:55+00:00", "event": "start"}
+{"run_id": "B-jsonpick-opus-2", "ended": "2026-10-11T13:59:05+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.5094706000000001}
+{"run_id": "A-logsum-sonnet-3", "started": "2026-10-11T13:59:05+00:00", "event": "start"}
+{"run_id": "B-logsum-sonnet-2", "ended": "2026-10-11T13:59:15+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.1010573}
+{"run_id": "B-jarsrc-haiku-4", "started": "2026-10-11T13:59:16+00:00", "event": "start"}
+{"run_id": "B-logsum-haiku-3", "ended": "2026-10-11T13:59:18+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.029300439999999997}
+{"run_id": "B-treesum-opus-1", "started": "2026-10-11T13:59:19+00:00", "event": "start"}
+{"run_id": "A-logsum-sonnet-3", "ended": "2026-10-11T13:59:32+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.0762966}
+{"run_id": "A-jarsrc-haiku-2", "started": "2026-10-11T13:59:33+00:00", "event": "start"}
+{"run_id": "B-treesum-opus-1", "ended": "2026-10-11T14:00:30+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.2875092}
+{"run_id": "A-jsonpick-haiku-3", "started": "2026-10-11T14:00:31+00:00", "event": "start"}
+{"run_id": "B-jsonpick-opus-3", "ended": "2026-10-11T14:01:05+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.49737699999999996}
+{"run_id": "A-jarsrc-opus-3", "started": "2026-10-11T14:01:05+00:00", "event": "start"}
+{"run_id": "A-jarsrc-haiku-2", "ended": "2026-10-11T14:01:49+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.030071560000000004}
+{"run_id": "A-treesum-sonnet-1", "started": "2026-10-11T14:01:49+00:00", "event": "start"}
+{"run_id": "B-jarsrc-haiku-4", "ended": "2026-10-11T14:02:12+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.038071289999999994}
+{"run_id": "A-jsonpick-sonnet-3", "started": "2026-10-11T14:02:13+00:00", "event": "start"}
+{"run_id": "A-treesum-sonnet-1", "ended": "2026-10-11T14:02:14+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.071191}
+{"run_id": "B-logsum-sonnet-4", "started": "2026-10-11T14:02:14+00:00", "event": "start"}
+{"run_id": "A-jsonpick-haiku-3", "ended": "2026-10-11T14:02:34+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.023583180000000002}
+{"run_id": "B-logsum-opus-4", "started": "2026-10-11T14:02:34+00:00", "event": "start"}
+{"run_id": "B-logsum-sonnet-4", "ended": "2026-10-11T14:02:49+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.096167}
+{"run_id": "A-jsonpick-sonnet-1", "started": "2026-10-11T14:02:49+00:00", "event": "start"}
+{"run_id": "A-jsonpick-sonnet-3", "ended": "2026-10-11T14:02:53+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.10099260000000002}
+{"run_id": "B-treesum-opus-4", "started": "2026-10-11T14:02:53+00:00", "event": "start"}
+{"run_id": "A-jarsrc-opus-3", "ended": "2026-10-11T14:02:59+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.435609}
+{"run_id": "A-treesum-opus-1", "started": "2026-10-11T14:02:59+00:00", "event": "start"}
+{"run_id": "A-jsonpick-sonnet-1", "ended": "2026-10-11T14:03:35+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.11454349999999998}
+{"run_id": "A-treesum-opus-2", "started": "2026-10-11T14:03:36+00:00", "event": "start"}
+{"run_id": "B-logsum-opus-4", "ended": "2026-10-11T14:03:48+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.29447979999999996}
+{"run_id": "A-treesum-opus-1", "ended": "2026-10-11T14:03:52+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.213269}
+{"run_id": "B-treesum-opus-4", "ended": "2026-10-11T14:03:57+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.2497444}
+{"run_id": "A-treesum-opus-2", "ended": "2026-10-11T14:04:23+00:00", "event": "end", "limit_hits": [], "cost_usd": 0.1854798}

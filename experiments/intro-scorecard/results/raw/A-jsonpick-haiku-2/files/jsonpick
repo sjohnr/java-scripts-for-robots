@@ -1,0 +1,413 @@
+#!/usr/bin/env python3
+"""jsonpick: extract a value by path from JSON. See SPEC.md."""
+
+import decimal
+import json
+import re
+import sys
+
+EXIT_OK = 0
+EXIT_NOT_FOUND = 1
+EXIT_USAGE = 2
+
+MAX_NESTING = 1000
+
+HELP = """usage: jsonpick PATH [FILE] [--shape] [--depth N]
+
+Extract the value at PATH from a JSON document.
+
+positional arguments:
+  PATH          path to the value, e.g. a.b[0].c; "." or "" is the whole document
+  FILE          JSON file to read; omitted or "-" reads stdin
+
+options:
+  --shape       print a type/array-length summary of the value at PATH
+  --depth N     number of levels to describe with --shape (default 2)
+  -h, --help    show this help and exit
+"""
+
+
+class JSONError(Exception):
+    pass
+
+
+class JNum:
+    """A JSON number, kept as its source literal and canonicalized on output."""
+
+    __slots__ = ("text",)
+
+    def __init__(self, text):
+        self.text = text
+
+
+def fail(code, message):
+    sys.stderr.buffer.write(message.encode("utf-8", "backslashreplace") + b"\n")
+    sys.exit(code)
+
+
+def write_stdout(text):
+    sys.stdout.buffer.write((text + "\n").encode("utf-8"))
+
+
+# --- JSON parsing -----------------------------------------------------------
+
+_NUMBER = re.compile(r"-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?")
+_HEX = "0123456789abcdefABCDEF"
+_SIMPLE_ESCAPES = {'"': '"', "\\": "\\", "/": "/", "b": "\b", "f": "\f",
+                   "n": "\n", "r": "\r", "t": "\t"}
+
+
+class Parser:
+    def __init__(self, text):
+        self.s = text
+        self.n = len(text)
+        self.i = 0
+
+    def error(self, msg, pos=None):
+        pos = self.i if pos is None else pos
+        line = self.s.count("\n", 0, pos) + 1
+        col = pos - (self.s.rfind("\n", 0, pos) + 1) + 1
+        raise JSONError(f"{msg} at line {line} column {col}")
+
+    def peek(self):
+        return self.s[self.i] if self.i < self.n else ""
+
+    def skip_ws(self):
+        while self.i < self.n and self.s[self.i] in " \t\r\n":
+            self.i += 1
+
+    def parse(self):
+        self.skip_ws()
+        value = self.value(0)
+        self.skip_ws()
+        if self.i < self.n:
+            self.error("unexpected content after JSON value")
+        return value
+
+    def value(self, depth):
+        c = self.peek()
+        if c == "":
+            self.error("unexpected end of input")
+        if c == "{":
+            return self.obj(depth + 1)
+        if c == "[":
+            return self.arr(depth + 1)
+        if c == '"':
+            return self.string()
+        if c == "t":
+            return self.literal("true", True)
+        if c == "f":
+            return self.literal("false", False)
+        if c == "n":
+            return self.literal("null", None)
+        if c == "-" or c in "0123456789":
+            return self.number()
+        self.error(f"unexpected character {c!r}")
+
+    def literal(self, word, result):
+        if not self.s.startswith(word, self.i):
+            self.error(f"invalid literal, expected {word!r}")
+        self.i += len(word)
+        return result
+
+    def number(self):
+        m = _NUMBER.match(self.s, self.i)
+        if m is None:
+            self.error("invalid number")
+        self.i = m.end()
+        return JNum(m.group(0))
+
+    def string(self):
+        self.i += 1  # opening quote
+        out = []
+        while True:
+            if self.i >= self.n:
+                self.error("unterminated string")
+            c = self.s[self.i]
+            if c == '"':
+                self.i += 1
+                return "".join(out)
+            if c == "\\":
+                out.append(self.escape())
+            elif ord(c) < 0x20:
+                self.error("control character in string")
+            else:
+                out.append(c)
+                self.i += 1
+
+    def hex4(self, at):
+        digits = self.s[at:at + 4]
+        if len(digits) != 4 or any(ch not in _HEX for ch in digits):
+            self.error("invalid \\u escape", at)
+        return int(digits, 16)
+
+    def escape(self):
+        start = self.i
+        e = self.s[self.i + 1:self.i + 2]
+        if e in _SIMPLE_ESCAPES:
+            self.i += 2
+            return _SIMPLE_ESCAPES[e]
+        if e != "u":
+            self.error("invalid escape sequence", start)
+        code = self.hex4(self.i + 2)
+        self.i += 6
+        if 0xDC00 <= code <= 0xDFFF:
+            self.error("lone low surrogate in string", start)
+        if 0xD800 <= code <= 0xDBFF:
+            if self.s[self.i:self.i + 2] == "\\u":
+                low = self.hex4(self.i + 2)
+                if 0xDC00 <= low <= 0xDFFF:
+                    self.i += 6
+                    return chr(0x10000 + ((code - 0xD800) << 10) + (low - 0xDC00))
+            self.error("lone high surrogate in string", start)
+        return chr(code)
+
+    def arr(self, depth):
+        if depth > MAX_NESTING:
+            self.error("nesting too deep")
+        self.i += 1  # [
+        items = []
+        self.skip_ws()
+        if self.peek() == "]":
+            self.i += 1
+            return items
+        while True:
+            self.skip_ws()
+            items.append(self.value(depth))
+            self.skip_ws()
+            c = self.peek()
+            if c == ",":
+                self.i += 1
+            elif c == "]":
+                self.i += 1
+                return items
+            else:
+                self.error("expected ',' or ']'")
+
+    def obj(self, depth):
+        if depth > MAX_NESTING:
+            self.error("nesting too deep")
+        self.i += 1  # {
+        members = {}
+        self.skip_ws()
+        if self.peek() == "}":
+            self.i += 1
+            return members
+        while True:
+            self.skip_ws()
+            if self.peek() != '"':
+                self.error("expected string key")
+            key = self.string()
+            self.skip_ws()
+            if self.peek() != ":":
+                self.error("expected ':' after key")
+            self.i += 1
+            self.skip_ws()
+            members[key] = self.value(depth)
+            self.skip_ws()
+            c = self.peek()
+            if c == ",":
+                self.i += 1
+            elif c == "}":
+                self.i += 1
+                return members
+            else:
+                self.error("expected ',' or '}'")
+
+
+def parse_json(data):
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError as e:
+        fail(EXIT_USAGE, f"error: invalid JSON: invalid UTF-8 at byte offset {e.start}")
+    try:
+        return Parser(text).parse()
+    except JSONError as e:
+        fail(EXIT_USAGE, f"error: invalid JSON: {e}")
+    except RecursionError:
+        fail(EXIT_USAGE, "error: invalid JSON: nesting too deep")
+
+
+# --- Path handling ----------------------------------------------------------
+
+def parse_path(path):
+    """Return a list of str keys and int indexes, or None if the path is malformed."""
+    if path in ("", "."):
+        return []
+    segs = []
+    n = len(path)
+    pos = 0
+    if path[0] == ".":
+        pos = 1
+        if pos < n and path[pos] == ".":
+            return None
+    while pos < n:
+        c = path[pos]
+        if c == "[":
+            close = path.find("]", pos)
+            if close == -1:
+                return None
+            digits = path[pos + 1:close]
+            if not digits or any(ch not in "0123456789" for ch in digits):
+                return None
+            segs.append(int(digits))
+            pos = close + 1
+            if pos < n and path[pos] not in ".[":
+                return None
+        elif c == ".":
+            pos += 1
+            if pos >= n or path[pos] in ".[":
+                return None
+        else:
+            end = pos
+            while end < n and path[end] not in ".[":
+                end += 1
+            segs.append(path[pos:end])
+            pos = end
+    return segs
+
+
+MISSING = object()
+
+
+def resolve(node, segs):
+    for seg in segs:
+        if isinstance(seg, int):
+            if not isinstance(node, list) or seg >= len(node):
+                return MISSING
+            node = node[seg]
+        else:
+            if not isinstance(node, dict) or seg not in node:
+                return MISSING
+            node = node[seg]
+    return node
+
+
+# --- Output -----------------------------------------------------------------
+
+def canonical_number(literal):
+    with decimal.localcontext() as ctx:
+        ctx.prec = len(literal) + 5
+        ctx.Emax = decimal.MAX_EMAX
+        ctx.Emin = decimal.MIN_EMIN
+        value = decimal.Decimal(literal).normalize()
+    if value == 0:
+        return "0"
+    return format(value, "f")
+
+
+def dumps(v):
+    """Compact JSON with document key order and canonical numbers."""
+    if v is None:
+        return "null"
+    if v is True:
+        return "true"
+    if v is False:
+        return "false"
+    if isinstance(v, JNum):
+        return canonical_number(v.text)
+    if isinstance(v, str):
+        return json.dumps(v, ensure_ascii=False)
+    if isinstance(v, list):
+        return "[" + ",".join(dumps(x) for x in v) + "]"
+    return "{" + ",".join(json.dumps(k, ensure_ascii=False) + ":" + dumps(x)
+                          for k, x in v.items()) + "}"
+
+
+def render(v):
+    return v if isinstance(v, str) else dumps(v)
+
+
+def describe(v, budget):
+    if v is None:
+        return "null"
+    if v is True or v is False:
+        return "boolean"
+    if isinstance(v, JNum):
+        return "number"
+    if isinstance(v, str):
+        return "string"
+    if isinstance(v, list):
+        if not v:
+            return "array[0]"
+        if budget == 0:
+            return f"array[{len(v)}]"
+        return f"array[{len(v)}] of {describe(v[0], budget - 1)}"
+    if budget == 0:
+        return f"object{{{len(v)} keys}}"
+    if not v:
+        return "object{}"
+    members = ", ".join(f"{k}: {describe(x, budget - 1)}" for k, x in v.items())
+    return "object{" + members + "}"
+
+
+# --- Command line -----------------------------------------------------------
+
+def parse_args(argv):
+    opts = {"shape": False, "depth": 2}
+    positional = []
+    only_positional = False
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if only_positional or arg == "-" or not arg.startswith("-"):
+            positional.append(arg)
+        elif arg == "--":
+            only_positional = True
+        elif arg in ("-h", "--help"):
+            sys.stdout.buffer.write(HELP.encode("utf-8"))
+            sys.exit(EXIT_OK)
+        elif arg == "--shape":
+            opts["shape"] = True
+        else:
+            name, eq, value = arg.partition("=")
+            if name != "--depth":
+                fail(EXIT_USAGE, f"unknown flag: {name}")
+            if not eq:
+                if i >= len(argv):
+                    fail(EXIT_USAGE, "error: --depth requires a value")
+                value = argv[i]
+                i += 1
+            if not re.fullmatch(r"[0-9]+", value):
+                fail(EXIT_USAGE, f"error: invalid --depth value: {value}")
+            opts["depth"] = int(value)
+
+    if not positional:
+        fail(EXIT_USAGE, "error: missing PATH argument (see --help)")
+    if len(positional) > 2:
+        fail(EXIT_USAGE, f"error: unexpected argument: {positional[2]}")
+    path = positional[0]
+    source = positional[1] if len(positional) > 1 else "-"
+    return path, source, opts
+
+
+def read_source(source):
+    if source == "-":
+        return sys.stdin.buffer.read()
+    try:
+        with open(source, "rb") as f:
+            return f.read()
+    except OSError as e:
+        fail(EXIT_USAGE, f"error: cannot read {source}: {e.strerror}")
+
+
+def main(argv):
+    sys.setrecursionlimit(10000)
+    path, source, opts = parse_args(argv)
+    segs = parse_path(path)
+    if segs is None:
+        fail(EXIT_USAGE, f"error: invalid path: {path}")
+    doc = parse_json(read_source(source))
+    node = resolve(doc, segs)
+    if node is MISSING:
+        fail(EXIT_NOT_FOUND, f"error: path not found: {path}")
+    if opts["shape"]:
+        write_stdout(describe(node, opts["depth"]))
+    else:
+        write_stdout(render(node))
+    return EXIT_OK
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

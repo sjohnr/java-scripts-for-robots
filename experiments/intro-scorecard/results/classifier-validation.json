@@ -1,0 +1,602 @@
+[
+  {
+    "case": "bakeoff logsum classic (javac + java)",
+    "run_command": "javac -d build/classes Tool.java && java -cp build/classes Tool",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "javac + java",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "javac + java",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff treesum classic (jar)",
+    "run_command": "java -jar build/treesum.jar",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "jar",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "jar",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff jarsrc compact",
+    "run_command": "java Tool.java",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "source launch",
+      "source": "compact source",
+      "imports": "module imports",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "source launch",
+      "wrapper_dim": "none",
+      "source": "compact source",
+      "imports": "module imports",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff jarsrc multi",
+    "run_command": "java Tool.java",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "source launch",
+      "source": "classic",
+      "imports": "classic",
+      "files": "multiple files",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "source launch",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "multiple files",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff noop compact",
+    "run_command": "java Tool.java",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "source launch",
+      "source": "compact source",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "source launch",
+      "wrapper_dim": "none",
+      "source": "compact source",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff jsonpick jbang (jbang cmd)",
+    "run_command": "jbang tool.java",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "JBang",
+      "launch": "source launch",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "one or more",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "JBang",
+      "launch": "source launch",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "one or more",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff jsonpick jbang (shebang)",
+    "run_command": "./tool.java",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "JBang",
+      "launch": "shebang",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "one or more",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "JBang",
+      "launch": "shebang",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "one or more",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff jarsrc shebang",
+    "run_command": "./jarsrc",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "shebang",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "shebang",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff jarsrc AOT cache",
+    "run_command": "java -XX:AOTCache=build/jarsrc.aot -jar build/jarsrc.jar",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "jar",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "AOT cache"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "jar",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "AOT cache"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff jarsrc native image",
+    "run_command": "./jarsrc-native",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "native binary",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "GraalVM native image"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "native binary",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "GraalVM native image"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff logsum go",
+    "run_command": "./logsum",
+    "expected": {
+      "language": "go"
+    },
+    "got": {
+      "language": "go"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff logsum python",
+    "run_command": "python3 tool.py",
+    "expected": {
+      "language": "python"
+    },
+    "got": {
+      "language": "python"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "bakeoff logsum node",
+    "run_command": "node tool.mjs",
+    "expected": {
+      "language": "javascript"
+    },
+    "got": {
+      "language": "javascript"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 02 go",
+    "run_command": "./javaw",
+    "expected": {
+      "language": "go"
+    },
+    "got": {
+      "language": "go"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 03 javascript",
+    "run_command": "./javaw",
+    "expected": {
+      "language": "javascript"
+    },
+    "got": {
+      "language": "javascript"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 04 python",
+    "run_command": "./javaw",
+    "expected": {
+      "language": "python"
+    },
+    "got": {
+      "language": "python"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 05 java (sh wrapper)",
+    "run_command": "./javaw",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "wrapper script",
+      "build": "none",
+      "launch": "source launch",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "source launch",
+      "wrapper_dim": "wrapper script",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 05 java (java cmd)",
+    "run_command": "java Javaw.java",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "source launch",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "source launch",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 06 jbang",
+    "run_command": "jbang javaw.java",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "JBang",
+      "launch": "source launch",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "JBang",
+      "launch": "source launch",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 11 compact (java cmd)",
+    "run_command": "java Javaw.java",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "source launch",
+      "source": "compact source",
+      "imports": "module imports",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "source launch",
+      "wrapper_dim": "none",
+      "source": "compact source",
+      "imports": "module imports",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 11 compact (sh wrapper)",
+    "run_command": "./javaw",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "wrapper script",
+      "build": "none",
+      "launch": "source launch",
+      "source": "compact source",
+      "imports": "module imports",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "source launch",
+      "wrapper_dim": "wrapper script",
+      "source": "compact source",
+      "imports": "module imports",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 12 shebang",
+    "run_command": "./javaw",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "shebang",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "shebang",
+      "wrapper_dim": "none",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 13 detailed",
+    "run_command": "./javaw",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "shebang",
+      "source": "compact source",
+      "imports": "module imports",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "shebang",
+      "wrapper_dim": "none",
+      "source": "compact source",
+      "imports": "module imports",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  },
+  {
+    "case": "javaw 13 detailed v2",
+    "run_command": "./javaw",
+    "expected": {
+      "language": "java",
+      "wrapper_dim": "none",
+      "build": "none",
+      "launch": "shebang",
+      "source": "compact source",
+      "imports": "module imports",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "got": {
+      "language": "java",
+      "build": "none",
+      "launch": "shebang",
+      "wrapper_dim": "none",
+      "source": "compact source",
+      "imports": "module imports",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none"
+    },
+    "match": true,
+    "diffs": {},
+    "flags": []
+  }
+]

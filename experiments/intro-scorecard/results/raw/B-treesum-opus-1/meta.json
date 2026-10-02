@@ -1,0 +1,122 @@
+{
+  "run_id": "B-treesum-opus-1",
+  "condition": "B",
+  "task": "treesum",
+  "model_alias": "opus",
+  "model_id": "claude-opus-5-5",
+  "model_ids_used": [
+    "claude-opus-5-5"
+  ],
+  "replicate": 1,
+  "seed": 20261010,
+  "seed_position": 72,
+  "started": "2026-10-11T13:59:19+00:00",
+  "ended": "2026-10-11T14:00:28+00:00",
+  "wall_s": 69.2,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 5,
+  "duration_ms": 68534,
+  "duration_api_ms": 67033,
+  "tokens": {
+    "input_tokens": 10,
+    "output_tokens": 8157,
+    "cache_creation_input_tokens": 13288,
+    "cache_read_input_tokens": 90126
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 8157,
+      "cacheReadInputTokens": 90126,
+      "cacheCreationInputTokens": 13288,
+      "webSearchRequests": 0,
+      "costUSD": 0.2875092,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1625,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.2875092,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "d9e6faa2-2b35-4924-85b3-785974f90a24",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-opus-1",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.2,
+    "cost_usd": 0.012568199999999974,
+    "cost_usd_cumulative_reported": 0.3000774,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 6,
+      "cache_creation_input_tokens": 941,
+      "cache_read_input_tokens": 24561
+    },
+    "subtype": "success",
+    "reply": "./treesum",
+    "run_command": "./treesum",
+    "limit_hits": []
+  },
+  "run_command": "./treesum",
+  "excluded_from_copy": [
+    {
+      "path": "build-out/treesum.jar",
+      "bytes": 11300
+    },
+    {
+      "path": "build-out/classes/treesum/Main$Options.class",
+      "bytes": 434
+    },
+    {
+      "path": "build-out/classes/treesum/Main$ExtStats.class",
+      "bytes": 394
+    },
+    {
+      "path": "build-out/classes/treesum/Main$FileEntry.class",
+      "bytes": 1321
+    },
+    {
+      "path": "build-out/classes/treesum/Main$Scan$Pending.class",
+      "bytes": 1424
+    },
+    {
+      "path": "build-out/classes/treesum/Main$Scan.class",
+      "bytes": 4939
+    },
+    {
+      "path": "build-out/classes/treesum/Main.class",
+      "bytes": 9981
+    },
+    {
+      "path": "build-out/classes/treesum/Main$UsageException.class",
+      "bytes": 316
+    }
+  ],
+  "prompt": "Build the `treesum` command-line tool described in SPEC.md. Write it in Java.",
+  "claude_args": [
+    "-p",
+    "Build the `treesum` command-line tool described in SPEC.md. Write it in Java.",
+    "--model",
+    "opus",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

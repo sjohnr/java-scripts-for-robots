@@ -1,0 +1,4 @@
+#!/bin/sh
+# Runs logsum; build first with ./build.sh.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+exec java -jar "$DIR/build/logsum.jar" "$@"

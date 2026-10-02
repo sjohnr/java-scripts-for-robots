@@ -1,0 +1,3 @@
+#!/bin/sh
+# Launches build/jarsrc.jar; run ./build.sh first.
+exec java -jar "$(dirname "$0")/build/jarsrc.jar" "$@"

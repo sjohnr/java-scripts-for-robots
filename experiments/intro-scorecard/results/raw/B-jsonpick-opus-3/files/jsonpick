@@ -1,0 +1,11 @@
+#!/bin/sh
+# Launcher for jsonpick: compiles src/JsonPick.java on first use (or when it changes).
+set -e
+DIR=$(cd "$(dirname "$0")" && pwd)
+SRC="$DIR/src/JsonPick.java"
+OUT="$DIR/build"
+if [ ! -f "$OUT/JsonPick.class" ] || [ "$SRC" -nt "$OUT/JsonPick.class" ]; then
+  mkdir -p "$OUT"
+  javac -encoding UTF-8 -d "$OUT" "$SRC" >&2
+fi
+exec java -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xshare:auto -cp "$OUT" JsonPick "$@"

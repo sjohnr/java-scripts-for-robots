@@ -1,0 +1,141 @@
+{
+  "duration_api_ms": 32185,
+  "stop_reason": "end_turn",
+  "session_id": "11146a91-481d-437e-a263-4bbc0e7fc06c",
+  "total_cost_usd": 0.0754046,
+  "usage": {
+    "input_tokens": 74,
+    "cache_creation_input_tokens": 15044,
+    "cache_read_input_tokens": 221676,
+    "output_tokens": 4615,
+    "output_tokens_details": {
+      "thinking_tokens": 1077
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 15044,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 8,
+        "output_tokens": 300,
+        "cache_read_input_tokens": 28316,
+        "cache_creation_input_tokens": 276,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 276
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 74,
+      "outputTokens": 4615,
+      "cacheReadInputTokens": 221676,
+      "cacheCreationInputTokens": 15044,
+      "webSearchRequests": 0,
+      "costUSD": 0.0754046,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 1077,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 10,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Excellent! The implementation is working correctly. \n\n**Language: Python**  \n**Filename: `logsum`**\n\nThe implementation:\n- Reads from stdin or a file specified as an argument\n- Parses log lines in the format `TIMESTAMP LEVEL MESSAGE`\n- Supports `--since`, `--level`, and `--top` filters\n- Groups ERROR messages after normalizing (replacing UUIDs, hex blobs, and numbers with placeholders)\n- Outputs summary statistics as specified\n- Handles all error cases with appropriate exit codes and error messages\n- Includes a working `--help` command\n- Uses hand-rolled argument parsing with no external dependencies (besides Python stdlib)",
+  "ttft_ms": 1387,
+  "type": "result",
+  "duration_ms": 33014,
+  "uuid": "c9fcfdcd-b645-4929-8936-1446d8bdfeec",
+  "ttft_stream_ms": 880,
+  "time_to_request_ms": 32,
+  "first_content_frame_ms": 880,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "_wall_s_measured": 33.57570719718933,
+  "condition": "B-a",
+  "trial": 1,
+  "trial_dir": "/private/tmp/claude-501/-Users-sriesenberg-git-ai-cli-experiment/4fe6da76-a1a1-4877-9783-663ab9fb5447/scratchpad/agent-B-9qohnal4",
+  "conformance": {
+    "lang_detected": "script",
+    "passed": 8,
+    "total": 8,
+    "details": [
+      {
+        "case": "logsum-basic",
+        "ok": true
+      },
+      {
+        "case": "logsum-top3",
+        "ok": true
+      },
+      {
+        "case": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "case": "logsum-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-missing-file",
+        "ok": true
+      }
+    ]
+  },
+  "success": true
+}

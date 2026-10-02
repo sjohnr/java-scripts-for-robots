@@ -1,0 +1,4 @@
+#!/bin/sh
+d="$(cd "$(dirname "$0")" && pwd)"
+[ -f "$d/build/jarsrc.jar" ] || "$d/build.sh" >&2
+exec java -jar "$d/build/jarsrc.jar" "$@"

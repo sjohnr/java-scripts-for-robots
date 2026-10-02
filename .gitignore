@@ -54,3 +54,8 @@ out/
 
 # Ignore local files
 .generate
+results/superceded
+*.jsonl
+
+# Machine/toolchain details recorded by experiments
+experiments/*/results/environment.md

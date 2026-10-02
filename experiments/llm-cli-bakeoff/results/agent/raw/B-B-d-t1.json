@@ -1,0 +1,239 @@
+{
+  "first_turn": {
+    "duration_api_ms": 43698,
+    "stop_reason": "end_turn",
+    "session_id": "8abc89a7-2020-4451-9b1f-1b0c180f5c39",
+    "total_cost_usd": 0.08744400000000001,
+    "usage": {
+      "input_tokens": 66,
+      "cache_creation_input_tokens": 16961,
+      "cache_read_input_tokens": 203260,
+      "output_tokens": 6626,
+      "output_tokens_details": {
+        "thinking_tokens": 3089
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 16961,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 8,
+          "output_tokens": 425,
+          "cache_read_input_tokens": 30065,
+          "cache_creation_input_tokens": 444,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 444
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    },
+    "modelUsage": {
+      "claude-haiku-4-5-20251001": {
+        "inputTokens": 66,
+        "outputTokens": 6626,
+        "cacheReadInputTokens": 203260,
+        "cacheCreationInputTokens": 16961,
+        "webSearchRequests": 0,
+        "costUSD": 0.08744400000000001,
+        "contextWindow": 200000,
+        "maxOutputTokens": 32000,
+        "thinkingTokens": 3089,
+        "canonicalModel": "claude-haiku-4-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": [],
+    "terminal_reason": "completed",
+    "fast_mode_state": "off",
+    "fast_mode_disabled_reason": "sdk_opt_in_required",
+    "subagent_stats": {
+      "spawned": 0,
+      "requested": {
+        "background": 0,
+        "foreground": 0,
+        "unset": 0
+      },
+      "started_in_background": 0,
+      "max_depth": 0,
+      "spawned_by_subagents": 0,
+      "completed": 0,
+      "failed": 0,
+      "killed": {
+        "parent": 0,
+        "user": 0,
+        "system": 0
+      },
+      "refused": {
+        "depth_limit": 0,
+        "concurrency_limit": 0,
+        "budget": 0
+      },
+      "by_type": {}
+    },
+    "is_error": false,
+    "num_turns": 9,
+    "subtype": "success",
+    "api_error_status": null,
+    "result": "Perfect! The implementation is complete and tested. Here's what I created:\n\n**Language:** Python 3  \n**Filename:** `logsum`\n\nThe CLI successfully:\n- Parses log lines in the format `TIMESTAMP LEVEL MESSAGE`\n- Filters by `--since` timestamp and `--level`\n- Normalizes messages for grouping (UUIDs, hex blobs, digits)\n- Groups ERROR messages by normalized form while displaying the original first-seen message\n- Outputs statistics in the exact format specified\n- Handles all edge cases (invalid timestamps, unknown levels, missing files)\n- Uses proper exit codes (0 for success, 2 for errors)\n- Supports reading from stdin or files with `--help` documentation",
+    "ttft_ms": 1329,
+    "type": "result",
+    "duration_ms": 44490,
+    "uuid": "3a40d9ce-e783-4632-abe1-a9f54dda51ed",
+    "ttft_stream_ms": 914,
+    "time_to_request_ms": 33,
+    "first_content_frame_ms": 914,
+    "queued_turn_count": 0,
+    "result_index": 0,
+    "_wall_s_measured": 44.99237370491028
+  },
+  "duration_api_ms": 79411,
+  "stop_reason": "end_turn",
+  "session_id": "8abc89a7-2020-4451-9b1f-1b0c180f5c39",
+  "total_cost_usd": 0.24374440000000003,
+  "usage": {
+    "input_tokens": 50,
+    "cache_creation_input_tokens": 7625,
+    "cache_read_input_tokens": 210014,
+    "output_tokens": 6511,
+    "output_tokens_details": {
+      "thinking_tokens": 2897
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 7625,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 8,
+        "output_tokens": 164,
+        "cache_read_input_tokens": 37747,
+        "cache_creation_input_tokens": 387,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 387
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 116,
+      "outputTokens": 13137,
+      "thinkingTokens": 5986,
+      "cacheReadInputTokens": 413274,
+      "cacheCreationInputTokens": 24586,
+      "webSearchRequests": 0,
+      "costUSD": 0.1563004,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 15,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Done! The Java version is complete and tested. It produces identical output to the Python version.\n\n**Language:** Java  \n**Filename:** `logsum.java`\n\nThe implementation compiles to `logsum.class` and runs with `java logsum`. It maintains all the same functionality as the Python version with proper:\n- Argument parsing (no frameworks)\n- Timestamp validation using `LocalDateTime`\n- Regex-based message normalization\n- Error grouping and sorting\n- File I/O with proper error handling\n- Exit codes and error messages per spec",
+  "ttft_ms": 14144,
+  "type": "result",
+  "duration_ms": 36458,
+  "uuid": "23d438c3-d77d-4a91-9132-8d0bc410c7d0",
+  "ttft_stream_ms": 839,
+  "time_to_request_ms": 36,
+  "first_content_frame_ms": 840,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "_wall_s_measured": 82.08977556228638,
+  "condition": "B-d",
+  "trial": 1,
+  "trial_dir": "/private/tmp/claude-501/-Users-sriesenberg-git-ai-cli-experiment/4fe6da76-a1a1-4877-9783-663ab9fb5447/scratchpad/agent-B-h0lc95ga",
+  "conformance": {
+    "lang_detected": "java",
+    "passed": 8,
+    "total": 8,
+    "details": [
+      {
+        "case": "logsum-basic",
+        "ok": true
+      },
+      {
+        "case": "logsum-top3",
+        "ok": true
+      },
+      {
+        "case": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "case": "logsum-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-missing-file",
+        "ok": true
+      }
+    ]
+  },
+  "success": true
+}

@@ -1,0 +1,198 @@
+#!/usr/bin/env python3
+"""treesum: compact repo overview. See SPEC.md for the output contract."""
+
+import os
+import re
+import sys
+
+IGNORED_DIRS = frozenset({
+    ".git", "node_modules", "build", ".gradle", "target", "dist",
+    ".venv", "__pycache__", ".idea", ".vscode",
+})
+
+READ_CHUNK = 1 << 16
+
+HELP = """\
+usage: treesum [DIR] [--top N] [--ext-limit M]
+
+Print a compact overview of the tree under DIR.
+
+arguments:
+  DIR              directory to summarize (default: .)
+
+options:
+  --top N          number of largest files to list (default: 10)
+  --ext-limit M    number of distinct extensions shown in the by-extension
+                   table (default: 20); the rest are folded into an
+                   "other" row
+  --help           show this message and exit
+
+ignored directory names (anywhere in the tree, never descended into):
+  .git, node_modules, build, .gradle, target, dist, .venv, __pycache__,
+  .idea, .vscode
+symbolic links are not followed and are not counted
+"""
+
+
+class UsageError(Exception):
+    """Bad command line. The message is written to stderr as-is."""
+
+
+def parse_count(flag, text):
+    if not re.fullmatch(r"[0-9]+", text):
+        raise UsageError(f"error: invalid value for {flag}: {text}")
+    return int(text)
+
+
+def parse_args(argv):
+    """Return (directory, top, ext_limit), or None when --help was given."""
+    positionals = []
+    top = 10
+    ext_limit = 20
+    options_done = False
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if options_done or arg == "-" or not arg.startswith("-"):
+            positionals.append(arg)
+            continue
+        if arg == "--":
+            options_done = True
+            continue
+        if arg == "--help":
+            return None
+        name, sep, value = arg.partition("=")
+        if name not in ("--top", "--ext-limit"):
+            raise UsageError(f"unknown flag: {name}")
+        if not sep:
+            if i >= len(argv):
+                raise UsageError(f"error: {name} requires a value")
+            value = argv[i]
+            i += 1
+        number = parse_count(name, value)
+        if name == "--top":
+            top = number
+        else:
+            ext_limit = number
+    if len(positionals) > 1:
+        raise UsageError(f"error: unexpected argument: {positionals[1]}")
+    directory = positionals[0] if positionals else "."
+    return directory, top, ext_limit
+
+
+def extension(name):
+    dot = name.rfind(".")
+    if dot <= 0:
+        return ""
+    return name[dot + 1:].lower()
+
+
+def count_loc(path):
+    """Newline bytes, plus one if the file is non-empty and lacks a final newline."""
+    newlines = 0
+    last = b""
+    with open(path, "rb") as f:
+        while chunk := f.read(READ_CHUNK):
+            newlines += chunk.count(b"\n")
+            last = chunk[-1:]
+    if last and last != b"\n":
+        newlines += 1
+    return newlines
+
+
+def scan(root):
+    """Walk root. Returns (dir_count, files) with files as (rel, ext, size, loc).
+
+    Raises OSError only if root itself cannot be listed. Unreadable entries
+    below root are skipped.
+    """
+    dirs = 0
+    files = []
+    pending = [(root, "")]
+    while pending:
+        path, prefix = pending.pop()
+        try:
+            with os.scandir(path) as it:
+                entries = list(it)
+        except OSError:
+            if path == root:
+                raise
+            continue
+        for entry in entries:
+            try:
+                if entry.is_dir(follow_symlinks=False):
+                    if entry.name in IGNORED_DIRS:
+                        continue
+                    dirs += 1
+                    pending.append((entry.path, prefix + entry.name + "/"))
+                elif entry.is_file(follow_symlinks=False):
+                    size = entry.stat(follow_symlinks=False).st_size
+                    loc = count_loc(entry.path)
+                    files.append((prefix + entry.name, extension(entry.name), size, loc))
+            except OSError:
+                continue
+    return dirs, files
+
+
+def build_report(dirs, files, top, ext_limit):
+    by_ext = {}
+    for _, ext, _, loc in files:
+        count, total = by_ext.get(ext, (0, 0))
+        by_ext[ext] = (count + 1, total + loc)
+
+    rows = sorted(by_ext.items(), key=lambda item: (-item[1][0], item[0]))
+    other = None
+    if len(rows) > ext_limit:
+        folded = rows[ext_limit:]
+        rows = rows[:ext_limit]
+        other = (
+            sum(count for _, (count, _) in folded),
+            sum(loc for _, (_, loc) in folded),
+        )
+
+    lines = [
+        f"files: {len(files)}",
+        f"dirs: {dirs}",
+        "by extension:",
+    ]
+    for ext, (count, loc) in rows:
+        lines.append(f"  {ext or '(none)'}  files={count} loc={loc}")
+    if other is not None:
+        lines.append(f"  other  files={other[0]} loc={other[1]}")
+
+    lines.append("largest files:")
+    ranked = sorted(files, key=lambda f: (-f[2], f[0]))
+    for rel, _, size, _ in ranked[:top]:
+        lines.append(f"  {size} {rel}")
+    return "\n".join(lines) + "\n"
+
+
+def emit(stream, text):
+    stream.buffer.write(text.encode("utf-8", "surrogateescape"))
+    stream.buffer.flush()
+
+
+def main(argv):
+    try:
+        parsed = parse_args(argv)
+    except UsageError as err:
+        emit(sys.stderr, f"{err}\n")
+        return 2
+    if parsed is None:
+        emit(sys.stdout, HELP)
+        return 0
+
+    directory, top, ext_limit = parsed
+    try:
+        dirs, files = scan(directory)
+    except OSError:
+        emit(sys.stderr, f"error: cannot read {directory}\n")
+        return 2
+
+    emit(sys.stdout, build_report(dirs, files, top, ext_limit))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

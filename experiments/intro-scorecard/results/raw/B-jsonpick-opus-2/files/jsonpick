@@ -1,0 +1,9 @@
+#!/bin/sh
+# Launcher for jsonpick. Builds on first use if needed.
+dir="$(cd "$(dirname "$0")" && pwd)"
+if [ ! -f "$dir/build/JsonPick.class" ] || [ "$dir/src/JsonPick.java" -nt "$dir/build/JsonPick.class" ]; then
+    "$dir/build.sh" >/dev/null 2>&1 || { echo "error: failed to build jsonpick (run ./build.sh)" >&2; exit 2; }
+fi
+# These would make the JVM print "Picked up ..." notices on stderr.
+unset JAVA_TOOL_OPTIONS _JAVA_OPTIONS JDK_JAVA_OPTIONS
+exec java -Xshare:auto -XX:TieredStopAtLevel=1 -cp "$dir/build" JsonPick "$@"

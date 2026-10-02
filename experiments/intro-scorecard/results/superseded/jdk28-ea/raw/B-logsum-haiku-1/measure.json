@@ -1,0 +1,255 @@
+{
+  "run_id": "B-logsum-haiku-1",
+  "measured": "2026-10-10T19:16:24",
+  "run_command_reported": "bin/logsum",
+  "run_command_used": "bin/logsum",
+  "run_command_notes": [],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "../build/logsum.jar",
+    "launch": {
+      "lang": "java",
+      "entry": "../build/logsum.jar",
+      "launch": "jar",
+      "wrapper": "bin/logsum",
+      "evidence": [
+        "run command program: bin/logsum",
+        "wrapper script bin/logsum runs: java -jar \"../build/logsum.jar\" "
+      ],
+      "flags": [],
+      "java_opts": "",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 115,
+      "java": 12328
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "Make",
+      "launch": "jar",
+      "source": "classic",
+      "imports": "classic",
+      "files": "multiple files",
+      "dependencies": "none",
+      "optimization": "none",
+      "combination": "Make / jar",
+      "java_file_count": 5,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "bin/logsum",
+      "evidence": {
+        "build": [
+          "Makefile"
+        ],
+        "launch": [
+          "run command program: bin/logsum",
+          "wrapper script bin/logsum runs: java -jar \"../build/logsum.jar\" ",
+          "run command program: java",
+          "via wrapper script bin/logsum"
+        ],
+        "source": [
+          "src/logsum/Main.java:35 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/logsum/Level.java",
+          "src/logsum/LineParser.java",
+          "src/logsum/LineReader.java",
+          "src/logsum/Main.java",
+          "src/logsum/Summary.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "Makefile",
+      "kind": "build",
+      "lang": null,
+      "bytes": 427
+    },
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 4442
+    },
+    {
+      "path": "bin/logsum",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 115
+    },
+    {
+      "path": "src/logsum/Level.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 438
+    },
+    {
+      "path": "src/logsum/LineParser.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 2579
+    },
+    {
+      "path": "src/logsum/LineReader.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 900
+    },
+    {
+      "path": "src/logsum/Main.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 5050
+    },
+    {
+      "path": "src/logsum/Summary.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 3361
+    },
+    {
+      "path": "test/run-tests.sh",
+      "kind": "test",
+      "lang": "shell",
+      "bytes": 4153
+    },
+    {
+      "path": "test/fixtures/basic.log",
+      "kind": "data",
+      "lang": null,
+      "bytes": 617
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "logsum-basic",
+        "ok": true
+      },
+      {
+        "id": "logsum-top3",
+        "ok": true
+      },
+      {
+        "id": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "id": "logsum-since",
+        "ok": true
+      },
+      {
+        "id": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "id": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "id": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "id": "logsum-missing-file",
+        "ok": true
+      },
+      {
+        "id": "logsum-help",
+        "ok": true
+      }
+    ],
+    "passed": 9,
+    "total": 9,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.04,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 2727,
+    "build_file_tokens": 144,
+    "test_tokens": 1538,
+    "source_files": [
+      "bin/logsum",
+      "src/logsum/Level.java",
+      "src/logsum/LineParser.java",
+      "src/logsum/LineReader.java",
+      "src/logsum/Main.java",
+      "src/logsum/Summary.java"
+    ],
+    "build_files": [
+      "Makefile"
+    ],
+    "source_bytes": 12443,
+    "build_file_bytes": 427
+  },
+  "disk": {
+    "source_and_build_files_bytes": 12870,
+    "build_output_bytes": 28183,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 41053
+  },
+  "startup": {
+    "command": "bin/logsum --help",
+    "median_ms": 34.184226540000004,
+    "mean_ms": 34.61395871441862,
+    "stddev_ms": 2.906044021490558,
+    "min_ms": 32.58566454,
+    "runs": 86,
+    "load_avg_before": 1.66796875,
+    "load_avg_after": 1.6943359375
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-1/opt/app.jar",
+    "main": "logsum.Main",
+    "training": {
+      "args": [
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/logsum.log"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-1/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-1/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-1/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 13713408,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-1/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-1/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-1/opt/app.jar logsum.Main --help",
+      "median_ms": 26.23879248,
+      "mean_ms": 26.1894651207767,
+      "stddev_ms": 0.7740111059946595,
+      "min_ms": 24.36758348,
+      "runs": 103,
+      "load_avg_before": 1.6943359375,
+      "load_avg_after": 1.6943359375
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-1/opt/app.jar logsum.Main --help",
+      "median_ms": 30.095964459999998,
+      "mean_ms": 30.370587771827964,
+      "stddev_ms": 1.4062725951397645,
+      "min_ms": 28.24913046,
+      "runs": 93,
+      "load_avg_before": 1.6943359375,
+      "load_avg_after": 1.638671875
+    }
+  }
+}

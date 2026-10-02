@@ -1,0 +1,94 @@
+{
+  "run_id": "B-logsum-sonnet-4",
+  "condition": "B",
+  "task": "logsum",
+  "model_alias": "sonnet",
+  "model_id": "claude-sonnet-5-5",
+  "model_ids_used": [
+    "claude-sonnet-5-5"
+  ],
+  "replicate": 4,
+  "seed": 20261010,
+  "seed_position": 79,
+  "started": "2026-10-11T14:02:14+00:00",
+  "ended": "2026-10-11T14:02:46+00:00",
+  "wall_s": 32.2,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 4,
+  "duration_ms": 31601,
+  "duration_api_ms": 30672,
+  "tokens": {
+    "input_tokens": 6,
+    "output_tokens": 5030,
+    "cache_creation_input_tokens": 10352,
+    "cache_read_input_tokens": 44470
+  },
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 6,
+      "outputTokens": 5030,
+      "cacheReadInputTokens": 44470,
+      "cacheCreationInputTokens": 10352,
+      "webSearchRequests": 0,
+      "costUSD": 0.096167,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 726,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.096167,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "e8a16096-9957-45bf-9eae-1a5ca2727c36",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-sonnet-4",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.2,
+    "cost_usd": 0.0050604999999999956,
+    "cost_usd_cumulative_reported": 0.1012275,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 39,
+      "cache_creation_input_tokens": 614,
+      "cache_read_input_tokens": 22105
+    },
+    "subtype": "success",
+    "reply": "`./logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]`",
+    "run_command": "./logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]",
+    "limit_hits": []
+  },
+  "run_command": "./logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]",
+  "excluded_from_copy": [
+    {
+      "path": "out",
+      "bytes": 9348
+    }
+  ],
+  "prompt": "Build the `logsum` command-line tool described in SPEC.md. Write it in Java.",
+  "claude_args": [
+    "-p",
+    "Build the `logsum` command-line tool described in SPEC.md. Write it in Java.",
+    "--model",
+    "sonnet",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

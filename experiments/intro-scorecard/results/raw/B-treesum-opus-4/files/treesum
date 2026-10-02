@@ -1,0 +1,8 @@
+#!/bin/sh
+# Launcher for treesum; builds the jar on first use if missing.
+here="$(cd "$(dirname "$0")" && pwd)"
+jar="$here/build-out/treesum.jar"
+if [ ! -f "$jar" ]; then
+  "$here/build.sh" >/dev/null 2>&1 || { echo "error: build failed; run $here/build.sh" >&2; exit 2; }
+fi
+exec java -Xshare:auto -XX:TieredStopAtLevel=1 -jar "$jar" "$@"

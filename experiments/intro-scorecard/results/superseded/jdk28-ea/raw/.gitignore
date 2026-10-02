@@ -1,0 +1,3 @@
+# The repository ignores bin/, build/ and out/; keep generated files that live there.
+!bin/
+!out/

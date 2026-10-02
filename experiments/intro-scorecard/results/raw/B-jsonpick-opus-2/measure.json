@@ -1,0 +1,223 @@
+{
+  "run_id": "B-jsonpick-opus-2",
+  "measured": "2026-10-11T08:59:05",
+  "run_command_reported": "./jsonpick",
+  "run_command_used": "./jsonpick",
+  "run_command_notes": [],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "JsonPick",
+    "launch": {
+      "lang": "java",
+      "entry": "JsonPick",
+      "launch": "javac + java",
+      "wrapper": "jsonpick",
+      "evidence": [
+        "run command program: ./jsonpick",
+        "wrapper script jsonpick runs: java -Xshare:auto -XX:TieredStopAtLevel=1 -cp \"build\" JsonPick "
+      ],
+      "flags": [],
+      "java_opts": "-Xshare:auto -XX:TieredStopAtLevel=1 -cp build",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 529,
+      "java": 25681
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "build script",
+      "launch": "javac + java",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "build script / javac + java",
+      "java_file_count": 1,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "jsonpick",
+      "evidence": {
+        "build": [
+          "build.sh"
+        ],
+        "launch": [
+          "run command program: ./jsonpick",
+          "wrapper script jsonpick runs: java -Xshare:auto -XX:TieredStopAtLevel=1 -cp \"build\" JsonPick ",
+          "run command program: java",
+          "via wrapper script jsonpick"
+        ],
+        "source": [
+          "src/JsonPick.java:57 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/JsonPick.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 3310
+    },
+    {
+      "path": "build.sh",
+      "kind": "build",
+      "lang": null,
+      "bytes": 149
+    },
+    {
+      "path": "jsonpick",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 529
+    },
+    {
+      "path": "src/JsonPick.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 25681
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jsonpick-string",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-number",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-array-index",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-object",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-root",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-shape",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-shape-depth0",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-notfound",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-stdin",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-bad-json",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-help",
+        "ok": true
+      }
+    ],
+    "passed": 11,
+    "total": 11,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.03,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 5626,
+    "build_file_tokens": 50,
+    "test_tokens": 0,
+    "source_files": [
+      "jsonpick",
+      "src/JsonPick.java"
+    ],
+    "build_files": [
+      "build.sh"
+    ],
+    "source_bytes": 26210,
+    "build_file_bytes": 149
+  },
+  "disk": {
+    "source_and_build_files_bytes": 26359,
+    "build_output_bytes": 22294,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 48653
+  },
+  "load_avg_at_bench_start": 2.27978515625,
+  "startup": {
+    "command": "./jsonpick --help",
+    "median_ms": 25.845072600000005,
+    "mean_ms": 25.981454144642857,
+    "stddev_ms": 0.780927684065046,
+    "min_ms": 24.5289691,
+    "runs": 112,
+    "load_avg_before": 2.27978515625,
+    "load_avg_after": 2.25732421875
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-opus-2/opt/app.jar",
+    "main": "JsonPick",
+    "training": {
+      "args": [
+        "items[0]",
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/jsonpick.json"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-opus-2/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-opus-2/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-opus-2/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 11649024,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-opus-2/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-opus-2/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-opus-2/opt/app.jar JsonPick --help",
+      "median_ms": 20.0232649,
+      "mean_ms": 21.258176600000002,
+      "stddev_ms": 5.541371004044913,
+      "min_ms": 18.4019944,
+      "runs": 50,
+      "load_avg_before": 2.25732421875,
+      "load_avg_after": 2.25732421875
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-opus-2/opt/app.jar JsonPick --help",
+      "median_ms": 23.47718446,
+      "mean_ms": 23.61831401737705,
+      "stddev_ms": 0.7299579567358688,
+      "min_ms": 22.54339296,
+      "runs": 122,
+      "load_avg_before": 2.25732421875,
+      "load_avg_after": 2.31640625
+    }
+  },
+  "benchmarked": "2026-10-11T09:08:52"
+}

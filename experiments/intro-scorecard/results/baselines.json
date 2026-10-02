@@ -1,0 +1,1017 @@
+{
+  "logsum/go": {
+    "task": "logsum",
+    "language": "go",
+    "run_command": "./logsum",
+    "conformance": {
+      "cases": [
+        {
+          "id": "logsum-basic",
+          "ok": true
+        },
+        {
+          "id": "logsum-top3",
+          "ok": true
+        },
+        {
+          "id": "logsum-level-error",
+          "ok": true
+        },
+        {
+          "id": "logsum-since",
+          "ok": true
+        },
+        {
+          "id": "logsum-stdin",
+          "ok": true
+        },
+        {
+          "id": "logsum-bad-level",
+          "ok": true
+        },
+        {
+          "id": "logsum-bad-since",
+          "ok": true
+        },
+        {
+          "id": "logsum-missing-file",
+          "ok": true
+        },
+        {
+          "id": "logsum-help",
+          "ok": true
+        }
+      ],
+      "passed": 9,
+      "total": 9,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.18,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 2052,
+      "build_file_tokens": 14,
+      "test_tokens": 0,
+      "source_files": [
+        "main.go"
+      ],
+      "build_files": [
+        "go.mod"
+      ],
+      "source_bytes": 6086,
+      "build_file_bytes": 33
+    },
+    "disk": {
+      "source_and_build_files_bytes": 6119,
+      "build_output_bytes": 3043074,
+      "cache_bytes": 0,
+      "cache_breakdown": {
+        "gocache": 41860818
+      },
+      "runtime_excluded_bytes": 41860818,
+      "total_bytes": 3049193
+    },
+    "startup": {
+      "command": "./logsum --help",
+      "median_ms": 1.5454278800000003,
+      "mean_ms": 1.650806337753019,
+      "stddev_ms": 0.7610186776167988,
+      "min_ms": 1.4278858800000003,
+      "runs": 1077,
+      "load_avg_before": 2.697265625,
+      "load_avg_after": 2.64111328125
+    }
+  },
+  "logsum/python": {
+    "task": "logsum",
+    "language": "python",
+    "run_command": "python3 tool.py",
+    "conformance": {
+      "cases": [
+        {
+          "id": "logsum-basic",
+          "ok": true
+        },
+        {
+          "id": "logsum-top3",
+          "ok": true
+        },
+        {
+          "id": "logsum-level-error",
+          "ok": true
+        },
+        {
+          "id": "logsum-since",
+          "ok": true
+        },
+        {
+          "id": "logsum-stdin",
+          "ok": true
+        },
+        {
+          "id": "logsum-bad-level",
+          "ok": true
+        },
+        {
+          "id": "logsum-bad-since",
+          "ok": true
+        },
+        {
+          "id": "logsum-missing-file",
+          "ok": true
+        },
+        {
+          "id": "logsum-help",
+          "ok": true
+        }
+      ],
+      "passed": 9,
+      "total": 9,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.02,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 1485,
+      "build_file_tokens": 0,
+      "test_tokens": 0,
+      "source_files": [
+        "tool.py"
+      ],
+      "build_files": [],
+      "source_bytes": 5581,
+      "build_file_bytes": 0
+    },
+    "disk": {
+      "source_and_build_files_bytes": 5581,
+      "build_output_bytes": 0,
+      "cache_bytes": 0,
+      "cache_breakdown": {},
+      "runtime_excluded_bytes": 0,
+      "total_bytes": 5581
+    },
+    "startup": {
+      "command": "python3 tool.py --help",
+      "median_ms": 12.98207646,
+      "mean_ms": 13.025932974423073,
+      "stddev_ms": 0.21284851937123336,
+      "min_ms": 12.630554960000001,
+      "runs": 208,
+      "load_avg_before": 2.64111328125,
+      "load_avg_after": 2.64111328125
+    }
+  },
+  "logsum/node": {
+    "task": "logsum",
+    "language": "javascript",
+    "run_command": "node tool.mjs",
+    "conformance": {
+      "cases": [
+        {
+          "id": "logsum-basic",
+          "ok": true
+        },
+        {
+          "id": "logsum-top3",
+          "ok": true
+        },
+        {
+          "id": "logsum-level-error",
+          "ok": true
+        },
+        {
+          "id": "logsum-since",
+          "ok": true
+        },
+        {
+          "id": "logsum-stdin",
+          "ok": true
+        },
+        {
+          "id": "logsum-bad-level",
+          "ok": true
+        },
+        {
+          "id": "logsum-bad-since",
+          "ok": true
+        },
+        {
+          "id": "logsum-missing-file",
+          "ok": true
+        },
+        {
+          "id": "logsum-help",
+          "ok": true
+        }
+      ],
+      "passed": 9,
+      "total": 9,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.03,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 1341,
+      "build_file_tokens": 0,
+      "test_tokens": 0,
+      "source_files": [
+        "tool.mjs"
+      ],
+      "build_files": [],
+      "source_bytes": 4465,
+      "build_file_bytes": 0
+    },
+    "disk": {
+      "source_and_build_files_bytes": 4465,
+      "build_output_bytes": 0,
+      "cache_bytes": 0,
+      "cache_breakdown": {},
+      "runtime_excluded_bytes": 0,
+      "total_bytes": 4465
+    },
+    "startup": {
+      "command": "node tool.mjs --help",
+      "median_ms": 20.6764954,
+      "mean_ms": 20.720823341176477,
+      "stddev_ms": 0.5992029517108449,
+      "min_ms": 19.1085154,
+      "runs": 136,
+      "load_avg_before": 2.64111328125,
+      "load_avg_after": 2.74951171875
+    }
+  },
+  "treesum/go": {
+    "task": "treesum",
+    "language": "go",
+    "run_command": "./treesum",
+    "conformance": {
+      "cases": [
+        {
+          "id": "treesum-basic",
+          "ok": true
+        },
+        {
+          "id": "treesum-top3",
+          "ok": true
+        },
+        {
+          "id": "treesum-extlimit",
+          "ok": true
+        },
+        {
+          "id": "treesum-missing-dir",
+          "ok": true
+        },
+        {
+          "id": "treesum-help",
+          "ok": true
+        }
+      ],
+      "passed": 5,
+      "total": 5,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.14,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 1899,
+      "build_file_tokens": 15,
+      "test_tokens": 0,
+      "source_files": [
+        "main.go"
+      ],
+      "build_files": [
+        "go.mod"
+      ],
+      "source_bytes": 5907,
+      "build_file_bytes": 34
+    },
+    "disk": {
+      "source_and_build_files_bytes": 5941,
+      "build_output_bytes": 2553282,
+      "cache_bytes": 0,
+      "cache_breakdown": {
+        "gocache": 39647485
+      },
+      "runtime_excluded_bytes": 39647485,
+      "total_bytes": 2559223
+    },
+    "startup": {
+      "command": "./treesum --help",
+      "median_ms": 1.3533853200000001,
+      "mean_ms": 1.3760043248309186,
+      "stddev_ms": 0.18085002395041994,
+      "min_ms": 1.2411773199999998,
+      "runs": 1035,
+      "load_avg_before": 2.74951171875,
+      "load_avg_after": 2.76953125
+    }
+  },
+  "treesum/python": {
+    "task": "treesum",
+    "language": "python",
+    "run_command": "python3 tool.py",
+    "conformance": {
+      "cases": [
+        {
+          "id": "treesum-basic",
+          "ok": true
+        },
+        {
+          "id": "treesum-top3",
+          "ok": true
+        },
+        {
+          "id": "treesum-extlimit",
+          "ok": true
+        },
+        {
+          "id": "treesum-missing-dir",
+          "ok": true
+        },
+        {
+          "id": "treesum-help",
+          "ok": true
+        }
+      ],
+      "passed": 5,
+      "total": 5,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.02,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 1393,
+      "build_file_tokens": 0,
+      "test_tokens": 0,
+      "source_files": [
+        "tool.py"
+      ],
+      "build_files": [],
+      "source_bytes": 5390,
+      "build_file_bytes": 0
+    },
+    "disk": {
+      "source_and_build_files_bytes": 5390,
+      "build_output_bytes": 0,
+      "cache_bytes": 0,
+      "cache_breakdown": {},
+      "runtime_excluded_bytes": 0,
+      "total_bytes": 5390
+    },
+    "startup": {
+      "command": "python3 tool.py --help",
+      "median_ms": 13.02994482,
+      "mean_ms": 13.59605808666666,
+      "stddev_ms": 2.6918487463899514,
+      "min_ms": 12.53892482,
+      "runs": 210,
+      "load_avg_before": 2.76953125,
+      "load_avg_after": 2.70751953125
+    }
+  },
+  "treesum/node": {
+    "task": "treesum",
+    "language": "javascript",
+    "run_command": "node tool.mjs",
+    "conformance": {
+      "cases": [
+        {
+          "id": "treesum-basic",
+          "ok": true
+        },
+        {
+          "id": "treesum-top3",
+          "ok": true
+        },
+        {
+          "id": "treesum-extlimit",
+          "ok": true
+        },
+        {
+          "id": "treesum-missing-dir",
+          "ok": true
+        },
+        {
+          "id": "treesum-help",
+          "ok": true
+        }
+      ],
+      "passed": 5,
+      "total": 5,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.02,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 1409,
+      "build_file_tokens": 0,
+      "test_tokens": 0,
+      "source_files": [
+        "tool.mjs"
+      ],
+      "build_files": [],
+      "source_bytes": 4629,
+      "build_file_bytes": 0
+    },
+    "disk": {
+      "source_and_build_files_bytes": 4629,
+      "build_output_bytes": 0,
+      "cache_bytes": 0,
+      "cache_breakdown": {},
+      "runtime_excluded_bytes": 0,
+      "total_bytes": 4629
+    },
+    "startup": {
+      "command": "node tool.mjs --help",
+      "median_ms": 20.722814380000003,
+      "mean_ms": 20.754209068888894,
+      "stddev_ms": 0.3858746485057742,
+      "min_ms": 19.711897380000003,
+      "runs": 135,
+      "load_avg_before": 2.70751953125,
+      "load_avg_after": 2.70751953125
+    }
+  },
+  "jsonpick/go": {
+    "task": "jsonpick",
+    "language": "go",
+    "run_command": "./jsonpick",
+    "conformance": {
+      "cases": [
+        {
+          "id": "jsonpick-string",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-number",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-array-index",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-object",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-root",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-shape",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-shape-depth0",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-notfound",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-stdin",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-bad-json",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-help",
+          "ok": true
+        }
+      ],
+      "passed": 11,
+      "total": 11,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.14,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 4455,
+      "build_file_tokens": 14,
+      "test_tokens": 0,
+      "source_files": [
+        "main.go",
+        "path.go",
+        "value.go"
+      ],
+      "build_files": [
+        "go.mod"
+      ],
+      "source_bytes": 13518,
+      "build_file_bytes": 35
+    },
+    "disk": {
+      "source_and_build_files_bytes": 13553,
+      "build_output_bytes": 3818194,
+      "cache_bytes": 0,
+      "cache_breakdown": {
+        "gocache": 47829047
+      },
+      "runtime_excluded_bytes": 47829047,
+      "total_bytes": 3831747
+    },
+    "startup": {
+      "command": "./jsonpick --help",
+      "median_ms": 1.4557160200000003,
+      "mean_ms": 1.482074606073502,
+      "stddev_ms": 0.13407326419348298,
+      "min_ms": 1.3186120200000004,
+      "runs": 1034,
+      "load_avg_before": 2.970703125,
+      "load_avg_after": 2.970703125
+    }
+  },
+  "jsonpick/python": {
+    "task": "jsonpick",
+    "language": "python",
+    "run_command": "python3 tool.py",
+    "conformance": {
+      "cases": [
+        {
+          "id": "jsonpick-string",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-number",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-array-index",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-object",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-root",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-shape",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-shape-depth0",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-notfound",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-stdin",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-bad-json",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-help",
+          "ok": true
+        }
+      ],
+      "passed": 11,
+      "total": 11,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.02,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 1630,
+      "build_file_tokens": 0,
+      "test_tokens": 0,
+      "source_files": [
+        "tool.py"
+      ],
+      "build_files": [],
+      "source_bytes": 6545,
+      "build_file_bytes": 0
+    },
+    "disk": {
+      "source_and_build_files_bytes": 6545,
+      "build_output_bytes": 0,
+      "cache_bytes": 0,
+      "cache_breakdown": {},
+      "runtime_excluded_bytes": 0,
+      "total_bytes": 6545
+    },
+    "startup": {
+      "command": "python3 tool.py --help",
+      "median_ms": 13.888871300000002,
+      "mean_ms": 13.922270518750004,
+      "stddev_ms": 0.1798673451217469,
+      "min_ms": 13.610704300000002,
+      "runs": 192,
+      "load_avg_before": 2.970703125,
+      "load_avg_after": 2.8125
+    }
+  },
+  "jsonpick/node": {
+    "task": "jsonpick",
+    "language": "javascript",
+    "run_command": "node tool.mjs",
+    "conformance": {
+      "cases": [
+        {
+          "id": "jsonpick-string",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-number",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-array-index",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-object",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-root",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-shape",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-shape-depth0",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-notfound",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-stdin",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-bad-json",
+          "ok": true
+        },
+        {
+          "id": "jsonpick-help",
+          "ok": true
+        }
+      ],
+      "passed": 11,
+      "total": 11,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.03,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 1519,
+      "build_file_tokens": 0,
+      "test_tokens": 0,
+      "source_files": [
+        "tool.mjs"
+      ],
+      "build_files": [],
+      "source_bytes": 5192,
+      "build_file_bytes": 0
+    },
+    "disk": {
+      "source_and_build_files_bytes": 5192,
+      "build_output_bytes": 0,
+      "cache_bytes": 0,
+      "cache_breakdown": {},
+      "runtime_excluded_bytes": 0,
+      "total_bytes": 5192
+    },
+    "startup": {
+      "command": "node tool.mjs --help",
+      "median_ms": 20.6687768,
+      "mean_ms": 20.89413228571429,
+      "stddev_ms": 1.740809492039485,
+      "min_ms": 19.1968808,
+      "runs": 140,
+      "load_avg_before": 2.8125,
+      "load_avg_after": 2.8271484375
+    }
+  },
+  "jarsrc/go": {
+    "task": "jarsrc",
+    "language": "go",
+    "run_command": "./jarsrc",
+    "conformance": {
+      "cases": [
+        {
+          "id": "jarsrc-find-exact",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-find-glob-star",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-find-glob-doublestar",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-find-notfound",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-highest-version",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-lines",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-lines-out-of-range",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-notfound",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-ls-ga",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-ls-gav-notfound",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-help",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-unknown-flag",
+          "ok": true
+        }
+      ],
+      "passed": 12,
+      "total": 12,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.14,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 3492,
+      "build_file_tokens": 15,
+      "test_tokens": 0,
+      "source_files": [
+        "main.go",
+        "version.go"
+      ],
+      "build_files": [
+        "go.mod"
+      ],
+      "source_bytes": 11126,
+      "build_file_bytes": 33
+    },
+    "disk": {
+      "source_and_build_files_bytes": 11159,
+      "build_output_bytes": 3437602,
+      "cache_bytes": 0,
+      "cache_breakdown": {
+        "gocache": 47979384
+      },
+      "runtime_excluded_bytes": 47979384,
+      "total_bytes": 3448761
+    },
+    "startup": {
+      "command": "./jarsrc --help",
+      "median_ms": 1.5199275200000004,
+      "mean_ms": 1.5552721830434808,
+      "stddev_ms": 0.19389568288545878,
+      "min_ms": 1.3614060200000007,
+      "runs": 1012,
+      "load_avg_before": 2.8271484375,
+      "load_avg_after": 3.1611328125
+    }
+  },
+  "jarsrc/python": {
+    "task": "jarsrc",
+    "language": "python",
+    "run_command": "python3 tool.py",
+    "conformance": {
+      "cases": [
+        {
+          "id": "jarsrc-find-exact",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-find-glob-star",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-find-glob-doublestar",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-find-notfound",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-highest-version",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-lines",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-lines-out-of-range",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-notfound",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-ls-ga",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-ls-gav-notfound",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-help",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-unknown-flag",
+          "ok": true
+        }
+      ],
+      "passed": 12,
+      "total": 12,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.03,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 2741,
+      "build_file_tokens": 0,
+      "test_tokens": 0,
+      "source_files": [
+        "tool.py"
+      ],
+      "build_files": [],
+      "source_bytes": 10573,
+      "build_file_bytes": 0
+    },
+    "disk": {
+      "source_and_build_files_bytes": 10573,
+      "build_output_bytes": 0,
+      "cache_bytes": 0,
+      "cache_breakdown": {},
+      "runtime_excluded_bytes": 0,
+      "total_bytes": 10573
+    },
+    "startup": {
+      "command": "python3 tool.py --help",
+      "median_ms": 19.451368900000002,
+      "mean_ms": 20.18315858027212,
+      "stddev_ms": 2.382393878959737,
+      "min_ms": 18.384451900000002,
+      "runs": 147,
+      "load_avg_before": 3.1611328125,
+      "load_avg_after": 3.1611328125
+    }
+  },
+  "jarsrc/node": {
+    "task": "jarsrc",
+    "language": "javascript",
+    "run_command": "node tool.mjs",
+    "conformance": {
+      "cases": [
+        {
+          "id": "jarsrc-find-exact",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-find-glob-star",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-find-glob-doublestar",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-find-notfound",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-highest-version",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-lines",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-lines-out-of-range",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-cat-notfound",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-ls-ga",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-ls-gav-notfound",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-help",
+          "ok": true
+        },
+        {
+          "id": "jarsrc-unknown-flag",
+          "ok": true
+        }
+      ],
+      "passed": 12,
+      "total": 12,
+      "warmup": {
+        "exit": 0,
+        "seconds": 0.03,
+        "stderr_tail": ""
+      },
+      "pass": true
+    },
+    "size": {
+      "source_tokens": 3701,
+      "build_file_tokens": 0,
+      "test_tokens": 0,
+      "source_files": [
+        "tool.mjs"
+      ],
+      "build_files": [],
+      "source_bytes": 12752,
+      "build_file_bytes": 0
+    },
+    "disk": {
+      "source_and_build_files_bytes": 12752,
+      "build_output_bytes": 0,
+      "cache_bytes": 0,
+      "cache_breakdown": {},
+      "runtime_excluded_bytes": 0,
+      "total_bytes": 12752
+    },
+    "startup": {
+      "command": "node tool.mjs --help",
+      "median_ms": 21.38271016,
+      "mean_ms": 21.46833240444443,
+      "stddev_ms": 0.7645280302695434,
+      "min_ms": 20.036627160000002,
+      "runs": 135,
+      "load_avg_before": 3.1611328125,
+      "load_avg_after": 3.06787109375
+    }
+  }
+}

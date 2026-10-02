@@ -1,0 +1,4 @@
+#!/bin/sh
+d=$(cd "$(dirname "$0")" && pwd)
+[ "$d/Jsonpick.class" -nt "$d/Jsonpick.java" ] || javac -d "$d" "$d/Jsonpick.java" || exit 2
+exec java -Xss512m -cp "$d" Jsonpick "$@"

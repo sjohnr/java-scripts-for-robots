@@ -1,0 +1,1 @@
+object{id: number, name: string, tags: array[3] of string, value: number, active: boolean, nested: object{depth2: object{depth3: number}}}

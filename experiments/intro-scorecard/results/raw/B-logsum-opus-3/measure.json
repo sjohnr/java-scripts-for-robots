@@ -1,0 +1,214 @@
+{
+  "run_id": "B-logsum-opus-3",
+  "measured": "2026-10-10T20:15:43",
+  "run_command_reported": "./logsum",
+  "run_command_used": "./logsum",
+  "run_command_notes": [],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "build/logsum.jar",
+    "launch": {
+      "lang": "java",
+      "entry": "build/logsum.jar",
+      "launch": "jar",
+      "wrapper": "logsum",
+      "evidence": [
+        "run command program: ./logsum",
+        "wrapper script logsum runs: java -Xshare:auto -jar \"build/logsum.jar\" "
+      ],
+      "flags": [],
+      "java_opts": "-Xshare:auto",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 149,
+      "java": 12227
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "build script",
+      "launch": "jar",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "build script / jar",
+      "java_file_count": 1,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "logsum",
+      "evidence": {
+        "build": [
+          "build.sh"
+        ],
+        "launch": [
+          "run command program: ./logsum",
+          "wrapper script logsum runs: java -Xshare:auto -jar \"build/logsum.jar\" ",
+          "run command program: java",
+          "via wrapper script logsum"
+        ],
+        "source": [
+          "src/logsum/Main.java:81 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/logsum/Main.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 4442
+    },
+    {
+      "path": "build.sh",
+      "kind": "build",
+      "lang": null,
+      "bytes": 263
+    },
+    {
+      "path": "logsum",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 149
+    },
+    {
+      "path": "src/logsum/Main.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 12227
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "logsum-basic",
+        "ok": true
+      },
+      {
+        "id": "logsum-top3",
+        "ok": true
+      },
+      {
+        "id": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "id": "logsum-since",
+        "ok": true
+      },
+      {
+        "id": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "id": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "id": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "id": "logsum-missing-file",
+        "ok": true
+      },
+      {
+        "id": "logsum-help",
+        "ok": true
+      }
+    ],
+    "passed": 9,
+    "total": 9,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.04,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 2782,
+    "build_file_tokens": 74,
+    "test_tokens": 0,
+    "source_files": [
+      "logsum",
+      "src/logsum/Main.java"
+    ],
+    "build_files": [
+      "build.sh"
+    ],
+    "source_bytes": 12376,
+    "build_file_bytes": 263
+  },
+  "disk": {
+    "source_and_build_files_bytes": 12639,
+    "build_output_bytes": 19975,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 32614
+  },
+  "load_avg_at_bench_start": 2.32568359375,
+  "startup": {
+    "command": "./logsum --help",
+    "median_ms": 29.38633636,
+    "mean_ms": 29.600181620416677,
+    "stddev_ms": 1.0669123970082843,
+    "min_ms": 27.99081536,
+    "runs": 96,
+    "load_avg_before": 2.32568359375,
+    "load_avg_after": 2.53955078125
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-opus-3/opt/app.jar",
+    "main": "logsum.Main",
+    "training": {
+      "args": [
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/logsum.log"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-opus-3/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-opus-3/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-opus-3/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 12369920,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-opus-3/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-opus-3/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-opus-3/opt/app.jar logsum.Main --help",
+      "median_ms": 22.036692560000002,
+      "mean_ms": 21.905430592000013,
+      "stddev_ms": 0.7891847583367377,
+      "min_ms": 19.97360956,
+      "runs": 125,
+      "load_avg_before": 2.53955078125,
+      "load_avg_after": 2.53955078125
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-opus-3/opt/app.jar logsum.Main --help",
+      "median_ms": 24.858343,
+      "mean_ms": 24.9085699649123,
+      "stddev_ms": 0.3466249865259162,
+      "min_ms": 23.977072500000002,
+      "runs": 114,
+      "load_avg_before": 2.53955078125,
+      "load_avg_after": 2.416015625
+    }
+  },
+  "benchmarked": "2026-10-11T09:10:02"
+}

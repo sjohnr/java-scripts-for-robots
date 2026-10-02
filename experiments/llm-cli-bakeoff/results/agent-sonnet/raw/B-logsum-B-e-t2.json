@@ -1,0 +1,1583 @@
+{
+  "duration_api_ms": 102261,
+  "stop_reason": "end_turn",
+  "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+  "total_cost_usd": 0.2505666,
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 23973,
+    "cache_read_input_tokens": 241083,
+    "output_tokens": 10643,
+    "output_tokens_details": {
+      "thinking_tokens": 5833
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 23973,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 455,
+        "cache_read_input_tokens": 42286,
+        "cache_creation_input_tokens": 181,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 181
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 14,
+      "outputTokens": 10643,
+      "cacheReadInputTokens": 241083,
+      "cacheCreationInputTokens": 23973,
+      "webSearchRequests": 0,
+      "costUSD": 0.2505666,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "thinkingTokens": 5833,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 8,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Implemented `Tool.java` in the working directory as a single-file classic-style Java program (`java Tool.java`), covering:\n\n- Positional `FILE` (or `-`/omitted for stdin), `--since`, `--level`, `--top`, `--help`\n- Hand-rolled arg parsing with `unknown flag: <flag>` for unrecognized flags, exit 2 on usage errors\n- Streaming line parsing (`split(\" \", 3)`), silently skipping malformed lines (bad shape, invalid timestamp, unknown level)\n- Filters applied before all stats (`--since` via lexicographic string compare, `--level` exact match)\n- Message normalization pipeline (UUID \u2192 hex \u2192 digit run) applied only for grouping, original first-seen message used for display\n- Top-N ERROR grouping sorted by count desc, then message asc, ties handled\n- Exact output format per spec, `n/a` for empty first/last, `top errors:` printed even when empty\n- File-not-found and invalid `--since`/`--level` error messages matching the spec's error shape\n\nVerified manually against sample logs: normal stats, `--since`/`--level`/`--top` filtering, UUID/hex/decimal normalization and grouping/sorting, stdin input, empty input, missing file, bad `--since`/`--level`, and unknown flags \u2014 all produced correct output and exit codes.",
+  "ttft_ms": 2312,
+  "type": "result",
+  "duration_ms": 105227,
+  "uuid": "134ef18b-6dad-44dd-987f-348cf696ebaf",
+  "ttft_stream_ms": 1781,
+  "time_to_request_ms": 33,
+  "first_content_frame_ms": 1782,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "_events": [
+    {
+      "type": "system",
+      "subtype": "init",
+      "cwd": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09",
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "tools": [
+        "Task",
+        "Bash",
+        "CronCreate",
+        "CronDelete",
+        "CronList",
+        "DesignSync",
+        "Edit",
+        "EnterWorktree",
+        "ExitWorktree",
+        "Glob",
+        "Grep",
+        "ListAgents",
+        "Monitor",
+        "NotebookEdit",
+        "PushNotification",
+        "Read",
+        "RemoteTrigger",
+        "ReportFindings",
+        "ScheduleWakeup",
+        "SendMessage",
+        "Skill",
+        "TaskStop",
+        "ToolSearch",
+        "WebFetch",
+        "WebSearch",
+        "Write"
+      ],
+      "mcp_servers": [],
+      "model": "claude-sonnet-5",
+      "permissionMode": "default",
+      "slash_commands": [
+        "design",
+        "design-sync",
+        "dataviz",
+        "update-config",
+        "verify",
+        "debug",
+        "code-review",
+        "simplify",
+        "batch",
+        "fewer-permission-prompts",
+        "doctor",
+        "loop",
+        "schedule",
+        "claude-api",
+        "run",
+        "run-skill-generator",
+        "advisor",
+        "agents",
+        "auto-mode-setup",
+        "autocompact",
+        "clear",
+        "color",
+        "compact",
+        "config",
+        "output-style",
+        "context",
+        "effort",
+        "fast",
+        "heapdump",
+        "init",
+        "mcp",
+        "import",
+        "model",
+        "__remote-workflow",
+        "workflow-launch-exec",
+        "reload-plugins",
+        "reload-skills",
+        "rename",
+        "ultrareview",
+        "security-review",
+        "usage-credits",
+        "extra-usage",
+        "usage",
+        "insights",
+        "recap",
+        "skill-doctor",
+        "goal",
+        "design-consent",
+        "design-revoke",
+        "list-agents",
+        "team-onboarding"
+      ],
+      "terminal_slash_commands": [
+        "doctor",
+        "color",
+        "reload-plugins"
+      ],
+      "apiKeySource": "none",
+      "claude_code_version": "2.1.278",
+      "output_style": "default",
+      "agents": [
+        "claude",
+        "Explore",
+        "general-purpose",
+        "Plan",
+        "statusline-setup"
+      ],
+      "skills": [
+        "design",
+        "design-sync",
+        "dataviz",
+        "update-config",
+        "verify",
+        "debug",
+        "code-review",
+        "simplify",
+        "batch",
+        "fewer-permission-prompts",
+        "doctor",
+        "loop",
+        "schedule",
+        "claude-api",
+        "run",
+        "run-skill-generator"
+      ],
+      "plugins": [
+        {
+          "name": "agents-md",
+          "path": "builtin",
+          "source": "agents-md@builtin"
+        }
+      ],
+      "capabilities": [
+        "interrupt_receipt_v1",
+        "interrupt_cancel_queued_v1",
+        "msg_lifecycle_v1"
+      ],
+      "analytics_disabled": false,
+      "product_feedback_disabled": false,
+      "uuid": "baa54a18-e3d5-402b-8e1c-38c2aa49e1f7",
+      "memory_paths": {
+        "auto": "/Users/sriesenberg/.claude/projects/-private-var-folders-kg-lwnx-xvd1yd828s14w-cg--40000gn-T-agent5b-logsum-3u1d7t09/memory/"
+      },
+      "messaging_socket_path": "/tmp/cc-socks/11317.sock",
+      "fast_mode_state": "off",
+      "fast_mode_disabled_reason": "sdk_opt_in_required"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF63WuQ2jQXBuVDYPACH",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "EqwCCqgBCBIYAipAhBPmhkjcUK0PLSoYg7j4JDTSroyBu+odTpBHWoOCzzCczPdfILpcx/GDoh6r+2Buefh7/cFxDNJidl2LqmsabjIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ5OGE3N2NhOC0zNDYzLTRlOGYtYTViYy1iMGZkYTJiZTEzNTlyENQFFdbvOs9TGzbDqN4EPPuIAQGoAZKwwNUGsAECEgzvjAwHy3JEeuCNodwaDJq8PlUjPifVOgKoziIwYbRCGZO4Y2iyWtpILb6bpEhc9ejEsoJQV3SCbp5ha/lmo01Kk3vUIPT2O2yrJ2x2KjH+oxFDcBUQqHROhVbRCxwTlPrOEBUDECn+APdiC0Xk4OrEdhW8lznqgaCFpbF5Jy0XGAE="
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 9397,
+          "cache_read_input_tokens": 18494,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 9397
+          },
+          "output_tokens": 5,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "943cd400-f654-4bde-b2f0-266e1df36d50",
+      "timestamp": "2026-09-20T17:29:54.756Z",
+      "request_id": "req_011CfF63WUMJtEDDhuVSoGQ9"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF63WuQ2jQXBuVDYPACH",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_013n2zLLVuRcqR7LscdkDxHA",
+            "name": "Read",
+            "input": {
+              "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/spec.md"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 9397,
+          "cache_read_input_tokens": 18494,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 9397
+          },
+          "output_tokens": 5,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "5baacea7-4c6d-4783-a606-05ae4d2bd9a2",
+      "timestamp": "2026-09-20T17:29:55.794Z",
+      "request_id": "req_011CfF63WUMJtEDDhuVSoGQ9",
+      "wire_tool_inputs": {
+        "toolu_013n2zLLVuRcqR7LscdkDxHA": {
+          "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/spec.md"
+        }
+      }
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_013n2zLLVuRcqR7LscdkDxHA",
+            "type": "tool_result",
+            "content": "1\t# Cross-CLI conventions\n2\t\n3\tThese rules apply to every CLI in this suite (`noop`, `jarsrc`, `logsum`, `treesum`, `jsonpick`) unless a CLI's own spec overrides them.\n4\t\n5\t## General\n6\t\n7\t- All text output is UTF-8, LF line endings (no CRLF, even on any platform), no trailing whitespace on any line.\n8\t- No implementation may print anything to stdout or stderr beyond what its spec defines as output. In particular: no JVM/Node/Go/Python banners, no \"Picked up JAVA_TOOL_OPTIONS\" notices, no deprecation warnings on the success path. Any unavoidable noise from a given execution mode is a measured finding (Phase 3), not something to suppress by redirecting streams inside the program.\n9\t- Exit code `0` = success. Exit code `1` = a well-formed \"not found\" / \"no results\" condition described in the CLI's own spec. Exit code `2` = usage error (bad flags, missing required argument, unparsable input). No other exit codes are used.\n10\t- `--help` on any CLI prints a usage message to stdout and exits 0. Exact wording is not byte-compared across languages (natural per-language help text is fine) but must list every flag the CLI supports.\n11\t- Argument parsing is hand-rolled (no argparse/commander/picocli/etc.) so that dependency footprint stays comparable across languages. Unknown flags are a usage error (exit 2) with message `unknown flag: <flag>` on stderr.\n12\t- All implementations are single-threaded by default. Any parallel variant is a separate, clearly labeled extra (e.g. `treesum-parallel`), never the default benchmarked path.\n13\t\n14\t## Numeric-segment version comparison (used by `jarsrc`)\n15\t\n16\tGiven two version strings, split each on `.` and `-` (both are segment separators) into segments. Compare segments left to right:\n17\t- If both segments parse as non-negative base-10 integers (no leading `+`, optional leading zeros allowed and ignored numerically), compare numerically.\n18\t- Otherwise compare the two segments as plain byte strings (ordinal comparison).\n19\t- If all compared segments are equal and one version has more segments than the other, the version with more segments is greater (e.g. `1.2` < `1.2.0`... note: `1.2.0` has an extra numeric `0` segment, so `1.2` < `1.2.0`).\n20\t- `1.2.0` > `1.2` ; `1.10.0` > `1.9.0` ; `1.0.0-beta` < `1.0.0` (`\"beta\"` is not a valid non-negative integer so falls back to string compare only if the other side is also non-numeric at that position \u2014 but here segment 4 exists on the left only after equal 1/0/0 prefix, so shorter-wins... wait `1.0.0-beta` splits to [1,0,0,beta], `1.0.0` splits to [1,0,0]; first 3 segments equal, left has an extra segment, so `1.0.0-beta` > `1.0.0` by the \"more segments\" rule). This is intentionally the documented, if slightly surprising, behavior \u2014 implementations must match it exactly, not attempt semver.\n21\t\n22\t\"Highest version\" = the maximum element of the version set under this ordering. Ties (two identical version strings for the same group:artifact) are not expected in fixtures; if they occur, either is acceptable and this is noted as an untested edge case.\n23\t\n24\t## Timestamps\n25\t\n26\tWhere a timestamp is printed (`logsum`), format is `YYYY-MM-DDTHH:MM:SS` (no fractional seconds, no timezone suffix \u2014 inputs are assumed to already be in one consistent zone and are passed through verbatim after parsing, not converted).\n27\t\n28\t## Error message shape\n29\t\n30\tEvery \"not found\" style error is exactly one line to stderr, of the form:\n31\t\n32\t```\n33\terror: <what was not found>\n34\t```\n35\t\n36\toptionally followed on the same line by suggestions in the form:\n37\t\n38\t```\n39\terror: <what was not found> (did you mean: <s1>, <s2>, <s3>?)\n40\t```\n41\t\n42\tSuggestions are prefix matches against known names, case-sensitive, sorted lexicographically, capped at 3. If there are zero prefix matches, the `(did you mean...)` clause is omitted entirely (no empty parens).\n43\t\n44\t## Golden-file testing\n45\t\n46\tEvery case in `tests/cases/` specifies: CLI, args, stdin (optional), and expects stdout, stderr, and exit code to match golden files byte-for-byte across every implementation of that CLI.\n47\t"
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "db525e44-e140-4a1c-906d-a25eeb843a7d",
+      "timestamp": "2026-09-20T17:29:55.809Z",
+      "tool_use_result": {
+        "type": "text",
+        "file": {
+          "filePath": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/spec.md",
+          "content": "# Cross-CLI conventions\n\nThese rules apply to every CLI in this suite (`noop`, `jarsrc`, `logsum`, `treesum`, `jsonpick`) unless a CLI's own spec overrides them.\n\n## General\n\n- All text output is UTF-8, LF line endings (no CRLF, even on any platform), no trailing whitespace on any line.\n- No implementation may print anything to stdout or stderr beyond what its spec defines as output. In particular: no JVM/Node/Go/Python banners, no \"Picked up JAVA_TOOL_OPTIONS\" notices, no deprecation warnings on the success path. Any unavoidable noise from a given execution mode is a measured finding (Phase 3), not something to suppress by redirecting streams inside the program.\n- Exit code `0` = success. Exit code `1` = a well-formed \"not found\" / \"no results\" condition described in the CLI's own spec. Exit code `2` = usage error (bad flags, missing required argument, unparsable input). No other exit codes are used.\n- `--help` on any CLI prints a usage message to stdout and exits 0. Exact wording is not byte-compared across languages (natural per-language help text is fine) but must list every flag the CLI supports.\n- Argument parsing is hand-rolled (no argparse/commander/picocli/etc.) so that dependency footprint stays comparable across languages. Unknown flags are a usage error (exit 2) with message `unknown flag: <flag>` on stderr.\n- All implementations are single-threaded by default. Any parallel variant is a separate, clearly labeled extra (e.g. `treesum-parallel`), never the default benchmarked path.\n\n## Numeric-segment version comparison (used by `jarsrc`)\n\nGiven two version strings, split each on `.` and `-` (both are segment separators) into segments. Compare segments left to right:\n- If both segments parse as non-negative base-10 integers (no leading `+`, optional leading zeros allowed and ignored numerically), compare numerically.\n- Otherwise compare the two segments as plain byte strings (ordinal comparison).\n- If all compared segments are equal and one version has more segments than the other, the version with more segments is greater (e.g. `1.2` < `1.2.0`... note: `1.2.0` has an extra numeric `0` segment, so `1.2` < `1.2.0`).\n- `1.2.0` > `1.2` ; `1.10.0` > `1.9.0` ; `1.0.0-beta` < `1.0.0` (`\"beta\"` is not a valid non-negative integer so falls back to string compare only if the other side is also non-numeric at that position \u2014 but here segment 4 exists on the left only after equal 1/0/0 prefix, so shorter-wins... wait `1.0.0-beta` splits to [1,0,0,beta], `1.0.0` splits to [1,0,0]; first 3 segments equal, left has an extra segment, so `1.0.0-beta` > `1.0.0` by the \"more segments\" rule). This is intentionally the documented, if slightly surprising, behavior \u2014 implementations must match it exactly, not attempt semver.\n\n\"Highest version\" = the maximum element of the version set under this ordering. Ties (two identical version strings for the same group:artifact) are not expected in fixtures; if they occur, either is acceptable and this is noted as an untested edge case.\n\n## Timestamps\n\nWhere a timestamp is printed (`logsum`), format is `YYYY-MM-DDTHH:MM:SS` (no fractional seconds, no timezone suffix \u2014 inputs are assumed to already be in one consistent zone and are passed through verbatim after parsing, not converted).\n\n## Error message shape\n\nEvery \"not found\" style error is exactly one line to stderr, of the form:\n\n```\nerror: <what was not found>\n```\n\noptionally followed on the same line by suggestions in the form:\n\n```\nerror: <what was not found> (did you mean: <s1>, <s2>, <s3>?)\n```\n\nSuggestions are prefix matches against known names, case-sensitive, sorted lexicographically, capped at 3. If there are zero prefix matches, the `(did you mean...)` clause is omitted entirely (no empty parens).\n\n## Golden-file testing\n\nEvery case in `tests/cases/` specifies: CLI, args, stdin (optional), and expects stdout, stderr, and exit code to match golden files byte-for-byte across every implementation of that CLI.\n",
+          "numLines": 47,
+          "startLine": 1,
+          "totalLines": 47
+        }
+      }
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF63WuQ2jQXBuVDYPACH",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01TTKcLJauDY2Bd7k4A4zukE",
+            "name": "Read",
+            "input": {
+              "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/logsum-spec.md"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 9397,
+          "cache_read_input_tokens": 18494,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 9397
+          },
+          "output_tokens": 5,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "acbb0a5f-390c-492a-8650-318e73dd9891",
+      "timestamp": "2026-09-20T17:29:56.340Z",
+      "request_id": "req_011CfF63WUMJtEDDhuVSoGQ9",
+      "wire_tool_inputs": {
+        "toolu_01TTKcLJauDY2Bd7k4A4zukE": {
+          "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/logsum-spec.md"
+        }
+      }
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_01TTKcLJauDY2Bd7k4A4zukE",
+            "type": "tool_result",
+            "content": "1\t# logsum\n2\t\n3\tPurpose: streaming summary of a log file (or stdin), no full-file buffering required for correctness (implementations should stream but this is not separately conformance-tested beyond correctness on large fixtures completing in reasonable memory).\n4\t\n5\t## Usage\n6\t\n7\t```\n8\tlogsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n9\t```\n10\t\n11\t`FILE` omitted or `-` means read stdin. `--top N` defaults to 5.\n12\t\n13\t## Input line format\n14\t\n15\tEach line: `TIMESTAMP LEVEL MESSAGE` where TIMESTAMP is `YYYY-MM-DDTHH:MM:SS`, LEVEL is one of `DEBUG`, `INFO`, `WARN`, `ERROR` (case-sensitive, exactly these tokens), and MESSAGE is the remainder of the line (may contain spaces). Fields are separated by single spaces (TIMESTAMP, then one space, then LEVEL, then one space, then MESSAGE \u2014 MESSAGE is everything after that third token starts, verbatim including any internal multiple spaces).\n16\t\n17\tLines that do not match this format (fewer than 3 whitespace-separated tokens, bad timestamp, or unrecognized level) are silently skipped and do not count toward any statistic. This is intentional \u2014 logsum is best-effort against messy real logs, not a strict parser.\n18\t\n19\t## Filters\n20\t\n21\t`--since TIMESTAMP`: only consider lines with TIMESTAMP >= the given value (plain string comparison is sufficient since the format is fixed-width and lexicographically ordered). `--level LEVEL`: only consider lines at exactly that level. Filters apply before all statistics below, including first/last timestamp.\n22\t\n23\t## Message normalization (for top-N grouping only, not for display)\n24\t\n25\tTo group similar ERROR-class... (see below) messages, normalize by applying these regex replacements in order to MESSAGE before grouping (display uses the ORIGINAL first-seen message for that group, not the normalized form):\n26\t\n27\t1. UUIDs: `[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}` -> `<uuid>`\n28\t2. Hex blobs of 6+ hex digits (word-boundary delimited, must contain at least one letter a-f/A-F to avoid eating plain decimal numbers): `\\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\\b` -> `<hex>`\n29\t3. Any remaining run of digits, 1 or more: `[0-9]+` -> `<num>`\n30\t\n31\tApply in that exact order (UUID pattern first, so a UUID is not partially eaten by the hex/digit rules first).\n32\t\n33\t## Output (to stdout, no output to stderr on success)\n34\t\n35\t```\n36\ttotal: <N>\n37\tby level: DEBUG=<a> INFO=<b> WARN=<c> ERROR=<d>\n38\tfirst: <timestamp or \"n/a\">\n39\tlast: <timestamp or \"n/a\">\n40\ttop errors:\n41\t  <count> <message>\n42\t  <count> <message>\n43\t  ...\n44\t```\n45\t\n46\t- `total` = count of all lines that passed parsing and filters (any level).\n47\t- `by level` always lists all four levels in that fixed order, `=0` for levels with no lines.\n48\t- `first`/`last` = the timestamp of the first and last (by input order, not sorted) line that passed filters; `n/a` if total is 0.\n49\t- `top errors`: only lines at level ERROR are eligible. Group by normalized message, count occurrences, sort by count descending then by the displayed (original, first-seen) message ascending for ties. Print top N groups (default 5). If fewer than N distinct groups exist, print all of them. If there are zero ERROR lines, print `top errors:` with no lines after it (not omitted).\n50\t- Each top-errors line is two-space indented: `  <count> <message>`.\n51\t\n52\t## Errors\n53\t\n54\tBad `--since` (unparsable timestamp) or bad `--level` (not one of the four): exit 2, stderr `error: invalid value for --since: <value>` (or `--level`). File given but not found: exit 2, stderr `error: cannot read <path>`.\n55\t\n56\t## `--help`\n57\t\n58\tLists FILE, `--since`, `--level`, `--top`. Exit 0.\n59\t"
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "2030cb0b-fbd9-4271-a296-4855fb68b815",
+      "timestamp": "2026-09-20T17:29:56.350Z",
+      "tool_use_result": {
+        "type": "text",
+        "file": {
+          "filePath": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/logsum-spec.md",
+          "content": "# logsum\n\nPurpose: streaming summary of a log file (or stdin), no full-file buffering required for correctness (implementations should stream but this is not separately conformance-tested beyond correctness on large fixtures completing in reasonable memory).\n\n## Usage\n\n```\nlogsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n```\n\n`FILE` omitted or `-` means read stdin. `--top N` defaults to 5.\n\n## Input line format\n\nEach line: `TIMESTAMP LEVEL MESSAGE` where TIMESTAMP is `YYYY-MM-DDTHH:MM:SS`, LEVEL is one of `DEBUG`, `INFO`, `WARN`, `ERROR` (case-sensitive, exactly these tokens), and MESSAGE is the remainder of the line (may contain spaces). Fields are separated by single spaces (TIMESTAMP, then one space, then LEVEL, then one space, then MESSAGE \u2014 MESSAGE is everything after that third token starts, verbatim including any internal multiple spaces).\n\nLines that do not match this format (fewer than 3 whitespace-separated tokens, bad timestamp, or unrecognized level) are silently skipped and do not count toward any statistic. This is intentional \u2014 logsum is best-effort against messy real logs, not a strict parser.\n\n## Filters\n\n`--since TIMESTAMP`: only consider lines with TIMESTAMP >= the given value (plain string comparison is sufficient since the format is fixed-width and lexicographically ordered). `--level LEVEL`: only consider lines at exactly that level. Filters apply before all statistics below, including first/last timestamp.\n\n## Message normalization (for top-N grouping only, not for display)\n\nTo group similar ERROR-class... (see below) messages, normalize by applying these regex replacements in order to MESSAGE before grouping (display uses the ORIGINAL first-seen message for that group, not the normalized form):\n\n1. UUIDs: `[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}` -> `<uuid>`\n2. Hex blobs of 6+ hex digits (word-boundary delimited, must contain at least one letter a-f/A-F to avoid eating plain decimal numbers): `\\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\\b` -> `<hex>`\n3. Any remaining run of digits, 1 or more: `[0-9]+` -> `<num>`\n\nApply in that exact order (UUID pattern first, so a UUID is not partially eaten by the hex/digit rules first).\n\n## Output (to stdout, no output to stderr on success)\n\n```\ntotal: <N>\nby level: DEBUG=<a> INFO=<b> WARN=<c> ERROR=<d>\nfirst: <timestamp or \"n/a\">\nlast: <timestamp or \"n/a\">\ntop errors:\n  <count> <message>\n  <count> <message>\n  ...\n```\n\n- `total` = count of all lines that passed parsing and filters (any level).\n- `by level` always lists all four levels in that fixed order, `=0` for levels with no lines.\n- `first`/`last` = the timestamp of the first and last (by input order, not sorted) line that passed filters; `n/a` if total is 0.\n- `top errors`: only lines at level ERROR are eligible. Group by normalized message, count occurrences, sort by count descending then by the displayed (original, first-seen) message ascending for ties. Print top N groups (default 5). If fewer than N distinct groups exist, print all of them. If there are zero ERROR lines, print `top errors:` with no lines after it (not omitted).\n- Each top-errors line is two-space indented: `  <count> <message>`.\n\n## Errors\n\nBad `--since` (unparsable timestamp) or bad `--level` (not one of the four): exit 2, stderr `error: invalid value for --since: <value>` (or `--level`). File given but not found: exit 2, stderr `error: cannot read <path>`.\n\n## `--help`\n\nLists FILE, `--since`, `--level`, `--top`. Exit 0.\n",
+          "numLines": 59,
+          "startLine": 1,
+          "totalLines": 59
+        }
+      }
+    },
+    {
+      "type": "rate_limit_event",
+      "rate_limit_info": {
+        "status": "allowed",
+        "resetsAt": 1789938600,
+        "rateLimitType": "five_hour",
+        "overageStatus": "rejected",
+        "overageDisabledReason": "org_level_disabled",
+        "isUsingOverage": false,
+        "unifiedWindows": {
+          "five_hour": {
+            "utilization": 0.29,
+            "resetsAt": 1789938600
+          },
+          "seven_day": {
+            "utilization": 0.11,
+            "resetsAt": 1789948800
+          }
+        }
+      },
+      "uuid": "df2a3975-ff1b-41e9-90a4-ec6045336ba2",
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 50,
+      "estimated_tokens_delta": 50,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "37db7c7c-7eae-4648-bd98-fbd63e63c230"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 150,
+      "estimated_tokens_delta": 100,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "9c918f14-298d-4640-a2d6-91359b1d8e78"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 300,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "5bc30ab1-95b0-47df-8910-e00198912385"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 400,
+      "estimated_tokens_delta": 100,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "7a9ebfee-e182-4f66-88d8-ddadb457f285"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 650,
+      "estimated_tokens_delta": 250,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "bb34005f-d8a6-4fbf-bfd3-478fb6ca39f1"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 750,
+      "estimated_tokens_delta": 100,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "5dc2a353-e35f-4272-8860-3790689f98fd"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 850,
+      "estimated_tokens_delta": 100,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "01ca3b55-e568-4585-aa36-5b7e3d0190d1"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1000,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "df087b98-c6e5-4c19-9f32-87f74a35996d"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1150,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "e586759e-9f5d-499f-b229-ea86161aec33"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1350,
+      "estimated_tokens_delta": 200,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "8dfbb42f-d659-49d2-bae0-8c898b6fbb8d"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1500,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "5c8f7de5-3604-470e-9987-bbf319231da4"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1700,
+      "estimated_tokens_delta": 200,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "1a483778-3c6a-4b00-8175-7918bc14d71b"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 1800,
+      "estimated_tokens_delta": 100,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "45e0fcd4-2d6f-46e8-9c84-10ea15a88818"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2000,
+      "estimated_tokens_delta": 200,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "42ceaa63-13bf-4728-ba07-c2f69d346b1d"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2200,
+      "estimated_tokens_delta": 200,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "ca6b9fe6-90f2-4999-bff5-6662057089e0"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2350,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "0c73ff36-91b6-43f0-81f8-b6e4ad18a8bc"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2500,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "303e8696-a307-41c4-a65b-e528b454ed46"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2650,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "131f022e-28f9-488c-a7a7-8837074f9d43"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2850,
+      "estimated_tokens_delta": 200,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "e8cf2108-45a0-484b-9ca3-e29e2435ea2c"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 2950,
+      "estimated_tokens_delta": 100,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "f35b66d2-4ba1-4058-a557-6aac924684f4"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3100,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "9d9d5d40-3a23-470e-a86e-43f2c8773711"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3250,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "9202c202-4a40-4817-847f-9b51501e029d"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3400,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "1cb3dea2-0a2e-4104-a842-8a14918deafc"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3550,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "85843941-580b-40f6-9768-fe1692e06c81"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3700,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "71d8fd45-8f8c-4bc9-9f57-e5afed65559f"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 3900,
+      "estimated_tokens_delta": 200,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "a4f67966-24d5-4af3-bef1-2813682791f7"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4050,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "358904b5-b4b7-45ff-b98a-883231169ea4"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4200,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "49f336da-26e5-4955-a61e-3934f318c767"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4350,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "59a77b6b-4fe2-455e-a586-ce34663f759e"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4500,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "16fc0836-19bc-430c-bfee-723d41553d3b"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4650,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "2190bb73-1804-474d-9c00-23cc565d5fe1"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 4950,
+      "estimated_tokens_delta": 300,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "503c2036-5acf-419d-9746-7fc78cdce354"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 5100,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "22ac2770-f65a-4eda-943c-343545c8f691"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF63oUYrxBHULmjmwaoL",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "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"
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 3475,
+          "cache_read_input_tokens": 27891,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3475
+          },
+          "output_tokens": 7,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "f94e3085-6035-4b81-b1dc-e917b02466f5",
+      "timestamp": "2026-09-20T17:30:49.573Z",
+      "request_id": "req_011CfF63nxnk7wPQ9PdD81KC"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF63oUYrxBHULmjmwaoL",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01Pz7HU29FVyqRe1Hx24QSoT",
+            "name": "Write",
+            "input": {
+              "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/Tool.java",
+              "content": "import java.io.BufferedReader;\nimport java.io.File;\nimport java.io.FileReader;\nimport java.io.IOException;\nimport java.io.InputStreamReader;\nimport java.nio.charset.StandardCharsets;\nimport java.time.LocalDateTime;\nimport java.time.format.DateTimeParseException;\nimport java.util.ArrayList;\nimport java.util.LinkedHashMap;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.regex.Pattern;\n\npublic class Tool {\n\n    private static final Pattern TIMESTAMP_SHAPE =\n            Pattern.compile(\"\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}\");\n\n    private static final Pattern UUID_PATTERN = Pattern.compile(\n            \"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\");\n    private static final Pattern HEX_PATTERN =\n            Pattern.compile(\"\\\\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\\\\b\");\n    private static final Pattern NUM_PATTERN = Pattern.compile(\"[0-9]+\");\n\n    private static final List<String> LEVELS = List.of(\"DEBUG\", \"INFO\", \"WARN\", \"ERROR\");\n\n    private static final String HELP_TEXT =\n            \"Usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\\n\" +\n            \"\\n\" +\n            \"Streaming summary of a log file (or stdin).\\n\" +\n            \"\\n\" +\n            \"Arguments:\\n\" +\n            \"  FILE            log file to read; omitted or - means read stdin\\n\" +\n            \"\\n\" +\n            \"Options:\\n\" +\n            \"  --since TIMESTAMP   only consider lines with TIMESTAMP >= this value\\n\" +\n            \"  --level LEVEL       only consider lines at exactly this level\\n\" +\n            \"                      (one of DEBUG, INFO, WARN, ERROR)\\n\" +\n            \"  --top N             number of top error groups to show (default 5)\\n\" +\n            \"  --help              show this help message and exit\\n\";\n\n    public static void main(String[] args) {\n        String file = null;\n        String since = null;\n        String level = null;\n        int top = 5;\n\n        for (int i = 0; i < args.length; i++) {\n            String arg = args[i];\n            switch (arg) {\n                case \"--help\":\n                    System.out.print(HELP_TEXT);\n                    System.exit(0);\n                    return;\n                case \"--since\":\n                    if (i + 1 >= args.length) {\n                        usageError(\"missing value for --since\");\n                    }\n                    since = args[++i];\n                    break;\n                case \"--level\":\n                    if (i + 1 >= args.length) {\n                        usageError(\"missing value for --level\");\n                    }\n                    level = args[++i];\n                    break;\n                case \"--top\":\n                    if (i + 1 >= args.length) {\n                        usageError(\"missing value for --top\");\n                    }\n                    String topVal = args[++i];\n                    try {\n                        top = Integer.parseInt(topVal);\n                    } catch (NumberFormatException e) {\n                        usageError(\"invalid value for --top: \" + topVal);\n                    }\n                    break;\n                default:\n                    if (arg.startsWith(\"--\")) {\n                        usageError(\"unknown flag: \" + arg);\n                    } else {\n                        if (file != null) {\n                            usageError(\"unexpected argument: \" + arg);\n                        }\n                        file = arg;\n                    }\n                    break;\n            }\n        }\n\n        if (since != null && !isValidTimestamp(since)) {\n            usageError(\"invalid value for --since: \" + since);\n        }\n        if (level != null && !LEVELS.contains(level)) {\n            usageError(\"invalid value for --level: \" + level);\n        }\n\n        BufferedReader reader = null;\n        try {\n            if (file == null || file.equals(\"-\")) {\n                reader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));\n            } else {\n                File f = new File(file);\n                if (!f.isFile() || !f.canRead()) {\n                    System.err.println(\"error: cannot read \" + file);\n                    System.exit(2);\n                    return;\n                }\n                reader = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));\n            }\n\n            long total = 0;\n            Map<String, Long> levelCounts = new LinkedHashMap<>();\n            for (String lvl : LEVELS) {\n                levelCounts.put(lvl, 0L);\n            }\n            String first = null;\n            String last = null;\n\n            Map<String, ErrorGroup> groups = new LinkedHashMap<>();\n\n            String line;\n            while ((line = reader.readLine()) != null) {\n                String[] parts = line.split(\" \", 3);\n                if (parts.length < 3) {\n                    continue;\n                }\n                String ts = parts[0];\n                String lvl = parts[1];\n                String message = parts[2];\n\n                if (!isValidTimestamp(ts)) {\n                    continue;\n                }\n                if (!LEVELS.contains(lvl)) {\n                    continue;\n                }\n\n                if (since != null && ts.compareTo(since) < 0) {\n                    continue;\n                }\n                if (level != null && !lvl.equals(level)) {\n                    continue;\n                }\n\n                total++;\n                levelCounts.put(lvl, levelCounts.get(lvl) + 1);\n                if (first == null) {\n                    first = ts;\n                }\n                last = ts;\n\n                if (lvl.equals(\"ERROR\")) {\n                    String normalized = normalize(message);\n                    ErrorGroup group = groups.get(normalized);\n                    if (group == null) {\n                        group = new ErrorGroup(message);\n                        groups.put(normalized, group);\n                    }\n                    group.count++;\n                }\n            }\n\n            StringBuilder out = new StringBuilder();\n            out.append(\"total: \").append(total).append(\"\\n\");\n            out.append(\"by level: \");\n            for (int i = 0; i < LEVELS.size(); i++) {\n                if (i > 0) {\n                    out.append(\" \");\n                }\n                String lvl = LEVELS.get(i);\n                out.append(lvl).append(\"=\").append(levelCounts.get(lvl));\n            }\n            out.append(\"\\n\");\n            out.append(\"first: \").append(first == null ? \"n/a\" : first).append(\"\\n\");\n            out.append(\"last: \").append(last == null ? \"n/a\" : last).append(\"\\n\");\n            out.append(\"top errors:\\n\");\n\n            List<ErrorGroup> sorted = new ArrayList<>(groups.values());\n            sorted.sort((a, b) -> {\n                if (a.count != b.count) {\n                    return Long.compare(b.count, a.count);\n                }\n                return a.message.compareTo(b.message);\n            });\n\n            int limit = Math.max(0, top);\n            for (int i = 0; i < sorted.size() && i < limit; i++) {\n                ErrorGroup g = sorted.get(i);\n                out.append(\"  \").append(g.count).append(\" \").append(g.message).append(\"\\n\");\n            }\n\n            System.out.print(out);\n        } catch (IOException e) {\n            System.err.println(\"error: cannot read \" + file);\n            System.exit(2);\n        } finally {\n            if (reader != null) {\n                try {\n                    reader.close();\n                } catch (IOException ignored) {\n                }\n            }\n        }\n    }\n\n    private static boolean isValidTimestamp(String ts) {\n        if (!TIMESTAMP_SHAPE.matcher(ts).matches()) {\n            return false;\n        }\n        try {\n            LocalDateTime.parse(ts);\n            return true;\n        } catch (DateTimeParseException e) {\n            return false;\n        }\n    }\n\n    private static String normalize(String message) {\n        String normalized = UUID_PATTERN.matcher(message).replaceAll(\"<uuid>\");\n        normalized = HEX_PATTERN.matcher(normalized).replaceAll(\"<hex>\");\n        normalized = NUM_PATTERN.matcher(normalized).replaceAll(\"<num>\");\n        return normalized;\n    }\n\n    private static void usageError(String message) {\n        System.err.println(\"error: \" + message);\n        System.exit(2);\n    }\n\n    private static class ErrorGroup {\n        final String message;\n        long count;\n\n        ErrorGroup(String message) {\n            this.message = message;\n            this.count = 0;\n        }\n    }\n}\n"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 3475,
+          "cache_read_input_tokens": 27891,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3475
+          },
+          "output_tokens": 7,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "51708c77-981f-4468-9f9d-173b95f00e2e",
+      "timestamp": "2026-09-20T17:31:08.620Z",
+      "request_id": "req_011CfF63nxnk7wPQ9PdD81KC",
+      "wire_tool_inputs": {
+        "toolu_01Pz7HU29FVyqRe1Hx24QSoT": {
+          "file_path": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/Tool.java",
+          "content": "import java.io.BufferedReader;\nimport java.io.File;\nimport java.io.FileReader;\nimport java.io.IOException;\nimport java.io.InputStreamReader;\nimport java.nio.charset.StandardCharsets;\nimport java.time.LocalDateTime;\nimport java.time.format.DateTimeParseException;\nimport java.util.ArrayList;\nimport java.util.LinkedHashMap;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.regex.Pattern;\n\npublic class Tool {\n\n    private static final Pattern TIMESTAMP_SHAPE =\n            Pattern.compile(\"\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}\");\n\n    private static final Pattern UUID_PATTERN = Pattern.compile(\n            \"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\");\n    private static final Pattern HEX_PATTERN =\n            Pattern.compile(\"\\\\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\\\\b\");\n    private static final Pattern NUM_PATTERN = Pattern.compile(\"[0-9]+\");\n\n    private static final List<String> LEVELS = List.of(\"DEBUG\", \"INFO\", \"WARN\", \"ERROR\");\n\n    private static final String HELP_TEXT =\n            \"Usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\\n\" +\n            \"\\n\" +\n            \"Streaming summary of a log file (or stdin).\\n\" +\n            \"\\n\" +\n            \"Arguments:\\n\" +\n            \"  FILE            log file to read; omitted or - means read stdin\\n\" +\n            \"\\n\" +\n            \"Options:\\n\" +\n            \"  --since TIMESTAMP   only consider lines with TIMESTAMP >= this value\\n\" +\n            \"  --level LEVEL       only consider lines at exactly this level\\n\" +\n            \"                      (one of DEBUG, INFO, WARN, ERROR)\\n\" +\n            \"  --top N             number of top error groups to show (default 5)\\n\" +\n            \"  --help              show this help message and exit\\n\";\n\n    public static void main(String[] args) {\n        String file = null;\n        String since = null;\n        String level = null;\n        int top = 5;\n\n        for (int i = 0; i < args.length; i++) {\n            String arg = args[i];\n            switch (arg) {\n                case \"--help\":\n                    System.out.print(HELP_TEXT);\n                    System.exit(0);\n                    return;\n                case \"--since\":\n                    if (i + 1 >= args.length) {\n                        usageError(\"missing value for --since\");\n                    }\n                    since = args[++i];\n                    break;\n                case \"--level\":\n                    if (i + 1 >= args.length) {\n                        usageError(\"missing value for --level\");\n                    }\n                    level = args[++i];\n                    break;\n                case \"--top\":\n                    if (i + 1 >= args.length) {\n                        usageError(\"missing value for --top\");\n                    }\n                    String topVal = args[++i];\n                    try {\n                        top = Integer.parseInt(topVal);\n                    } catch (NumberFormatException e) {\n                        usageError(\"invalid value for --top: \" + topVal);\n                    }\n                    break;\n                default:\n                    if (arg.startsWith(\"--\")) {\n                        usageError(\"unknown flag: \" + arg);\n                    } else {\n                        if (file != null) {\n                            usageError(\"unexpected argument: \" + arg);\n                        }\n                        file = arg;\n                    }\n                    break;\n            }\n        }\n\n        if (since != null && !isValidTimestamp(since)) {\n            usageError(\"invalid value for --since: \" + since);\n        }\n        if (level != null && !LEVELS.contains(level)) {\n            usageError(\"invalid value for --level: \" + level);\n        }\n\n        BufferedReader reader = null;\n        try {\n            if (file == null || file.equals(\"-\")) {\n                reader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));\n            } else {\n                File f = new File(file);\n                if (!f.isFile() || !f.canRead()) {\n                    System.err.println(\"error: cannot read \" + file);\n                    System.exit(2);\n                    return;\n                }\n                reader = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));\n            }\n\n            long total = 0;\n            Map<String, Long> levelCounts = new LinkedHashMap<>();\n            for (String lvl : LEVELS) {\n                levelCounts.put(lvl, 0L);\n            }\n            String first = null;\n            String last = null;\n\n            Map<String, ErrorGroup> groups = new LinkedHashMap<>();\n\n            String line;\n            while ((line = reader.readLine()) != null) {\n                String[] parts = line.split(\" \", 3);\n                if (parts.length < 3) {\n                    continue;\n                }\n                String ts = parts[0];\n                String lvl = parts[1];\n                String message = parts[2];\n\n                if (!isValidTimestamp(ts)) {\n                    continue;\n                }\n                if (!LEVELS.contains(lvl)) {\n                    continue;\n                }\n\n                if (since != null && ts.compareTo(since) < 0) {\n                    continue;\n                }\n                if (level != null && !lvl.equals(level)) {\n                    continue;\n                }\n\n                total++;\n                levelCounts.put(lvl, levelCounts.get(lvl) + 1);\n                if (first == null) {\n                    first = ts;\n                }\n                last = ts;\n\n                if (lvl.equals(\"ERROR\")) {\n                    String normalized = normalize(message);\n                    ErrorGroup group = groups.get(normalized);\n                    if (group == null) {\n                        group = new ErrorGroup(message);\n                        groups.put(normalized, group);\n                    }\n                    group.count++;\n                }\n            }\n\n            StringBuilder out = new StringBuilder();\n            out.append(\"total: \").append(total).append(\"\\n\");\n            out.append(\"by level: \");\n            for (int i = 0; i < LEVELS.size(); i++) {\n                if (i > 0) {\n                    out.append(\" \");\n                }\n                String lvl = LEVELS.get(i);\n                out.append(lvl).append(\"=\").append(levelCounts.get(lvl));\n            }\n            out.append(\"\\n\");\n            out.append(\"first: \").append(first == null ? \"n/a\" : first).append(\"\\n\");\n            out.append(\"last: \").append(last == null ? \"n/a\" : last).append(\"\\n\");\n            out.append(\"top errors:\\n\");\n\n            List<ErrorGroup> sorted = new ArrayList<>(groups.values());\n            sorted.sort((a, b) -> {\n                if (a.count != b.count) {\n                    return Long.compare(b.count, a.count);\n                }\n                return a.message.compareTo(b.message);\n            });\n\n            int limit = Math.max(0, top);\n            for (int i = 0; i < sorted.size() && i < limit; i++) {\n                ErrorGroup g = sorted.get(i);\n                out.append(\"  \").append(g.count).append(\" \").append(g.message).append(\"\\n\");\n            }\n\n            System.out.print(out);\n        } catch (IOException e) {\n            System.err.println(\"error: cannot read \" + file);\n            System.exit(2);\n        } finally {\n            if (reader != null) {\n                try {\n                    reader.close();\n                } catch (IOException ignored) {\n                }\n            }\n        }\n    }\n\n    private static boolean isValidTimestamp(String ts) {\n        if (!TIMESTAMP_SHAPE.matcher(ts).matches()) {\n            return false;\n        }\n        try {\n            LocalDateTime.parse(ts);\n            return true;\n        } catch (DateTimeParseException e) {\n            return false;\n        }\n    }\n\n    private static String normalize(String message) {\n        String normalized = UUID_PATTERN.matcher(message).replaceAll(\"<uuid>\");\n        normalized = HEX_PATTERN.matcher(normalized).replaceAll(\"<hex>\");\n        normalized = NUM_PATTERN.matcher(normalized).replaceAll(\"<num>\");\n        return normalized;\n    }\n\n    private static void usageError(String message) {\n        System.err.println(\"error: \" + message);\n        System.exit(2);\n    }\n\n    private static class ErrorGroup {\n        final String message;\n        long count;\n\n        ErrorGroup(String message) {\n            this.message = message;\n            this.count = 0;\n        }\n    }\n}\n"
+        }
+      }
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_01Pz7HU29FVyqRe1Hx24QSoT",
+            "type": "tool_result",
+            "content": "File created successfully at: /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/Tool.java (file state is current in your context \u2014 no need to Read it back)"
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "5cfe77f4-0665-4584-8d77-b78cac9e404a",
+      "timestamp": "2026-09-20T17:31:08.665Z",
+      "tool_use_result": {
+        "type": "create",
+        "filePath": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/Tool.java",
+        "content": "import java.io.BufferedReader;\nimport java.io.File;\nimport java.io.FileReader;\nimport java.io.IOException;\nimport java.io.InputStreamReader;\nimport java.nio.charset.StandardCharsets;\nimport java.time.LocalDateTime;\nimport java.time.format.DateTimeParseException;\nimport java.util.ArrayList;\nimport java.util.LinkedHashMap;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.regex.Pattern;\n\npublic class Tool {\n\n    private static final Pattern TIMESTAMP_SHAPE =\n            Pattern.compile(\"\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}\");\n\n    private static final Pattern UUID_PATTERN = Pattern.compile(\n            \"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\");\n    private static final Pattern HEX_PATTERN =\n            Pattern.compile(\"\\\\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\\\\b\");\n    private static final Pattern NUM_PATTERN = Pattern.compile(\"[0-9]+\");\n\n    private static final List<String> LEVELS = List.of(\"DEBUG\", \"INFO\", \"WARN\", \"ERROR\");\n\n    private static final String HELP_TEXT =\n            \"Usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\\n\" +\n            \"\\n\" +\n            \"Streaming summary of a log file (or stdin).\\n\" +\n            \"\\n\" +\n            \"Arguments:\\n\" +\n            \"  FILE            log file to read; omitted or - means read stdin\\n\" +\n            \"\\n\" +\n            \"Options:\\n\" +\n            \"  --since TIMESTAMP   only consider lines with TIMESTAMP >= this value\\n\" +\n            \"  --level LEVEL       only consider lines at exactly this level\\n\" +\n            \"                      (one of DEBUG, INFO, WARN, ERROR)\\n\" +\n            \"  --top N             number of top error groups to show (default 5)\\n\" +\n            \"  --help              show this help message and exit\\n\";\n\n    public static void main(String[] args) {\n        String file = null;\n        String since = null;\n        String level = null;\n        int top = 5;\n\n        for (int i = 0; i < args.length; i++) {\n            String arg = args[i];\n            switch (arg) {\n                case \"--help\":\n                    System.out.print(HELP_TEXT);\n                    System.exit(0);\n                    return;\n                case \"--since\":\n                    if (i + 1 >= args.length) {\n                        usageError(\"missing value for --since\");\n                    }\n                    since = args[++i];\n                    break;\n                case \"--level\":\n                    if (i + 1 >= args.length) {\n                        usageError(\"missing value for --level\");\n                    }\n                    level = args[++i];\n                    break;\n                case \"--top\":\n                    if (i + 1 >= args.length) {\n                        usageError(\"missing value for --top\");\n                    }\n                    String topVal = args[++i];\n                    try {\n                        top = Integer.parseInt(topVal);\n                    } catch (NumberFormatException e) {\n                        usageError(\"invalid value for --top: \" + topVal);\n                    }\n                    break;\n                default:\n                    if (arg.startsWith(\"--\")) {\n                        usageError(\"unknown flag: \" + arg);\n                    } else {\n                        if (file != null) {\n                            usageError(\"unexpected argument: \" + arg);\n                        }\n                        file = arg;\n                    }\n                    break;\n            }\n        }\n\n        if (since != null && !isValidTimestamp(since)) {\n            usageError(\"invalid value for --since: \" + since);\n        }\n        if (level != null && !LEVELS.contains(level)) {\n            usageError(\"invalid value for --level: \" + level);\n        }\n\n        BufferedReader reader = null;\n        try {\n            if (file == null || file.equals(\"-\")) {\n                reader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));\n            } else {\n                File f = new File(file);\n                if (!f.isFile() || !f.canRead()) {\n                    System.err.println(\"error: cannot read \" + file);\n                    System.exit(2);\n                    return;\n                }\n                reader = new BufferedReader(new FileReader(f, StandardCharsets.UTF_8));\n            }\n\n            long total = 0;\n            Map<String, Long> levelCounts = new LinkedHashMap<>();\n            for (String lvl : LEVELS) {\n                levelCounts.put(lvl, 0L);\n            }\n            String first = null;\n            String last = null;\n\n            Map<String, ErrorGroup> groups = new LinkedHashMap<>();\n\n            String line;\n            while ((line = reader.readLine()) != null) {\n                String[] parts = line.split(\" \", 3);\n                if (parts.length < 3) {\n                    continue;\n                }\n                String ts = parts[0];\n                String lvl = parts[1];\n                String message = parts[2];\n\n                if (!isValidTimestamp(ts)) {\n                    continue;\n                }\n                if (!LEVELS.contains(lvl)) {\n                    continue;\n                }\n\n                if (since != null && ts.compareTo(since) < 0) {\n                    continue;\n                }\n                if (level != null && !lvl.equals(level)) {\n                    continue;\n                }\n\n                total++;\n                levelCounts.put(lvl, levelCounts.get(lvl) + 1);\n                if (first == null) {\n                    first = ts;\n                }\n                last = ts;\n\n                if (lvl.equals(\"ERROR\")) {\n                    String normalized = normalize(message);\n                    ErrorGroup group = groups.get(normalized);\n                    if (group == null) {\n                        group = new ErrorGroup(message);\n                        groups.put(normalized, group);\n                    }\n                    group.count++;\n                }\n            }\n\n            StringBuilder out = new StringBuilder();\n            out.append(\"total: \").append(total).append(\"\\n\");\n            out.append(\"by level: \");\n            for (int i = 0; i < LEVELS.size(); i++) {\n                if (i > 0) {\n                    out.append(\" \");\n                }\n                String lvl = LEVELS.get(i);\n                out.append(lvl).append(\"=\").append(levelCounts.get(lvl));\n            }\n            out.append(\"\\n\");\n            out.append(\"first: \").append(first == null ? \"n/a\" : first).append(\"\\n\");\n            out.append(\"last: \").append(last == null ? \"n/a\" : last).append(\"\\n\");\n            out.append(\"top errors:\\n\");\n\n            List<ErrorGroup> sorted = new ArrayList<>(groups.values());\n            sorted.sort((a, b) -> {\n                if (a.count != b.count) {\n                    return Long.compare(b.count, a.count);\n                }\n                return a.message.compareTo(b.message);\n            });\n\n            int limit = Math.max(0, top);\n            for (int i = 0; i < sorted.size() && i < limit; i++) {\n                ErrorGroup g = sorted.get(i);\n                out.append(\"  \").append(g.count).append(\" \").append(g.message).append(\"\\n\");\n            }\n\n            System.out.print(out);\n        } catch (IOException e) {\n            System.err.println(\"error: cannot read \" + file);\n            System.exit(2);\n        } finally {\n            if (reader != null) {\n                try {\n                    reader.close();\n                } catch (IOException ignored) {\n                }\n            }\n        }\n    }\n\n    private static boolean isValidTimestamp(String ts) {\n        if (!TIMESTAMP_SHAPE.matcher(ts).matches()) {\n            return false;\n        }\n        try {\n            LocalDateTime.parse(ts);\n            return true;\n        } catch (DateTimeParseException e) {\n            return false;\n        }\n    }\n\n    private static String normalize(String message) {\n        String normalized = UUID_PATTERN.matcher(message).replaceAll(\"<uuid>\");\n        normalized = HEX_PATTERN.matcher(normalized).replaceAll(\"<hex>\");\n        normalized = NUM_PATTERN.matcher(normalized).replaceAll(\"<num>\");\n        return normalized;\n    }\n\n    private static void usageError(String message) {\n        System.err.println(\"error: \" + message);\n        System.exit(2);\n    }\n\n    private static class ErrorGroup {\n        final String message;\n        long count;\n\n        ErrorGroup(String message) {\n            this.message = message;\n            this.count = 0;\n        }\n    }\n}\n",
+        "structuredPatch": [],
+        "originalFile": null,
+        "userModified": false
+      }
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 50,
+      "estimated_tokens_delta": 50,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "65a52ee6-6c29-4703-800b-ac7ab535e0c7"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 150,
+      "estimated_tokens_delta": 100,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "97bdf9fd-3a2b-4b07-a526-0e1c4aa6bf07"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 239,
+      "estimated_tokens_delta": 89,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "de631035-53b1-4311-9fe9-8cc810ad14c7"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF698aeQgfVPe27DVLdA",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "ErUHCqgBCBIYAipAIjGbUl2fP88NjIZL5kOvjC9Jjw19MQDYMctBKAywvppuvFkuQVSoKbgkVh0znr5MhZTqpe41eyKnAAEws1fwRDIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ5OGE3N2NhOC0zNDYzLTRlOGYtYTViYy1iMGZkYTJiZTEzNTlyENQFFdbvOs9TGzbDqN4EPPuIAQGoAeCwwNUGsAECEgy2gnR3vc0Ohr4m3I4aDH2iL43S+EGm3VpwFiIwAPQmGowJoFk9k27kVrybsl0x71nUtDfyK+tIF3t35CFgHdO6GWsVVb8zOI2MPk/yKrkF1hEheekk+YRG0pSqf33KPsFewg1Cl9f29lCfeTs1bM+dG58Ux2fhLxN1AY2ll7e5RsSsWeXgPm0GMBiwmYCN8yPBuzl86gLy5/QKR9VMzEdkQFae+fFerxpBZqyJNf7tKiJXakYX207rT7csgLqS/amQOt1obi1T4axyDEl2tzCqURnwUAuGR0i4AYFQNpTqVjNF26C5iuHiplgpNF2/OHt5M3lJeMf41hEmLuo7OF5H/4aajwy+Krcc3EVE0u2HOOiW49wAnpEo16tW5+MuoK8SPUAr/Cn/ZoiQGs806dwrqGg+eWNtwnrfA9JX+BAm+IdaArHlUL/DAS6eJDFc0rHSzT6cswDOxsKksklkzT7zpMCNPLSGmc0vZFeTs5NgkycTu3kxV8RXeS184jHo7st9piwYN15gLHQEm9WeEz6hT8/kKih4QuA8BgEkxyxyewEf14iYR7GCGIZBEMo0dbfkkunaN5ozzF0EycRWdPRARUbjJzWfjCUpJ0VIwC3mKm7k4bhOSMmQNIVqGvphQwscU84zMQuYlA3gy+In9Ei4N+EcntYKuOTyRSnq3Lvp3kBtFJ34+hi3WEBEMc+RBWhdHRMi4Qa/NklDErIQ2kfKWODPHU3AsCGTAEAJMpyKnuWw+zH0p+JbTlEW+TejHYfGUuQSgfe2MIZuzbyyR1UTtndgB4yGMJCZQg1U8gvQ55CGhqYHBYxyFH6izDjMASmXnOCX/+7BEnHGd0FN1pAChCOEVAQmHWDHsWK5iRICaUvOD5Ft3OjIHHzLvqYex1pYQYoaK12RY3uZ2Ro2XSKi0Blyv+JJj/dHtTeskCCuupqt1d4wzykSHhO54oqHFiLrzpYi0T25I0GlTVysepIKdjMC+a9rqKKdLXSGWbTrlOYrcUDCM/+T53HbOk4KLcybFy+AJ/8AjhgB"
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 8363,
+          "cache_read_input_tokens": 31366,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 8363
+          },
+          "output_tokens": 6,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "932a1433-dad4-407d-a5f0-1f702b5c7342",
+      "timestamp": "2026-09-20T17:31:13.020Z",
+      "request_id": "req_011CfF6981evKc6EdECnSxBK"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF698aeQgfVPe27DVLdA",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01VJg1PE3mbJWuYXFRyZLVxo",
+            "name": "Bash",
+            "input": {
+              "command": "java Tool.java --help; echo \"EXIT:$?\""
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 8363,
+          "cache_read_input_tokens": 31366,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 8363
+          },
+          "output_tokens": 6,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "d1e93227-7a81-402a-a074-b2a3c1d64eca",
+      "timestamp": "2026-09-20T17:31:13.350Z",
+      "request_id": "req_011CfF6981evKc6EdECnSxBK",
+      "wire_tool_inputs": {
+        "toolu_01VJg1PE3mbJWuYXFRyZLVxo": {
+          "command": "cd /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09 && java Tool.java --help; echo \"EXIT:$?\""
+        }
+      },
+      "wire_ingest_context": {
+        "toolu_01VJg1PE3mbJWuYXFRyZLVxo": {
+          "cwd": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09"
+        }
+      }
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_01VJg1PE3mbJWuYXFRyZLVxo",
+            "type": "tool_result",
+            "content": "Usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n\nStreaming summary of a log file (or stdin).\n\nArguments:\n  FILE            log file to read; omitted or - means read stdin\n\nOptions:\n  --since TIMESTAMP   only consider lines with TIMESTAMP >= this value\n  --level LEVEL       only consider lines at exactly this level\n                      (one of DEBUG, INFO, WARN, ERROR)\n  --top N             number of top error groups to show (default 5)\n  --help              show this help message and exit\nEXIT:0",
+            "is_error": false
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "d6c6d10d-a63f-4ab2-9f4f-8d93fcfcc616",
+      "timestamp": "2026-09-20T17:31:13.959Z",
+      "tool_use_result": {
+        "stdout": "Usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]\n\nStreaming summary of a log file (or stdin).\n\nArguments:\n  FILE            log file to read; omitted or - means read stdin\n\nOptions:\n  --since TIMESTAMP   only consider lines with TIMESTAMP >= this value\n  --level LEVEL       only consider lines at exactly this level\n                      (one of DEBUG, INFO, WARN, ERROR)\n  --top N             number of top error groups to show (default 5)\n  --help              show this help message and exit\nEXIT:0",
+        "stderr": "",
+        "interrupted": false,
+        "isImage": false,
+        "noOutputExpected": false
+      }
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF69X9hvgVbAxhtzjsaz",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Now let's test with actual log data covering normal stats, filters, error grouping, and edge cases."
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 611,
+          "cache_read_input_tokens": 39729,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 611
+          },
+          "output_tokens": 5,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "d102c945-8617-4e74-b8f5-689b518f6020",
+      "timestamp": "2026-09-20T17:31:16.050Z",
+      "request_id": "req_011CfF69Wiu2WktC4LmNQnVr"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF69X9hvgVbAxhtzjsaz",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01FNA1RqioLkqvzL5fjctReR",
+            "name": "Bash",
+            "input": {
+              "command": "cat > /tmp/test.log <<'EOF'\n2024-01-01T10:00:00 INFO starting up\n2024-01-01T10:00:01 DEBUG debug msg\n2024-01-01T10:00:02 ERROR failed request id=abc12345-1234-5678-9abc-123456789abc\n2024-01-01T10:00:03 ERROR failed request id=deadbeef12\n2024-01-01T10:00:04 ERROR failed request id=99999999\n2024-01-01T10:00:05 WARN slow response\n2024-01-01T10:00:06 ERROR failed request id=deadbeef34\nbad line here\n2024-01-01T10:00:07 ERROR another kind of error\n2024-01-01T10:00:08 ERROR another kind of error\n2024-01-01T10:00:09 ERROR another kind of error\nEOF\njava Tool.java /tmp/test.log; echo \"EXIT:$?\""
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 611,
+          "cache_read_input_tokens": 39729,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 611
+          },
+          "output_tokens": 5,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "ca35a46a-8ee0-42cb-97eb-6505eeea34f3",
+      "timestamp": "2026-09-20T17:31:18.974Z",
+      "request_id": "req_011CfF69Wiu2WktC4LmNQnVr",
+      "wire_tool_inputs": {
+        "toolu_01FNA1RqioLkqvzL5fjctReR": {
+          "command": "cd /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09 && cat > /tmp/test.log <<'EOF'\n2024-01-01T10:00:00 INFO starting up\n2024-01-01T10:00:01 DEBUG debug msg\n2024-01-01T10:00:02 ERROR failed request id=abc12345-1234-5678-9abc-123456789abc\n2024-01-01T10:00:03 ERROR failed request id=deadbeef12\n2024-01-01T10:00:04 ERROR failed request id=99999999\n2024-01-01T10:00:05 WARN slow response\n2024-01-01T10:00:06 ERROR failed request id=deadbeef34\nbad line here\n2024-01-01T10:00:07 ERROR another kind of error\n2024-01-01T10:00:08 ERROR another kind of error\n2024-01-01T10:00:09 ERROR another kind of error\nEOF\njava Tool.java /tmp/test.log; echo \"EXIT:$?\""
+        }
+      },
+      "wire_ingest_context": {
+        "toolu_01FNA1RqioLkqvzL5fjctReR": {
+          "cwd": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09"
+        }
+      }
+    },
+    {
+      "type": "rate_limit_event",
+      "rate_limit_info": {
+        "status": "allowed",
+        "resetsAt": 1789938600,
+        "rateLimitType": "five_hour",
+        "overageStatus": "rejected",
+        "overageDisabledReason": "org_level_disabled",
+        "isUsingOverage": false,
+        "unifiedWindows": {
+          "five_hour": {
+            "utilization": 0.3,
+            "resetsAt": 1789938600
+          },
+          "seven_day": {
+            "utilization": 0.11,
+            "resetsAt": 1789948800
+          }
+        }
+      },
+      "uuid": "4659d7f8-d022-40ea-b774-d31ad4ca56f5",
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b"
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_01FNA1RqioLkqvzL5fjctReR",
+            "type": "tool_result",
+            "content": "total: 10\nby level: DEBUG=1 INFO=1 WARN=1 ERROR=7\nfirst: 2024-01-01T10:00:00\nlast: 2024-01-01T10:00:09\ntop errors:\n  3 another kind of error\n  2 failed request id=deadbeef12\n  1 failed request id=99999999\n  1 failed request id=abc12345-1234-5678-9abc-123456789abc\nEXIT:0",
+            "is_error": false
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "2ccb4e7c-6e51-4865-a710-a6e1d579feb0",
+      "timestamp": "2026-09-20T17:31:19.272Z",
+      "tool_use_result": {
+        "stdout": "total: 10\nby level: DEBUG=1 INFO=1 WARN=1 ERROR=7\nfirst: 2024-01-01T10:00:00\nlast: 2024-01-01T10:00:09\ntop errors:\n  3 another kind of error\n  2 failed request id=deadbeef12\n  1 failed request id=99999999\n  1 failed request id=abc12345-1234-5678-9abc-123456789abc\nEXIT:0",
+        "stderr": "",
+        "interrupted": false,
+        "isImage": false,
+        "noOutputExpected": false
+      }
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 50,
+      "estimated_tokens_delta": 50,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "9e1f5fd4-2c17-4d06-b332-a1c38bbc77a6"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 100,
+      "estimated_tokens_delta": 50,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "88fb406b-fc1e-4eb0-9559-5414f5e353b3"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 250,
+      "estimated_tokens_delta": 150,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "ba63db94-4523-4280-9c2e-ba6dab33a676"
+    },
+    {
+      "type": "system",
+      "subtype": "thinking_tokens",
+      "estimated_tokens": 312,
+      "estimated_tokens_delta": 62,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "eb89294c-641a-4a68-bad5-48bca39ca91e"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF69uwAUnqbHdToE2thY",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "EtYJCqgBCBIYAipArCFxxHoCTwUTuZKoB/CZmZ3rmrwpl4bXnIHUZR/gG2YTucVS92tFO0Thx99AsbtoEG2++0Z5cCU+vLWbTs5phzIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ5OGE3N2NhOC0zNDYzLTRlOGYtYTViYy1iMGZkYTJiZTEzNTlyENQFFdbvOs9TGzbDqN4EPPuIAQGoAeywwNUGsAECEgwBYsVEebanc6FgsXEaDK6jjnhEHciTHZnR1CIwvyLN6LL8qPuK6l2QHpIlc6PGTcH2Pgh8U6zR42i4Cj83TymEl3nzVZj8BQfLPSAkKtoHdCu2p5Acev8tQ7iCcd9w4GB80eBsJ99A2UEHJBAxhzf7ygi7e9ivwqfosNNbsDXZVkeFDicYpPPbf4KlHV6Lf2OFLDx7rNewLQbxTnOJuqplR7E/B1MIj9Tyd0XQPa26EckSnZwLDhRkOXNCSD33LCW2JhnxS5xIuWfnttVB1XPZQKI3mkfDhJE7nTfiyEAV+ysUp7EIbx6ZQpRxu92rrTsuuGBw/4IwskPG3QvGlGIVI0OHW+EcjfSjBwt3dpSnNn18TOD4ybzfoFn4JZufR/DW/T+yMFHiepv8c9NeL9l/ysuDXxUED+EHRU1HaDIoi412REbRWAcsnWbh9q8jlLokbutBAvBZyJX4rt1kxO279jkfrTJW0iT1hXQQl3DUmUX1aGGva7GnMrdZAJtV1gj3l62F/2abA1sz5lln94+irm+4tJ4TR3jgx3T0GYAVcRFFSgSm5xlR7tMq2jyJK+uv9KRnvgOip9KRapSCzv47icrgkCCp0JvB2uCA/AW9nfoxVGEtytpeJ8xNShl3r3gf22UpN/987w4+mR+5u/EVyn/icMwR6JuBxYoFFArLuHAgjTRvNW/zykPFiLzx37qBPORz5BvnvF3Zo3XI+WrEzNzrtYU0prxwsuGSaBnc46YIt1hVFDvqfQJv+BsS+01VzVZ/JawgSe0OGAVukHt8am0XP+AdYhRmnO4J05qexnAN04mcrCSQB1jnubmbQFJ2oVIJJLmU+slN8VuME84YnEjmgNbEqkQKJ7HRL+qcd6H/40opLL8bqruE/EERg0GsNacYlYQJpNqkdnKVdG8KgtGtOpgYOEhlpo6sG7J1wtjpvb3qUNyQFX1tkHnlTkJrZeT3Z/Lg2WjmufQjGuJ9ah3W0eCrrGJMxi8hJYL8pOeBNRzeFcuI/C+ERdcGJCSXoik87/uVWVxggtlIw7UxvXew//b3rs71TkInta8l2NhPQrdX7myKeZUzJBbQXfxpcxg9HkKxj+t/lS8GvktZjHr9An3XM09/inlj8DSpNB+5MMmkBKGI7xAgcSrfOfp3i9/psECMtaKj+iIakPTpTEWcKRf63IMi6GtHoNvyziRdmPiJW2VuUyGvbJpLGYWsH6kfRCrTk2K/M1STsXGjVxRL+6oTs5df5CIi9Jw1kuuBbH6lJGP9iGU6EdXn2h748p/oornxUJ7M+b6+fT5WjPLDJPMLXBIkfrKKRV0f55NdKXRSz5Gtz8dVdiAbOtDF7U4C3xnJX3t21OXm+v27zhNqrjxuGeJhJY+o+xin63/1t0drdo+ctiPmWEsoVEJeRcln13CSEykYAQ=="
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 637,
+          "cache_read_input_tokens": 40340,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 637
+          },
+          "output_tokens": 5,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "8576d1b2-9a7a-49ff-8fe4-4fdc616b9fb8",
+      "timestamp": "2026-09-20T17:31:24.458Z",
+      "request_id": "req_011CfF69uUsUePZwDRVA2UKo"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF69uwAUnqbHdToE2thY",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01God4DYnfgNqY8Nx79wfURa",
+            "name": "Bash",
+            "input": {
+              "command": "\\\necho \"--since filter:\" && java Tool.java /tmp/test.log --since 2024-01-01T10:00:05 && \\\necho \"--level filter:\" && java Tool.java /tmp/test.log --level ERROR --top 2 && \\\necho \"bad since:\" && java Tool.java /tmp/test.log --since notadate; echo \"EXIT:$?\" && \\\necho \"bad level:\" && java Tool.java /tmp/test.log --level TRACE; echo \"EXIT:$?\" && \\\necho \"missing file:\" && java Tool.java /tmp/doesnotexist.log; echo \"EXIT:$?\" && \\\necho \"unknown flag:\" && java Tool.java --bogus; echo \"EXIT:$?\" && \\\necho \"stdin:\" && echo \"2024-01-01T10:00:00 INFO hi\" | java Tool.java; echo \"EXIT:$?\" && \\\necho \"empty stdin:\" && printf \"\" | java Tool.java"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 637,
+          "cache_read_input_tokens": 40340,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 637
+          },
+          "output_tokens": 5,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "35ccd853-2d70-45ee-b0e9-18f12867692d",
+      "timestamp": "2026-09-20T17:31:26.827Z",
+      "request_id": "req_011CfF69uUsUePZwDRVA2UKo",
+      "wire_tool_inputs": {
+        "toolu_01God4DYnfgNqY8Nx79wfURa": {
+          "command": "cd /private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09 && \\\necho \"--since filter:\" && java Tool.java /tmp/test.log --since 2024-01-01T10:00:05 && \\\necho \"--level filter:\" && java Tool.java /tmp/test.log --level ERROR --top 2 && \\\necho \"bad since:\" && java Tool.java /tmp/test.log --since notadate; echo \"EXIT:$?\" && \\\necho \"bad level:\" && java Tool.java /tmp/test.log --level TRACE; echo \"EXIT:$?\" && \\\necho \"missing file:\" && java Tool.java /tmp/doesnotexist.log; echo \"EXIT:$?\" && \\\necho \"unknown flag:\" && java Tool.java --bogus; echo \"EXIT:$?\" && \\\necho \"stdin:\" && echo \"2024-01-01T10:00:00 INFO hi\" | java Tool.java; echo \"EXIT:$?\" && \\\necho \"empty stdin:\" && printf \"\" | java Tool.java"
+        }
+      },
+      "wire_ingest_context": {
+        "toolu_01God4DYnfgNqY8Nx79wfURa": {
+          "cwd": "/private/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09"
+        }
+      }
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_01God4DYnfgNqY8Nx79wfURa",
+            "type": "tool_result",
+            "content": "--since filter:\ntotal: 5\nby level: DEBUG=0 INFO=0 WARN=1 ERROR=4\nfirst: 2024-01-01T10:00:05\nlast: 2024-01-01T10:00:09\ntop errors:\n  3 another kind of error\n  1 failed request id=deadbeef34\n--level filter:\ntotal: 7\nby level: DEBUG=0 INFO=0 WARN=0 ERROR=7\nfirst: 2024-01-01T10:00:02\nlast: 2024-01-01T10:00:09\ntop errors:\n  3 another kind of error\n  2 failed request id=deadbeef12\nbad since:\nerror: invalid value for --since: notadate\nEXIT:2\nbad level:\nerror: invalid value for --level: TRACE\nEXIT:2\nmissing file:\nerror: cannot read /tmp/doesnotexist.log\nEXIT:2\nunknown flag:\nerror: unknown flag: --bogus\nEXIT:2\nstdin:\ntotal: 1\nby level: DEBUG=0 INFO=1 WARN=0 ERROR=0\nfirst: 2024-01-01T10:00:00\nlast: 2024-01-01T10:00:00\ntop errors:\nEXIT:0\nempty stdin:\ntotal: 0\nby level: DEBUG=0 INFO=0 WARN=0 ERROR=0\nfirst: n/a\nlast: n/a\ntop errors:",
+            "is_error": false
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "6d1a2cbc-b507-4da6-bcda-e7617d62ad64",
+      "timestamp": "2026-09-20T17:31:28.850Z",
+      "tool_use_result": {
+        "stdout": "--since filter:\ntotal: 5\nby level: DEBUG=0 INFO=0 WARN=1 ERROR=4\nfirst: 2024-01-01T10:00:05\nlast: 2024-01-01T10:00:09\ntop errors:\n  3 another kind of error\n  1 failed request id=deadbeef34\n--level filter:\ntotal: 7\nby level: DEBUG=0 INFO=0 WARN=0 ERROR=7\nfirst: 2024-01-01T10:00:02\nlast: 2024-01-01T10:00:09\ntop errors:\n  3 another kind of error\n  2 failed request id=deadbeef12\nbad since:\nerror: invalid value for --since: notadate\nEXIT:2\nbad level:\nerror: invalid value for --level: TRACE\nEXIT:2\nmissing file:\nerror: cannot read /tmp/doesnotexist.log\nEXIT:2\nunknown flag:\nerror: unknown flag: --bogus\nEXIT:2\nstdin:\ntotal: 1\nby level: DEBUG=0 INFO=1 WARN=0 ERROR=0\nfirst: 2024-01-01T10:00:00\nlast: 2024-01-01T10:00:00\ntop errors:\nEXIT:0\nempty stdin:\ntotal: 0\nby level: DEBUG=0 INFO=0 WARN=0 ERROR=0\nfirst: n/a\nlast: n/a\ntop errors:",
+        "stderr": "",
+        "interrupted": false,
+        "isImage": false,
+        "noOutputExpected": false
+      }
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF6AcsH3YFu9tPXuKQQG",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "All behaviors match the spec: filtering, error grouping/normalization (UUID/hex/num, in order), sorting ties by message, `n/a` handling, exit codes, and error messages all check out."
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 1309,
+          "cache_read_input_tokens": 40977,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1309
+          },
+          "output_tokens": 1,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "2003079a-08d0-479c-99dd-9d8d29c22d83",
+      "timestamp": "2026-09-20T17:31:31.651Z",
+      "request_id": "req_011CfF6AcQyp7EyQhjYr2h4T"
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF6AcsH3YFu9tPXuKQQG",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01HJSrXH4EbZPapJqwBWHkj4",
+            "name": "Bash",
+            "input": {
+              "command": "rm -f /tmp/test.log"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 1309,
+          "cache_read_input_tokens": 40977,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1309
+          },
+          "output_tokens": 1,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "cc319429-dee2-433f-8a78-3f782d6e7099",
+      "timestamp": "2026-09-20T17:31:31.655Z",
+      "request_id": "req_011CfF6AcQyp7EyQhjYr2h4T",
+      "wire_tool_inputs": {
+        "toolu_01HJSrXH4EbZPapJqwBWHkj4": {
+          "command": "rm -f /tmp/test.log"
+        }
+      }
+    },
+    {
+      "type": "user",
+      "message": {
+        "role": "user",
+        "content": [
+          {
+            "tool_use_id": "toolu_01HJSrXH4EbZPapJqwBWHkj4",
+            "type": "tool_result",
+            "content": "(Bash completed with no output)",
+            "is_error": false
+          }
+        ]
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "4765304f-aae8-4f28-892b-e8fdf512ab5d",
+      "timestamp": "2026-09-20T17:31:31.695Z",
+      "tool_use_result": {
+        "stdout": "",
+        "stderr": "",
+        "interrupted": false,
+        "isImage": false,
+        "noOutputExpected": true
+      }
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "model": "claude-sonnet-5",
+        "id": "msg_011CfF6AqBw919f6zi78x12L",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Implemented `Tool.java` in the working directory as a single-file classic-style Java program (`java Tool.java`), covering:\n\n- Positional `FILE` (or `-`/omitted for stdin), `--since`, `--level`, `--top`, `--help`\n- Hand-rolled arg parsing with `unknown flag: <flag>` for unrecognized flags, exit 2 on usage errors\n- Streaming line parsing (`split(\" \", 3)`), silently skipping malformed lines (bad shape, invalid timestamp, unknown level)\n- Filters applied before all stats (`--since` via lexicographic string compare, `--level` exact match)\n- Message normalization pipeline (UUID \u2192 hex \u2192 digit run) applied only for grouping, original first-seen message used for display\n- Top-N ERROR grouping sorted by count desc, then message asc, ties handled\n- Exact output format per spec, `n/a` for empty first/last, `top errors:` printed even when empty\n- File-not-found and invalid `--since`/`--level` error messages matching the spec's error shape\n\nVerified manually against sample logs: normal stats, `--since`/`--level`/`--top` filtering, UUID/hex/decimal normalization and grouping/sorting, stdin input, empty input, missing file, bad `--since`/`--level`, and unknown flags \u2014 all produced correct output and exit codes."
+          }
+        ],
+        "container": null,
+        "stop_reason": null,
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 181,
+          "cache_read_input_tokens": 42286,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 181
+          },
+          "output_tokens": 2,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "input_transformations": [],
+        "diagnostics": null,
+        "context_management": null
+      },
+      "parent_tool_use_id": null,
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "uuid": "ba443fe1-892a-4e48-8d33-6d8018ecc535",
+      "timestamp": "2026-09-20T17:31:37.612Z",
+      "request_id": "req_011CfF6ApYV3jY95g1pp8Wjt"
+    },
+    {
+      "duration_api_ms": 102261,
+      "stop_reason": "end_turn",
+      "session_id": "e1d76a79-7b71-45b5-b7ef-cf491199c50b",
+      "total_cost_usd": 0.2505666,
+      "usage": {
+        "input_tokens": 14,
+        "cache_creation_input_tokens": 23973,
+        "cache_read_input_tokens": 241083,
+        "output_tokens": 10643,
+        "output_tokens_details": {
+          "thinking_tokens": 5833
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 23973,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 455,
+            "cache_read_input_tokens": 42286,
+            "cache_creation_input_tokens": 181,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 181
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard"
+      },
+      "modelUsage": {
+        "claude-sonnet-5": {
+          "inputTokens": 14,
+          "outputTokens": 10643,
+          "cacheReadInputTokens": 241083,
+          "cacheCreationInputTokens": 23973,
+          "webSearchRequests": 0,
+          "costUSD": 0.2505666,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 64000,
+          "thinkingTokens": 5833,
+          "canonicalModel": "claude-sonnet-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "permission_denials": [],
+      "terminal_reason": "completed",
+      "fast_mode_state": "off",
+      "fast_mode_disabled_reason": "sdk_opt_in_required",
+      "subagent_stats": {
+        "spawned": 0,
+        "requested": {
+          "background": 0,
+          "foreground": 0,
+          "unset": 0
+        },
+        "started_in_background": 0,
+        "max_depth": 0,
+        "spawned_by_subagents": 0,
+        "completed": 0,
+        "failed": 0,
+        "killed": {
+          "parent": 0,
+          "user": 0,
+          "system": 0
+        },
+        "refused": {
+          "depth_limit": 0,
+          "concurrency_limit": 0,
+          "budget": 0
+        },
+        "by_type": {}
+      },
+      "is_error": false,
+      "num_turns": 8,
+      "subtype": "success",
+      "api_error_status": null,
+      "result": "Implemented `Tool.java` in the working directory as a single-file classic-style Java program (`java Tool.java`), covering:\n\n- Positional `FILE` (or `-`/omitted for stdin), `--since`, `--level`, `--top`, `--help`\n- Hand-rolled arg parsing with `unknown flag: <flag>` for unrecognized flags, exit 2 on usage errors\n- Streaming line parsing (`split(\" \", 3)`), silently skipping malformed lines (bad shape, invalid timestamp, unknown level)\n- Filters applied before all stats (`--since` via lexicographic string compare, `--level` exact match)\n- Message normalization pipeline (UUID \u2192 hex \u2192 digit run) applied only for grouping, original first-seen message used for display\n- Top-N ERROR grouping sorted by count desc, then message asc, ties handled\n- Exact output format per spec, `n/a` for empty first/last, `top errors:` printed even when empty\n- File-not-found and invalid `--since`/`--level` error messages matching the spec's error shape\n\nVerified manually against sample logs: normal stats, `--since`/`--level`/`--top` filtering, UUID/hex/decimal normalization and grouping/sorting, stdin input, empty input, missing file, bad `--since`/`--level`, and unknown flags \u2014 all produced correct output and exit codes.",
+      "ttft_ms": 2312,
+      "type": "result",
+      "duration_ms": 105227,
+      "uuid": "134ef18b-6dad-44dd-987f-348cf696ebaf",
+      "ttft_stream_ms": 1781,
+      "time_to_request_ms": 33,
+      "first_content_frame_ms": 1782,
+      "queued_turn_count": 0,
+      "result_index": 0
+    }
+  ],
+  "_wall_s_measured": 105.84866213798523,
+  "tool": "logsum",
+  "condition": "B-e",
+  "trial": 2,
+  "trial_dir": "/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09",
+  "model_requested": "sonnet",
+  "source_file": "/var/folders/kg/lwnx_xvd1yd828s14w_cg__40000gn/T/agent5b-logsum-3u1d7t09/Tool.java",
+  "conformance": {
+    "lang_detected": "java",
+    "passed": 8,
+    "total": 8,
+    "details": [
+      {
+        "case": "logsum-basic",
+        "ok": true
+      },
+      {
+        "case": "logsum-top3",
+        "ok": true
+      },
+      {
+        "case": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "case": "logsum-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "case": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "case": "logsum-missing-file",
+        "ok": true
+      }
+    ]
+  },
+  "success": true
+}

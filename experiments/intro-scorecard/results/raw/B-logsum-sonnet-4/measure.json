@@ -1,0 +1,205 @@
+{
+  "run_id": "B-logsum-sonnet-4",
+  "measured": "2026-10-11T09:02:49",
+  "run_command_reported": "./logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]",
+  "run_command_used": "./logsum",
+  "run_command_notes": [
+    "dropped placeholders:  [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]"
+  ],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "Logsum",
+    "launch": {
+      "lang": "java",
+      "entry": "Logsum",
+      "launch": "javac + java",
+      "wrapper": "logsum",
+      "evidence": [
+        "run command program: ./logsum",
+        "wrapper script logsum runs: java -cp \"out\" Logsum "
+      ],
+      "flags": [],
+      "java_opts": "-cp out",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "java": 8441,
+      "shell": 58
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "none",
+      "launch": "javac + java",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "none / javac + java",
+      "java_file_count": 1,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "logsum",
+      "evidence": {
+        "launch": [
+          "run command program: ./logsum",
+          "wrapper script logsum runs: java -cp \"out\" Logsum ",
+          "run command program: java",
+          "via wrapper script logsum"
+        ],
+        "source": [
+          "Logsum.java:38 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "Logsum.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "Logsum.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 8441
+    },
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 4442
+    },
+    {
+      "path": "logsum",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 58
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "logsum-basic",
+        "ok": true
+      },
+      {
+        "id": "logsum-top3",
+        "ok": true
+      },
+      {
+        "id": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "id": "logsum-since",
+        "ok": true
+      },
+      {
+        "id": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "id": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "id": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "id": "logsum-missing-file",
+        "ok": true
+      },
+      {
+        "id": "logsum-help",
+        "ok": true
+      }
+    ],
+    "passed": 9,
+    "total": 9,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.03,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 2065,
+    "build_file_tokens": 0,
+    "test_tokens": 0,
+    "source_files": [
+      "Logsum.java",
+      "logsum"
+    ],
+    "build_files": [],
+    "source_bytes": 8499,
+    "build_file_bytes": 0
+  },
+  "disk": {
+    "source_and_build_files_bytes": 8499,
+    "build_output_bytes": 9348,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 17847
+  },
+  "load_avg_at_bench_start": 4.12353515625,
+  "startup": {
+    "command": "./logsum --help",
+    "median_ms": 26.92252456,
+    "mean_ms": 26.96131431238095,
+    "stddev_ms": 0.5876838970471904,
+    "min_ms": 25.955357560000003,
+    "runs": 105,
+    "load_avg_before": 4.12353515625,
+    "load_avg_after": 3.953125
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-sonnet-4/opt/app.jar",
+    "main": "Logsum",
+    "training": {
+      "args": [
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/logsum.log"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-sonnet-4/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-sonnet-4/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-sonnet-4/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 12402688,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-sonnet-4/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-sonnet-4/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-sonnet-4/opt/app.jar Logsum --help",
+      "median_ms": 19.9311184,
+      "mean_ms": 20.006921009929073,
+      "stddev_ms": 0.6339149645966468,
+      "min_ms": 18.4042024,
+      "runs": 141,
+      "load_avg_before": 3.953125,
+      "load_avg_after": 3.79638671875
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-sonnet-4/opt/app.jar Logsum --help",
+      "median_ms": 24.252890380000004,
+      "mean_ms": 24.27648849206897,
+      "stddev_ms": 0.43401638191660297,
+      "min_ms": 23.07499388,
+      "runs": 116,
+      "load_avg_before": 3.79638671875,
+      "load_avg_after": 3.79638671875
+    }
+  },
+  "benchmarked": "2026-10-11T09:10:43"
+}

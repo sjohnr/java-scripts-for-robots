@@ -1,0 +1,44 @@
+planned: 84  already recorded: 6  to run: 78
+ledger attempts so far: 6  cap: 84  seed: 20261010
+  A jarsrc    haiku   3
+  A jarsrc    opus    3
+  A jarsrc    sonnet  3
+  A jsonpick  haiku   3
+  A jsonpick  opus    3
+  A jsonpick  sonnet  3
+  A logsum    haiku   2
+  A logsum    opus    2
+  A logsum    sonnet  2
+  A treesum   haiku   3
+  A treesum   opus    3
+  A treesum   sonnet  3
+  B jarsrc    haiku   4
+  B jarsrc    opus    4
+  B jarsrc    sonnet  4
+  B jsonpick  haiku   4
+  B jsonpick  opus    4
+  B jsonpick  sonnet  4
+  B logsum    haiku   3
+  B logsum    opus    3
+  B logsum    sonnet  3
+  B treesum   haiku   4
+  B treesum   opus    4
+  B treesum   sonnet  4
+--- [7/84] A-jarsrc-sonnet-1 (seed position 1) 2026-10-11T00:46:18+00:00
+    model=claude-sonnet-5-5 turns=5 cost=$0.114615 wall=40.7s subtype=success limits=[] apiKeySource=none
+    run command: ./jarsrc --help
+--- [8/84] B-treesum-opus-3 (seed position 2) 2026-10-11T00:47:01+00:00
+    model=claude-opus-5-5 turns=7 cost=$0.3077166 wall=73.2s subtype=success limits=[] apiKeySource=none
+    run command: ./treesum
+--- [9/84] A-treesum-haiku-3 (seed position 3) 2026-10-11T00:48:17+00:00
+    model=claude-haiku-5-5 turns=7 cost=$0.01633361 wall=82.5s subtype=success limits=[] apiKeySource=none
+    run command: ./treesum
+--- [10/84] A-treesum-sonnet-2 (seed position 5) 2026-10-11T00:49:42+00:00
+    model=claude-sonnet-5-5 turns=8 cost=$0.08957630000000001 wall=30.1s subtype=success limits=[] apiKeySource=none
+    run command: ./treesum
+--- [11/84] A-jarsrc-opus-2 (seed position 6) 2026-10-11T00:50:14+00:00
+    model=claude-opus-5-5 turns=7 cost=$0.3886836 wall=99.1s subtype=success limits=[] apiKeySource=none
+    run command: ./jarsrc
+--- [12/84] B-jsonpick-haiku-4 (seed position 7) 2026-10-11T00:51:56+00:00
+    model=claude-haiku-5-5 turns=22 cost=$0.04070655000000001 wall=198.0s subtype=success limits=[] apiKeySource=none
+    run command: ./bin/jsonpick

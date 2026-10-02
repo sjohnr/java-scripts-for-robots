@@ -1,0 +1,7 @@
+#!/bin/sh
+# Launcher: compiles on first use, then runs.
+D="$(cd "$(dirname "$0")" && pwd)"
+if [ ! -f "$D/build/Jarsrc.class" ] || [ "$D/src/Jarsrc.java" -nt "$D/build/Jarsrc.class" ]; then
+  javac -d "$D/build" "$D/src/Jarsrc.java" || exit 2
+fi
+exec java -cp "$D/build" Jarsrc "$@"

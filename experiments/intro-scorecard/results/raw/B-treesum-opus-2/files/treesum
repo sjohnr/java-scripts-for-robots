@@ -1,0 +1,6 @@
+#!/bin/sh
+# Launcher for treesum. Run ./build.sh once first.
+# JVM option env vars make the JVM print "Picked up ..." to stderr, which the spec forbids.
+unset JAVA_TOOL_OPTIONS _JAVA_OPTIONS JDK_JAVA_OPTIONS
+here="$(cd "$(dirname "$0")" && pwd)"
+exec java -Xshare:auto -XX:TieredStopAtLevel=1 -jar "$here/out/treesum.jar" "$@"

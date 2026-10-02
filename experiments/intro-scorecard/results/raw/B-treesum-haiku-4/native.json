@@ -1,0 +1,20 @@
+{
+ "run_id": "B-treesum-haiku-4",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-haiku-4/opt/app.jar",
+ "main": "treesum.Treesum",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-treesum-haiku-4/app",
+ "build_seconds": 10.0,
+ "image_bytes": 6397984,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-treesum-haiku-4/app --help",
+  "median_ms": 2.55444246,
+  "mean_ms": 2.570907177086835,
+  "stddev_ms": 0.1196936665630134,
+  "min_ms": 2.3540049599999993,
+  "runs": 714,
+  "load_avg_before": 11.2109375,
+  "load_avg_after": 10.71337890625
+ }
+}

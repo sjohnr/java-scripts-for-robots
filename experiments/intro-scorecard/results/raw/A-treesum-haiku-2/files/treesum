@@ -1,0 +1,188 @@
+#!/usr/bin/env python3
+"""treesum: compact repo overview. See SPEC.md."""
+
+import os
+import re
+import sys
+
+IGNORED_DIRS = frozenset({
+    ".git", "node_modules", "build", ".gradle", "target", "dist",
+    ".venv", "__pycache__", ".idea", ".vscode",
+})
+
+USAGE = """\
+usage: treesum [DIR] [--top N] [--ext-limit M]
+
+Print a compact overview of the tree under DIR.
+
+arguments:
+  DIR            directory to summarise (default: .)
+
+options:
+  --top N        number of largest files to list (default: 10)
+  --ext-limit M  number of distinct extensions shown in the by-extension
+                 table (default: 20); the rest are folded into an "other" row
+  --help         show this message and exit
+
+ignored directory names (anywhere in the tree, never descended into):
+  .git, node_modules, build, .gradle, target, dist, .venv, __pycache__,
+  .idea, .vscode
+
+symlinks are not followed and are not counted.
+"""
+
+
+class UsageError(Exception):
+    pass
+
+
+def write_out(text):
+    sys.stdout.buffer.write(text.encode("utf-8", "surrogateescape"))
+
+
+def write_err(text):
+    sys.stderr.buffer.write((text + "\n").encode("utf-8", "surrogateescape"))
+
+
+def parse_count(flag, value):
+    if not re.fullmatch(r"[0-9]+", value):
+        raise UsageError(f"error: invalid value for {flag}: {value}")
+    return int(value)
+
+
+def parse_args(argv):
+    top = 10
+    ext_limit = 20
+    positional = []
+    only_positional = False
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if only_positional or arg == "-" or not arg.startswith("-"):
+            positional.append(arg)
+            continue
+        if arg == "--":
+            only_positional = True
+            continue
+        name, has_eq, value = arg.partition("=")
+        if name == "--help" and not has_eq:
+            write_out(USAGE)
+            raise SystemExit(0)
+        if name not in ("--top", "--ext-limit"):
+            raise UsageError(f"unknown flag: {name}")
+        if not has_eq:
+            if i >= len(argv):
+                raise UsageError(f"error: {name} requires a value")
+            value = argv[i]
+            i += 1
+        if name == "--top":
+            top = parse_count(name, value)
+        else:
+            ext_limit = parse_count(name, value)
+    if len(positional) > 1:
+        raise UsageError(f"error: unexpected argument: {positional[1]}")
+    root = positional[0] if positional else "."
+    return root, top, ext_limit
+
+
+def extension(name):
+    # A dot at index 0 (e.g. ".gitignore") does not start an extension.
+    idx = name.rfind(".")
+    if idx <= 0:
+        return ""
+    return name[idx + 1:].lower()
+
+
+def count_loc(path):
+    newlines = 0
+    last = b""
+    with open(path, "rb") as f:
+        while True:
+            chunk = f.read(1 << 16)
+            if not chunk:
+                break
+            newlines += chunk.count(b"\n")
+            last = chunk[-1:]
+    if last and last != b"\n":
+        newlines += 1
+    return newlines
+
+
+def scan(root):
+    """Walk root. Raises OSError (with filename set) if a directory or file can't be read."""
+    files = 0
+    dirs = 0
+    by_ext = {}  # ext -> [file count, loc]
+    sizes = []  # (size, relative path)
+    stack = [(None, root)]  # (relative path of directory, filesystem path)
+    while stack:
+        rel, path = stack.pop()
+        with os.scandir(path) as it:
+            entries = list(it)
+        for entry in entries:
+            if entry.is_symlink():
+                continue
+            child_rel = entry.name if rel is None else rel + "/" + entry.name
+            if entry.is_dir(follow_symlinks=False):
+                if entry.name in IGNORED_DIRS:
+                    continue
+                dirs += 1
+                stack.append((child_rel, entry.path))
+            elif entry.is_file(follow_symlinks=False):
+                size = entry.stat(follow_symlinks=False).st_size
+                loc = count_loc(entry.path)
+                files += 1
+                row = by_ext.setdefault(extension(entry.name), [0, 0])
+                row[0] += 1
+                row[1] += loc
+                sizes.append((size, child_rel))
+    return files, dirs, by_ext, sizes
+
+
+def ext_rows(by_ext, ext_limit):
+    ordered = sorted(by_ext.items(), key=lambda kv: (-kv[1][0], kv[0]))
+    rows = [(ext or "(none)", count, loc) for ext, (count, loc) in ordered[:ext_limit]]
+    folded = ordered[ext_limit:]
+    if folded:
+        rows.append(("other",
+                     sum(count for _, (count, _) in folded),
+                     sum(loc for _, (_, loc) in folded)))
+    return rows
+
+
+def run(argv):
+    root, top, ext_limit = parse_args(argv)
+    if not os.path.isdir(root):
+        write_err(f"error: cannot read {root}")
+        return 2
+    try:
+        files, dirs, by_ext, sizes = scan(root)
+    except OSError as e:
+        write_err(f"error: cannot read {e.filename or root}")
+        return 2
+
+    lines = [
+        f"files: {files}",
+        f"dirs: {dirs}",
+        "by extension:",
+    ]
+    for label, count, loc in ext_rows(by_ext, ext_limit):
+        lines.append(f"  {label}  files={count} loc={loc}")
+    lines.append("largest files:")
+    for size, rel in sorted(sizes, key=lambda s: (-s[0], s[1]))[:top]:
+        lines.append(f"  {size} {rel}")
+    write_out("\n".join(lines) + "\n")
+    return 0
+
+
+def main():
+    try:
+        return run(sys.argv[1:])
+    except UsageError as e:
+        write_err(str(e))
+        return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

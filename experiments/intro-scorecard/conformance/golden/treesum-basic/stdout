@@ -1,0 +1,23 @@
+files: 200
+dirs: 8
+by extension:
+  txt  files=31 loc=3083
+  java  files=28 loc=3259
+  go  files=24 loc=2408
+  yaml  files=22 loc=2394
+  py  files=21 loc=2133
+  json  files=20 loc=1918
+  md  files=20 loc=2268
+  (none)  files=18 loc=1729
+  js  files=16 loc=1624
+largest files:
+  3472 dir0/dir2/dir6/file28.java
+  3454 dir0/dir4/file5.yaml
+  3454 file66.txt
+  3400 dir0/dir2/dir6/file163.java
+  3400 dir0/dir2/dir6/file51.js
+  3400 dir0/dir2/file16.java
+  3400 dir0/dir4/dir7/file141.go
+  3400 file65.json
+  3382 dir0/dir2/file102.yaml
+  3346 dir0/dir2/dir6/file20.md

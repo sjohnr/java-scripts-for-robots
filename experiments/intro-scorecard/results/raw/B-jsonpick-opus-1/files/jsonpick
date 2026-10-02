@@ -1,0 +1,7 @@
+#!/bin/sh
+# Run jsonpick; compiles on first use if ./build is missing or stale.
+dir=$(cd "$(dirname "$0")" && pwd)
+if [ ! -f "$dir/build/JsonPick.class" ] || [ "$dir/src/JsonPick.java" -nt "$dir/build/JsonPick.class" ]; then
+  "$dir/build.sh" >/dev/null || exit 2
+fi
+exec java -Xshare:auto -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -cp "$dir/build" JsonPick "$@"

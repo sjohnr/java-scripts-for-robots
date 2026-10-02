@@ -1,0 +1,209 @@
+{
+  "run_id": "B-jsonpick-opus-1.limit-1791681450",
+  "measured": "2026-10-11T09:08:43",
+  "run_command_reported": "You've hit your session limit \u00b7 resets 12:10am (America/Chicago)",
+  "run_command_used": "You've hit your session limit \u00b7 resets 12:10am (America/Chicago)",
+  "run_command_notes": [
+    "unparseable; used verbatim"
+  ],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": null,
+    "launch": {
+      "lang": null,
+      "entry": null,
+      "launch": null,
+      "wrapper": null,
+      "evidence": [],
+      "flags": [
+        "run command missing or unparseable"
+      ],
+      "java_opts": ""
+    },
+    "source_bytes_by_lang": {
+      "shell": 520,
+      "java": 24815
+    },
+    "flags": [
+      "run command missing or unparseable",
+      "language from dominant source (java); run command did not resolve it"
+    ],
+    "needs_review": true,
+    "java_style": {
+      "build": "build script",
+      "launch": "unknown",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "none",
+      "combination": "build script / unknown",
+      "java_file_count": 1,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": null,
+      "evidence": {
+        "build": [
+          "build.sh"
+        ],
+        "launch": [],
+        "source": [
+          "src/JsonPick.java:55 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/JsonPick.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 3310
+    },
+    {
+      "path": "build.sh",
+      "kind": "build",
+      "lang": null,
+      "bytes": 211
+    },
+    {
+      "path": "jsonpick",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 520
+    },
+    {
+      "path": "src/JsonPick.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 24815
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jsonpick-string",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-number",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-array-index",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-object",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-root",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-shape",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-shape-depth0",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-notfound",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 1,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-stdin",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      },
+      {
+        "id": "jsonpick-bad-json",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-help",
+        "ok": false,
+        "exit": 2,
+        "want_exit": 0,
+        "stdout_head": "",
+        "stderr_head": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+      }
+    ],
+    "passed": 1,
+    "total": 11,
+    "warmup": {
+      "exit": 2,
+      "seconds": 0.0,
+      "stderr_tail": "bash: -c: line 0: unexpected EOF while looking for matching `''\nbash: -c: line 1: syntax error: unexpected end of file\n"
+    },
+    "pass": false
+  },
+  "size": {
+    "source_tokens": 5312,
+    "build_file_tokens": 66,
+    "test_tokens": 0,
+    "source_files": [
+      "jsonpick",
+      "src/JsonPick.java"
+    ],
+    "build_files": [
+      "build.sh"
+    ],
+    "source_bytes": 25335,
+    "build_file_bytes": 211
+  },
+  "disk": {
+    "source_and_build_files_bytes": 25546,
+    "build_output_bytes": 21467,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 47013
+  }
+}

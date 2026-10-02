@@ -1,0 +1,11 @@
+#!/bin/sh
+# Launcher for jarsrc. Builds the jar on first use.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+JAR="$DIR/build/jarsrc.jar"
+if [ ! -f "$JAR" ]; then
+  if ! "$DIR/build.sh" >/dev/null 2>&1; then
+    echo "error: failed to build jarsrc (run $DIR/build.sh)" >&2
+    exit 2
+  fi
+fi
+exec java -Xshare:auto -XX:TieredStopAtLevel=1 -jar "$JAR" "$@"

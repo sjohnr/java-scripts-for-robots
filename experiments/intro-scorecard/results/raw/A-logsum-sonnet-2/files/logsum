@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+"""logsum: streaming summary of a log file (or stdin)."""
+import re
+import sys
+from datetime import datetime
+
+LEVELS = ("DEBUG", "INFO", "WARN", "ERROR")
+TS_RE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}")
+UUID_RE = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+HEX_RE = re.compile(r"\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\b")
+NUM_RE = re.compile(r"[0-9]+")
+
+HELP = """usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]
+
+Streaming summary of a log file (or stdin).
+
+arguments:
+  FILE               log file to read; omitted or '-' means stdin
+
+options:
+  --since TIMESTAMP  only lines with timestamp >= TIMESTAMP (YYYY-MM-DDTHH:MM:SS)
+  --level LEVEL      only lines at exactly this level (DEBUG, INFO, WARN, ERROR)
+  --top N            number of top error groups to show (default 5)
+  --help             show this message
+"""
+
+
+def die(msg):
+    sys.stderr.write(msg + "\n")
+    sys.exit(2)
+
+
+def valid_ts(s):
+    if not TS_RE.fullmatch(s):
+        return False
+    try:
+        datetime.strptime(s, "%Y-%m-%dT%H:%M:%S")
+    except ValueError:
+        return False
+    return True
+
+
+def normalize(msg):
+    msg = UUID_RE.sub("<uuid>", msg)
+    msg = HEX_RE.sub("<hex>", msg)
+    return NUM_RE.sub("<num>", msg)
+
+
+def parse_args(argv):
+    path = None
+    since = None
+    level = None
+    top = "5"
+    have_path = False
+    i = 0
+    while i < len(argv):
+        a = argv[i]
+        i += 1
+        if a == "--help":
+            sys.stdout.write(HELP)
+            sys.exit(0)
+        if a.startswith("--"):
+            name, eq, val = a.partition("=")
+            if name not in ("--since", "--level", "--top"):
+                die("unknown flag: " + a)
+            if not eq:
+                if i >= len(argv):
+                    die("error: missing value for " + name)
+                val = argv[i]
+                i += 1
+            if name == "--since":
+                since = val
+            elif name == "--level":
+                level = val
+            else:
+                top = val
+        elif a.startswith("-") and a != "-":
+            die("unknown flag: " + a)
+        else:
+            if have_path:
+                die("error: unexpected argument: " + a)
+            path = a
+            have_path = True
+    if since is not None and not valid_ts(since):
+        die("error: invalid value for --since: " + since)
+    if level is not None and level not in LEVELS:
+        die("error: invalid value for --level: " + level)
+    try:
+        n = int(top)
+        if n < 0 or not top.strip().lstrip("+").isdigit():
+            raise ValueError
+    except ValueError:
+        die("error: invalid value for --top: " + top)
+    return path, since, level, n
+
+
+def main():
+    path, since, level, top = parse_args(sys.argv[1:])
+    if path is None or path == "-":
+        f = sys.stdin.buffer
+    else:
+        try:
+            f = open(path, "rb")
+        except OSError:
+            die("error: cannot read " + path)
+
+    counts = dict.fromkeys(LEVELS, 0)
+    total = 0
+    first = last = None
+    groups = {}  # normalized -> [count, original]
+
+    try:
+        for raw in f:
+            line = raw.decode("utf-8", errors="replace").rstrip("\r\n")
+            parts = line.split(" ", 2)
+            if len(parts) < 3:
+                continue
+            ts, lv, msg = parts
+            if lv not in counts or not msg.strip() or not valid_ts(ts):
+                continue
+            if since is not None and ts < since:
+                continue
+            if level is not None and lv != level:
+                continue
+            total += 1
+            counts[lv] += 1
+            if first is None:
+                first = ts
+            last = ts
+            if lv == "ERROR":
+                key = normalize(msg)
+                g = groups.get(key)
+                if g is None:
+                    groups[key] = [1, msg]
+                else:
+                    g[0] += 1
+    except OSError:
+        die("error: cannot read " + (path or "-"))
+
+    out = [
+        "total: %d" % total,
+        "by level: " + " ".join("%s=%d" % (l, counts[l]) for l in LEVELS),
+        "first: " + (first or "n/a"),
+        "last: " + (last or "n/a"),
+        "top errors:",
+    ]
+    ranked = sorted(groups.values(), key=lambda g: (-g[0], g[1]))
+    for c, m in ranked[:top]:
+        out.append(("  %d %s" % (c, m)).rstrip())
+    sys.stdout.buffer.write(("\n".join(out) + "\n").encode("utf-8", errors="replace"))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,10 @@
+#!/bin/sh
+# Launcher for jsonpick. Builds the class on first use if needed.
+DIR=$(cd "$(dirname "$0")" && pwd)
+CLASSES="$DIR/build/classes"
+if [ ! -f "$CLASSES/JsonPick.class" ] || [ "$DIR/src/JsonPick.java" -nt "$CLASSES/JsonPick.class" ]; then
+    "$DIR/build.sh" >&2 || exit 2
+fi
+# The JVM announces these variables on stderr ("Picked up ..."), which the spec forbids.
+unset JAVA_TOOL_OPTIONS JDK_JAVA_OPTIONS _JAVA_OPTIONS
+exec java -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xshare:auto -cp "$CLASSES" JsonPick "$@"

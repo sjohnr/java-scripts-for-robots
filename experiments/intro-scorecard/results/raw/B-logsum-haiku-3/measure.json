@@ -1,0 +1,228 @@
+{
+  "run_id": "B-logsum-haiku-3",
+  "measured": "2026-10-11T08:59:18",
+  "run_command_reported": "bin/logsum",
+  "run_command_used": "bin/logsum",
+  "run_command_notes": [],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "../build/logsum.jar",
+    "launch": {
+      "lang": "java",
+      "entry": "../build/logsum.jar",
+      "launch": "jar",
+      "wrapper": "bin/logsum",
+      "evidence": [
+        "run command program: bin/logsum",
+        "wrapper script bin/logsum runs: java -jar \"../build/logsum.jar\" "
+      ],
+      "flags": [],
+      "java_opts": "",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 117,
+      "java": 12655
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "build script",
+      "launch": "jar",
+      "source": "classic",
+      "imports": "classic",
+      "files": "multiple files",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "build script / jar",
+      "java_file_count": 2,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "bin/logsum",
+      "evidence": {
+        "build": [
+          "build.sh"
+        ],
+        "launch": [
+          "run command program: bin/logsum",
+          "wrapper script bin/logsum runs: java -jar \"../build/logsum.jar\" ",
+          "run command program: java",
+          "via wrapper script bin/logsum"
+        ],
+        "source": [
+          "src/main/java/logsum/Main.java:34 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/main/java/logsum/Main.java",
+          "src/main/java/logsum/Summary.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 4442
+    },
+    {
+      "path": "big.log",
+      "kind": "data",
+      "lang": null,
+      "bytes": 171045608
+    },
+    {
+      "path": "build.sh",
+      "kind": "build",
+      "lang": null,
+      "bytes": 300
+    },
+    {
+      "path": "bin/logsum",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 117
+    },
+    {
+      "path": "src/main/java/logsum/Main.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 6023
+    },
+    {
+      "path": "src/main/java/logsum/Summary.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 6632
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "logsum-basic",
+        "ok": true
+      },
+      {
+        "id": "logsum-top3",
+        "ok": true
+      },
+      {
+        "id": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "id": "logsum-since",
+        "ok": true
+      },
+      {
+        "id": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "id": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "id": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "id": "logsum-missing-file",
+        "ok": true
+      },
+      {
+        "id": "logsum-help",
+        "ok": true
+      }
+    ],
+    "passed": 9,
+    "total": 9,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.03,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 2828,
+    "build_file_tokens": 90,
+    "test_tokens": 0,
+    "source_files": [
+      "bin/logsum",
+      "src/main/java/logsum/Main.java",
+      "src/main/java/logsum/Summary.java"
+    ],
+    "build_files": [
+      "build.sh"
+    ],
+    "source_bytes": 12772,
+    "build_file_bytes": 300
+  },
+  "disk": {
+    "source_and_build_files_bytes": 13072,
+    "build_output_bytes": 26573,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 39645
+  },
+  "load_avg_at_bench_start": 2.39599609375,
+  "startup": {
+    "command": "bin/logsum --help",
+    "median_ms": 26.261146580000002,
+    "mean_ms": 26.28357203,
+    "stddev_ms": 0.4541039937203094,
+    "min_ms": 25.215001580000003,
+    "runs": 100,
+    "load_avg_before": 2.39599609375,
+    "load_avg_after": 2.3642578125
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-3/opt/app.jar",
+    "main": "logsum.Main",
+    "training": {
+      "args": [
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/logsum.log"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-3/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-3/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-3/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 12828672,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-3/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-3/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-3/opt/app.jar logsum.Main --help",
+      "median_ms": 19.5427204,
+      "mean_ms": 19.540015922875813,
+      "stddev_ms": 0.5283689446679417,
+      "min_ms": 18.3300964,
+      "runs": 153,
+      "load_avg_before": 2.3642578125,
+      "load_avg_after": 2.3349609375
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-haiku-3/opt/app.jar logsum.Main --help",
+      "median_ms": 22.33046708,
+      "mean_ms": 22.381846330000013,
+      "stddev_ms": 0.5171965487716058,
+      "min_ms": 21.424717080000004,
+      "runs": 128,
+      "load_avg_before": 2.3349609375,
+      "load_avg_after": 2.3349609375
+    }
+  },
+  "benchmarked": "2026-10-11T09:09:32"
+}

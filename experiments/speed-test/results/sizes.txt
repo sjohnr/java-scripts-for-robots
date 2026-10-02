@@ -1,0 +1,5 @@
+csv-small-disk 8 57
+csv-portable 16 98
+csv-fast-start 11812 123
+csv-native 11020 149
+lib 984 0

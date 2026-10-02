@@ -1,0 +1,174 @@
+#!/usr/bin/env -S java --source 25
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.*;
+
+/** javaw: generates a relocatable POSIX sh launcher script for a Java program. */
+public class Javaw {
+    static final String HELP = """
+        Usage: javaw [options] File.java... | --jar file.jar
+
+        Writes an executable launcher script (default: ./run-<kebab-name>) per input.
+
+        Options:
+          --jar FILE          launch FILE with java -jar (repeatable; *.jar inputs too)
+          --classpath PATH    add -cp PATH to the launch command (recorded as-is)
+          --java-home DIR     use DIR/bin/java instead of java from the PATH
+          --jvm-opts "OPTS"   JVM options placed before the program (shell words)
+          --min-java N        fail with a clear error if the Java version is below N
+          -o, --output NAME   output file, or a directory if it ends in / or exists
+          --force             overwrite existing files
+          -h, --help          show this help
+        """;
+
+    // Resolves symlinks (chains, relative targets) to find the real file's directory.
+    static final String RESOLVE = """
+        self=$0
+        case $self in -*) self=./$self ;; esac
+        while [ -L "$self" ]; do
+          link=$(readlink "$self") || exit 1
+          case $link in
+            /*) self=$link ;;
+            *) case $self in */*) self=${self%/*}/$link ;; *) self=./$link ;; esac ;;
+          esac
+        done
+        case $self in */*) dir=${self%/*} ;; *) dir=. ;; esac
+        dir=$(CDPATH= cd -P "${dir:-/}" && pwd -P) || exit 1
+        """;
+
+    static final String CHECK = """
+        raw=$(@JAVA@ -version 2>&1 | sed -n 's/^[^ ]* version "\\([^"]*\\)".*/\\1/p' | head -n 1)
+        v=${raw#1.}
+        v=${v%%[!0-9]*}
+        if [ -z "$v" ] || [ "$v" -lt @MIN@ ]; then
+          printf '%s: Java @MIN@ or newer is required, found %s (%s)\\n' "${0##*/}" "${raw:-no usable Java}" @JAVA@ >&2
+          exit 1
+        fi
+        """;
+
+    record Input(Path file, boolean jar) {}
+
+    static class UsageError extends RuntimeException {
+        UsageError(String msg) { super(msg); }
+    }
+
+    public static void main(String[] args) {
+        try {
+            run(args);
+        } catch (UsageError e) {
+            System.err.println("javaw: " + e.getMessage() + "\nTry 'javaw --help'.");
+            System.exit(2);
+        } catch (IOException e) {
+            System.err.println("javaw: " + e.getMessage());
+            System.exit(1);
+        }
+    }
+
+    static void run(String[] args) throws IOException {
+        List<Input> inputs = new ArrayList<>();
+        String cp = null, home = null, opts = null, min = null, out = null;
+        boolean force = false, optsDone = false;
+        for (int i = 0; i < args.length; i++) {
+            String a = args[i], v = null;
+            if (a.contains("\n")) throw new UsageError("arguments must not contain newlines");
+            if (!optsDone && a.startsWith("--") && a.contains("=")) {
+                v = a.substring(a.indexOf('=') + 1);
+                a = a.substring(0, a.indexOf('='));
+            }
+            if (optsDone || !a.startsWith("-") || a.equals("-")) {
+                inputs.add(new Input(Path.of(a), a.endsWith(".jar")));
+                continue;
+            }
+            switch (a) {
+                case "--" -> optsDone = true;
+                case "-h", "--help" -> { System.out.print(HELP); return; }
+                case "--force" -> force = true;
+                case "--jar", "--classpath", "--java-home", "--jvm-opts", "--min-java", "-o", "--output" -> {
+                    if (v == null) {
+                        if (++i == args.length) throw new UsageError(a + " requires a value");
+                        v = args[i];
+                    }
+                    switch (a) {
+                        case "--jar" -> inputs.add(new Input(Path.of(v), true));
+                        case "--classpath" -> cp = v;
+                        case "--java-home" -> home = v;
+                        case "--jvm-opts" -> opts = v;
+                        case "--min-java" -> min = v;
+                        default -> out = v;
+                    }
+                }
+                default -> throw new UsageError("unknown option: " + a);
+            }
+        }
+        if (inputs.isEmpty()) throw new UsageError("missing input: give a .java file or --jar FILE");
+        if (min != null && !min.matches("[1-9][0-9]{0,3}")) throw new UsageError("--min-java expects a number, got: " + min);
+
+        Path outDir = Path.of("."), outFile = null;
+        if (out != null) {
+            if (out.endsWith("/") || Files.isDirectory(Path.of(out))) outDir = Path.of(out);
+            else if (inputs.size() > 1) throw new UsageError("-o must be a directory when there are several inputs");
+            else outFile = Path.of(out);
+        }
+
+        // Validate everything before writing anything.
+        Map<Path, Input> plan = new LinkedHashMap<>();
+        for (Input in : inputs) {
+            if (!Files.isRegularFile(in.file())) throw new IOException("no such file: " + in.file());
+            Path target = outFile != null ? outFile : outDir.resolve(defaultName(in.file()));
+            Path parent = target.toAbsolutePath().getParent();
+            if (!Files.isDirectory(parent)) throw new IOException("no such directory: " + parent);
+            if (plan.put(real(parent).resolve(target.getFileName()), in) != null)
+                throw new UsageError("several inputs would write " + target);
+            if (Files.exists(target, LinkOption.NOFOLLOW_LINKS) && !force)
+                throw new IOException(target + " already exists (use --force to overwrite)");
+        }
+
+        StringBuilder cmd = new StringBuilder("javaw");
+        for (String a : args) cmd.append(' ').append(shq(a));
+        for (var e : plan.entrySet()) {
+            Path target = e.getKey(), file = e.getValue().file().toAbsolutePath();
+            String rel = target.getParent().relativize(real(file.getParent()).resolve(file.getFileName())).toString();
+            String prog = rel.matches("[^\"$`\\\\]+") ? "\"$dir/" + rel + "\"" : "\"$dir\"/" + shq(rel);
+            String java = home == null ? "java" : shq(home.replaceAll("(.)/+$", "$1") + "/bin/java");
+
+            StringBuilder s = new StringBuilder("#!/bin/sh\n# Generated by javaw. Regenerate with:\n#   ")
+                .append(cmd).append('\n').append(RESOLVE);
+            if (min != null) s.append(CHECK.replace("@JAVA@", java).replace("@MIN@", min));
+            s.append("exec ").append(java);
+            if (opts != null && !opts.isBlank()) s.append(' ').append(opts.strip());
+            if (cp != null) s.append(" -cp ").append(shq(cp));
+            if (e.getValue().jar()) s.append(" -jar");
+            s.append(' ').append(prog).append(" \"$@\"\n");
+
+            Files.writeString(target, s);
+            target.toFile().setExecutable(true, false);
+            System.out.println("wrote " + real(Path.of("")).relativize(target));
+        }
+    }
+
+    /** run- plus the base name without extension, in kebab-case. */
+    static String defaultName(Path file) {
+        String base = file.getFileName().toString().replaceFirst("(.)\\.[^.]*$", "$1");
+        String k = kebab(base);
+        if (k.isEmpty()) throw new UsageError("cannot derive a name from " + file + "; use -o");
+        return "run-" + k;
+    }
+
+    static String kebab(String s) {
+        return s.replaceAll("([a-z0-9])([A-Z])", "$1-$2")      // fooBar, foo1Bar
+                .replaceAll("([A-Z])([A-Z][a-z])", "$1-$2")    // HTTPServer
+                .replaceAll("[-_. \\s]+", "-")                 // separators, collapsed
+                .replaceAll("^-|-$", "")
+                .toLowerCase(Locale.ROOT);
+    }
+
+    /** Quotes a word for POSIX sh, leaving plain words unquoted. */
+    static String shq(String s) {
+        return s.matches("[A-Za-z0-9_./=:,+@%^-]+") ? s : "'" + s.replace("'", "'\\''") + "'";
+    }
+
+    static Path real(Path p) {
+        Path a = p.toAbsolutePath().normalize();
+        try { return a.toRealPath(); } catch (IOException e) { return a; }
+    }
+}

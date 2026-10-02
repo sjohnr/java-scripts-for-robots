@@ -1,0 +1,94 @@
+{
+  "run_id": "B-jarsrc-sonnet-2",
+  "condition": "B",
+  "task": "jarsrc",
+  "model_alias": "sonnet",
+  "model_id": "claude-sonnet-5-5",
+  "model_ids_used": [
+    "claude-sonnet-5-5"
+  ],
+  "replicate": 2,
+  "seed": 20261010,
+  "seed_position": 28,
+  "started": "2026-10-11T01:03:07+00:00",
+  "ended": "2026-10-11T01:04:17+00:00",
+  "wall_s": 69.6,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 6,
+  "duration_ms": 68915,
+  "duration_api_ms": 66803,
+  "tokens": {
+    "input_tokens": 10,
+    "output_tokens": 10571,
+    "cache_creation_input_tokens": 17244,
+    "cache_read_input_tokens": 99662
+  },
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 10,
+      "outputTokens": 10571,
+      "cacheReadInputTokens": 99662,
+      "cacheCreationInputTokens": 17244,
+      "webSearchRequests": 0,
+      "costUSD": 0.1846722,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2867,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.1846722,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "caef15e0-a593-4b80-97ca-241632dd7f22",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-sonnet-2",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.2,
+    "cost_usd": 0.006047899999999995,
+    "cost_usd_cumulative_reported": 0.1907201,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 10,
+      "cache_creation_input_tokens": 761,
+      "cache_read_input_tokens": 28999
+    },
+    "subtype": "success",
+    "reply": "`./jarsrc`",
+    "run_command": "./jarsrc",
+    "limit_hits": []
+  },
+  "run_command": "./jarsrc",
+  "excluded_from_copy": [
+    {
+      "path": "build",
+      "bytes": 28047
+    }
+  ],
+  "prompt": "Build the `jarsrc` command-line tool described in SPEC.md. Write it in Java.",
+  "claude_args": [
+    "-p",
+    "Build the `jarsrc` command-line tool described in SPEC.md. Write it in Java.",
+    "--model",
+    "sonnet",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

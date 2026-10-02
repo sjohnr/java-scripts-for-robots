@@ -1,0 +1,119 @@
+{
+  "run_id": "A-logsum-opus-1",
+  "measured": "2026-10-10T19:45:03",
+  "run_command_reported": "./logsum",
+  "run_command_used": "./logsum",
+  "run_command_notes": [],
+  "classification": {
+    "language": "python",
+    "language_group": "scripting",
+    "entry": "logsum",
+    "launch": {
+      "lang": "python",
+      "entry": "logsum",
+      "launch": null,
+      "wrapper": null,
+      "evidence": [
+        "run command program: ./logsum"
+      ],
+      "flags": [],
+      "java_opts": ""
+    },
+    "source_bytes_by_lang": {
+      "python": 5684
+    },
+    "flags": [],
+    "needs_review": false
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 4442
+    },
+    {
+      "path": "logsum",
+      "kind": "source",
+      "lang": "python",
+      "bytes": 5684
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "logsum-basic",
+        "ok": true
+      },
+      {
+        "id": "logsum-top3",
+        "ok": true
+      },
+      {
+        "id": "logsum-level-error",
+        "ok": true
+      },
+      {
+        "id": "logsum-since",
+        "ok": true
+      },
+      {
+        "id": "logsum-stdin",
+        "ok": true
+      },
+      {
+        "id": "logsum-bad-level",
+        "ok": true
+      },
+      {
+        "id": "logsum-bad-since",
+        "ok": true
+      },
+      {
+        "id": "logsum-missing-file",
+        "ok": true
+      },
+      {
+        "id": "logsum-help",
+        "ok": true
+      }
+    ],
+    "passed": 9,
+    "total": 9,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.02,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 1531,
+    "build_file_tokens": 0,
+    "test_tokens": 0,
+    "source_files": [
+      "logsum"
+    ],
+    "build_files": [],
+    "source_bytes": 5684,
+    "build_file_bytes": 0
+  },
+  "disk": {
+    "source_and_build_files_bytes": 5684,
+    "build_output_bytes": 0,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 5684
+  },
+  "startup": {
+    "command": "./logsum --help",
+    "median_ms": 14.655846760000001,
+    "mean_ms": 14.850485041250005,
+    "stddev_ms": 0.7939016691933081,
+    "min_ms": 14.16167976,
+    "runs": 192,
+    "load_avg_before": 1.39208984375,
+    "load_avg_after": 1.4404296875
+  }
+}

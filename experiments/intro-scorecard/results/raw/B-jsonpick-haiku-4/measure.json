@@ -1,0 +1,261 @@
+{
+  "run_id": "B-jsonpick-haiku-4",
+  "measured": "2026-10-10T19:55:21",
+  "run_command_reported": "./bin/jsonpick",
+  "run_command_used": "./bin/jsonpick",
+  "run_command_notes": [],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "../build/jsonpick.jar",
+    "launch": {
+      "lang": "java",
+      "entry": "../build/jsonpick.jar",
+      "launch": "jar",
+      "wrapper": "bin/jsonpick",
+      "evidence": [
+        "run command program: ./bin/jsonpick",
+        "wrapper script bin/jsonpick runs: java -jar \"../build/jsonpick.jar\" "
+      ],
+      "flags": [],
+      "java_opts": "",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 130,
+      "java": 23059
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "Make",
+      "launch": "jar",
+      "source": "classic",
+      "imports": "classic",
+      "files": "multiple files",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "Make / jar",
+      "java_file_count": 5,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "bin/jsonpick",
+      "evidence": {
+        "build": [
+          "Makefile"
+        ],
+        "launch": [
+          "run command program: ./bin/jsonpick",
+          "wrapper script bin/jsonpick runs: java -jar \"../build/jsonpick.jar\" ",
+          "run command program: java",
+          "via wrapper script bin/jsonpick"
+        ],
+        "source": [
+          "src/jsonpick/Main.java:35 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/jsonpick/CliException.java",
+          "src/jsonpick/Json.java",
+          "src/jsonpick/JsonParser.java",
+          "src/jsonpick/JsonPath.java",
+          "src/jsonpick/Main.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "Makefile",
+      "kind": "build",
+      "lang": null,
+      "bytes": 371
+    },
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 3310
+    },
+    {
+      "path": "bin/jsonpick",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 130
+    },
+    {
+      "path": "src/jsonpick/CliException.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 281
+    },
+    {
+      "path": "src/jsonpick/Json.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 4437
+    },
+    {
+      "path": "src/jsonpick/JsonParser.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 7946
+    },
+    {
+      "path": "src/jsonpick/JsonPath.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 3331
+    },
+    {
+      "path": "src/jsonpick/Main.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 7064
+    },
+    {
+      "path": "test/run-tests.sh",
+      "kind": "test",
+      "lang": "shell",
+      "bytes": 9164
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jsonpick-string",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-number",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-array-index",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-object",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-root",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-shape",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-shape-depth0",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-notfound",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-stdin",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-bad-json",
+        "ok": true
+      },
+      {
+        "id": "jsonpick-help",
+        "ok": true
+      }
+    ],
+    "passed": 11,
+    "total": 11,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.03,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 4961,
+    "build_file_tokens": 110,
+    "test_tokens": 3101,
+    "source_files": [
+      "bin/jsonpick",
+      "src/jsonpick/CliException.java",
+      "src/jsonpick/Json.java",
+      "src/jsonpick/JsonParser.java",
+      "src/jsonpick/JsonPath.java",
+      "src/jsonpick/Main.java"
+    ],
+    "build_files": [
+      "Makefile"
+    ],
+    "source_bytes": 23189,
+    "build_file_bytes": 371
+  },
+  "disk": {
+    "source_and_build_files_bytes": 23560,
+    "build_output_bytes": 45194,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 68754
+  },
+  "load_avg_at_bench_start": 2.1494140625,
+  "startup": {
+    "command": "./bin/jsonpick --help",
+    "median_ms": 27.291925940000002,
+    "mean_ms": 27.38596022846153,
+    "stddev_ms": 0.7603207621956669,
+    "min_ms": 25.918488940000003,
+    "runs": 104,
+    "load_avg_before": 2.1494140625,
+    "load_avg_after": 2.21728515625
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-4/opt/app.jar",
+    "main": "jsonpick.Main",
+    "training": {
+      "args": [
+        "items[0]",
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/jsonpick.json"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-4/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-4/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-4/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 12140544,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-4/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-4/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-4/opt/app.jar jsonpick.Main --help",
+      "median_ms": 19.756132140000002,
+      "mean_ms": 19.812215021578947,
+      "stddev_ms": 0.514526155401026,
+      "min_ms": 18.45552714,
+      "runs": 152,
+      "load_avg_before": 2.21728515625,
+      "load_avg_after": 2.27978515625
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-haiku-4/opt/app.jar jsonpick.Main --help",
+      "median_ms": 23.42554034,
+      "mean_ms": 23.945223166446286,
+      "stddev_ms": 1.3543522935353003,
+      "min_ms": 22.526539340000003,
+      "runs": 121,
+      "load_avg_before": 2.27978515625,
+      "load_avg_after": 2.27978515625
+    }
+  },
+  "benchmarked": "2026-10-11T09:08:43"
+}

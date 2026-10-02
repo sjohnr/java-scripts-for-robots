@@ -1,0 +1,185 @@
+#!/usr/bin/env python3
+"""logsum: streaming summary of a log file (or stdin). See SPEC.md."""
+
+import re
+import sys
+from datetime import datetime
+
+LEVELS = ("DEBUG", "INFO", "WARN", "ERROR")
+TS_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\Z")
+
+UUID_RE = re.compile(
+    r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+)
+HEX_RE = re.compile(r"\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{6,}\b")
+NUM_RE = re.compile(r"[0-9]+")
+
+HELP = """\
+Usage: logsum [FILE] [--since TIMESTAMP] [--level LEVEL] [--top N]
+
+Summarize a log file whose lines look like: TIMESTAMP LEVEL MESSAGE
+
+Arguments:
+  FILE                 log file to read; omitted or '-' reads stdin
+
+Options:
+  --since TIMESTAMP    only consider lines with timestamp >= TIMESTAMP
+                       (format YYYY-MM-DDTHH:MM:SS)
+  --level LEVEL        only consider lines at exactly LEVEL
+                       (DEBUG, INFO, WARN or ERROR)
+  --top N              number of top error groups to show (default 5)
+  --help               show this help and exit
+"""
+
+
+class UsageError(Exception):
+    pass
+
+
+def out(text):
+    sys.stdout.buffer.write(text.encode("utf-8"))
+
+
+def valid_timestamp(value):
+    if not TS_RE.match(value):
+        return False
+    try:
+        datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+    except ValueError:
+        return False
+    return True
+
+
+def parse_args(argv):
+    opts = {"file": None, "since": None, "level": None, "top": 5}
+    valued = ("--since", "--level", "--top")
+    i = 0
+    only_positional = False
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if not only_positional and arg == "--":
+            only_positional = True
+            continue
+        if not only_positional and arg.startswith("-") and arg != "-":
+            if arg == "--help":
+                out(HELP)
+                sys.exit(0)
+            name, eq, value = arg.partition("=")
+            if name not in valued:
+                raise UsageError("unknown flag: %s" % arg)
+            if not eq:
+                if i >= len(argv):
+                    raise UsageError("error: missing value for %s" % name)
+                value = argv[i]
+                i += 1
+            if name == "--since":
+                if not valid_timestamp(value):
+                    raise UsageError("error: invalid value for --since: %s" % value)
+                opts["since"] = value
+            elif name == "--level":
+                if value not in LEVELS:
+                    raise UsageError("error: invalid value for --level: %s" % value)
+                opts["level"] = value
+            else:
+                if not re.fullmatch(r"[0-9]+", value):
+                    raise UsageError("error: invalid value for --top: %s" % value)
+                opts["top"] = int(value)
+            continue
+        if opts["file"] is not None:
+            raise UsageError("error: unexpected argument: %s" % arg)
+        opts["file"] = arg
+    return opts
+
+
+def parse_line(line):
+    """Return (timestamp, level, message) or None if the line is malformed."""
+    line = line.rstrip("\r\n")
+    parts = line.split(None, 2)
+    if len(parts) < 3:
+        return None
+    ts, level = parts[0], parts[1]
+    if level not in LEVELS or not valid_timestamp(ts):
+        return None
+    # MESSAGE is verbatim from where the third token starts; trailing
+    # whitespace is dropped so output lines never end in whitespace.
+    return ts, level, parts[2].rstrip()
+
+
+def normalize(message):
+    message = UUID_RE.sub("<uuid>", message)
+    message = HEX_RE.sub("<hex>", message)
+    return NUM_RE.sub("<num>", message)
+
+
+def summarize(stream, since, level_filter, top):
+    total = 0
+    counts = dict.fromkeys(LEVELS, 0)
+    first = last = None
+    groups = {}  # normalized -> [count, first-seen original message]
+
+    for raw in stream:
+        parsed = parse_line(raw.decode("utf-8", errors="replace"))
+        if parsed is None:
+            continue
+        ts, level, message = parsed
+        if since is not None and ts < since:
+            continue
+        if level_filter is not None and level != level_filter:
+            continue
+        total += 1
+        counts[level] += 1
+        if first is None:
+            first = ts
+        last = ts
+        if level == "ERROR":
+            key = normalize(message)
+            group = groups.get(key)
+            if group is None:
+                groups[key] = [1, message]
+            else:
+                group[0] += 1
+
+    lines = [
+        "total: %d" % total,
+        "by level: " + " ".join("%s=%d" % (lv, counts[lv]) for lv in LEVELS),
+        "first: %s" % (first or "n/a"),
+        "last: %s" % (last or "n/a"),
+        "top errors:",
+    ]
+    ranked = sorted(groups.values(), key=lambda g: (-g[0], g[1]))
+    for count, message in ranked[:top]:
+        lines.append(("  %d %s" % (count, message)).rstrip())
+    return "\n".join(lines) + "\n"
+
+
+def main(argv):
+    try:
+        opts = parse_args(argv)
+    except UsageError as e:
+        sys.stderr.buffer.write((str(e) + "\n").encode("utf-8"))
+        return 2
+
+    path = opts["file"]
+    try:
+        if path is None or path == "-":
+            stream = open(sys.stdin.fileno(), "rb", closefd=False)
+        else:
+            stream = open(path, "rb")
+        with stream:
+            result = summarize(stream, opts["since"], opts["level"], opts["top"])
+    except OSError:
+        shown = "<stdin>" if path is None else path
+        sys.stderr.buffer.write(("error: cannot read %s\n" % shown).encode("utf-8"))
+        return 2
+
+    out(result)
+    sys.stdout.flush()
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main(sys.argv[1:]))
+    except BrokenPipeError:
+        sys.exit(0)

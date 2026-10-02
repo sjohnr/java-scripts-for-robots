@@ -1,0 +1,89 @@
+{
+  "run_id": "A-jarsrc-sonnet-2",
+  "condition": "A",
+  "task": "jarsrc",
+  "model_alias": "sonnet",
+  "model_id": "claude-sonnet-5-5",
+  "model_ids_used": [
+    "claude-sonnet-5-5"
+  ],
+  "replicate": 2,
+  "seed": 20261010,
+  "seed_position": 17,
+  "started": "2026-10-11T00:59:07+00:00",
+  "ended": "2026-10-11T00:59:51+00:00",
+  "wall_s": 44.5,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 6,
+  "duration_ms": 43893,
+  "duration_api_ms": 42974,
+  "tokens": {
+    "input_tokens": 8,
+    "output_tokens": 6589,
+    "cache_creation_input_tokens": 12545,
+    "cache_read_input_tokens": 64614
+  },
+  "model_usage": {
+    "claude-sonnet-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 6589,
+      "cacheReadInputTokens": 64614,
+      "cacheCreationInputTokens": 12545,
+      "webSearchRequests": 0,
+      "costUSD": 0.12254739999999997,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1923,
+      "canonicalModel": "claude-sonnet-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.12254739999999997,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "9d97dfd9-1d88-4b20-a143-b51e26c9c5a3",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-jarsrc-sonnet-2",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.2,
+    "cost_usd": 0.004917300000000013,
+    "cost_usd_cumulative_reported": 0.1274647,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 12,
+      "cache_creation_input_tokens": 591,
+      "cache_read_input_tokens": 24293
+    },
+    "subtype": "success",
+    "reply": "`./jarsrc --help`",
+    "run_command": "./jarsrc --help",
+    "limit_hits": []
+  },
+  "run_command": "./jarsrc --help",
+  "excluded_from_copy": [],
+  "prompt": "Build the `jarsrc` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `jarsrc` command-line tool described in SPEC.md.",
+    "--model",
+    "sonnet",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

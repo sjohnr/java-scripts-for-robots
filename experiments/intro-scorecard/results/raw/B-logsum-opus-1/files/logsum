@@ -1,0 +1,6 @@
+#!/bin/sh
+# Launcher for logsum. Run ./build.sh first.
+# The JVM prints "Picked up ..." notices to stderr when these are set; the spec forbids extra output.
+unset JAVA_TOOL_OPTIONS _JAVA_OPTIONS JDK_JAVA_OPTIONS
+dir="$(cd "$(dirname "$0")" && pwd)"
+exec java -XX:+UseSerialGC -Xshare:auto -jar "$dir/build/logsum.jar" "$@"

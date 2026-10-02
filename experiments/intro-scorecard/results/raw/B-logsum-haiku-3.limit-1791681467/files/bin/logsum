@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Runs logsum from the classes produced by build.sh.
+set -euo pipefail
+here="$(cd "$(dirname "$0")/.." && pwd)"
+exec java -cp "$here/build/classes" logsum.Main "$@"

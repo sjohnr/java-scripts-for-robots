@@ -1,0 +1,94 @@
+{
+  "run_id": "B-jarsrc-haiku-4",
+  "condition": "B",
+  "task": "jarsrc",
+  "model_alias": "haiku",
+  "model_id": "claude-haiku-5-5",
+  "model_ids_used": [
+    "claude-haiku-5-5"
+  ],
+  "replicate": 4,
+  "seed": 20261010,
+  "seed_position": 71,
+  "started": "2026-10-11T13:59:16+00:00",
+  "ended": "2026-10-11T14:02:10+00:00",
+  "wall_s": 173.8,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 16,
+  "duration_ms": 173113,
+  "duration_api_ms": 167865,
+  "tokens": {
+    "input_tokens": 28,
+    "output_tokens": 39995,
+    "cache_creation_input_tokens": 59303,
+    "cache_read_input_tokens": 621039
+  },
+  "model_usage": {
+    "claude-haiku-5-5": {
+      "inputTokens": 28,
+      "outputTokens": 39995,
+      "cacheReadInputTokens": 621039,
+      "cacheCreationInputTokens": 59303,
+      "webSearchRequests": 0,
+      "costUSD": 0.038071289999999994,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 25314,
+      "canonicalModel": "claude-haiku-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.038071289999999994,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "41863fdb-0ec7-45f6-b24f-8f16339a387f",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-haiku-4",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.5,
+    "cost_usd": 0.0010755600000000032,
+    "cost_usd_cumulative_reported": 0.03914685,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 168,
+      "cache_creation_input_tokens": 1389,
+      "cache_read_input_tokens": 71356
+    },
+    "subtype": "success",
+    "reply": "```sh\n./bin/jarsrc --help\n```",
+    "run_command": "./bin/jarsrc --help",
+    "limit_hits": []
+  },
+  "run_command": "./bin/jarsrc --help",
+  "excluded_from_copy": [
+    {
+      "path": "build",
+      "bytes": 26279
+    }
+  ],
+  "prompt": "Build the `jarsrc` command-line tool described in SPEC.md. Write it in Java.",
+  "claude_args": [
+    "-p",
+    "Build the `jarsrc` command-line tool described in SPEC.md. Write it in Java.",
+    "--model",
+    "haiku",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

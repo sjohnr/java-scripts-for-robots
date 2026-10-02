@@ -1,0 +1,108 @@
+{
+  "duration_api_ms": 9296,
+  "stop_reason": "end_turn",
+  "session_id": "067b58a3-3469-4ceb-945e-bc950b2e7c92",
+  "total_cost_usd": 0.028471,
+  "usage": {
+    "input_tokens": 34,
+    "cache_creation_input_tokens": 8539,
+    "cache_read_input_tokens": 77540,
+    "output_tokens": 721,
+    "output_tokens_details": {
+      "thinking_tokens": 310
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 8539,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 8,
+        "output_tokens": 155,
+        "cache_read_input_tokens": 21837,
+        "cache_creation_input_tokens": 250,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 250
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 34,
+      "outputTokens": 721,
+      "cacheReadInputTokens": 77540,
+      "cacheCreationInputTokens": 8539,
+      "webSearchRequests": 0,
+      "costUSD": 0.028471,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 310,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 4,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Here's the method signature and Javadoc for `method0` on class `com.example.core.alpha.Main`:\n\n**Signature:**\n```java\npublic int method0(int x)\n```\n\n**Javadoc:** None (no documentation comment present)\n\n**Implementation:**\n```java\nreturn x + 49;\n```\n\nThe method is a simple public method that takes an integer parameter and returns that integer plus 49. There is no Javadoc or other documentation attached to this method.",
+  "ttft_ms": 2547,
+  "type": "result",
+  "duration_ms": 9891,
+  "uuid": "0dd660b8-2782-4df8-baf8-8b834135a663",
+  "ttft_stream_ms": 1322,
+  "time_to_request_ms": 39,
+  "first_content_frame_ms": 1322,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "_wall_s_measured": 10.828626871109009,
+  "task": "A1",
+  "condition": "C1",
+  "trial": 1,
+  "trial_dir": "/private/tmp/claude-501/-Users-sriesenberg-git-ai-cli-experiment/4fe6da76-a1a1-4877-9783-663ab9fb5447/scratchpad/agent-A1-9n502flk",
+  "check_hits": [
+    "method0",
+    "int x"
+  ],
+  "check_total": 2,
+  "success": true
+}

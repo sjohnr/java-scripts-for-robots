@@ -1,0 +1,141 @@
+{
+  "duration_api_ms": 71452,
+  "stop_reason": "end_turn",
+  "session_id": "6c5a6e42-5f9a-43a6-bb35-9809d4c6804a",
+  "total_cost_usd": 0.1081648,
+  "usage": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 21419,
+    "cache_read_input_tokens": 58458,
+    "output_tokens": 11891,
+    "output_tokens_details": {
+      "thinking_tokens": 9107
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 21419,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 8,
+        "output_tokens": 563,
+        "cache_read_input_tokens": 23923,
+        "cache_creation_input_tokens": 11044,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 11044
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 26,
+      "outputTokens": 11891,
+      "cacheReadInputTokens": 58458,
+      "cacheCreationInputTokens": 21419,
+      "webSearchRequests": 0,
+      "costUSD": 0.1081648,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 9107,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 4,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "Implemented the logsum CLI as Tool.java. The implementation:\n\n- **Reads logs** from a file or stdin, parsing lines in `TIMESTAMP LEVEL MESSAGE` format\n- **Filters** by optional `--since` (timestamp) and `--level` (DEBUG/INFO/WARN/ERROR)\n- **Normalizes messages** for grouping (UUIDs \u2192 `<uuid>`, hex blobs \u2192 `<hex>`, digits \u2192 `<num>`)\n- **Groups ERROR messages** and displays top N by count (descending), then by original message (ascending)\n- **Outputs summary** with total, level breakdown, first/last timestamps, and top errors\n- **Handles all error cases** with proper exit codes: 0 (success/help), 2 (usage error)\n- **Uses Java 25 compact source file style**: top-level `main`, no class boilerplate, `IO.println`\n- **No external dependencies**: stdlib only\n\nThe file runs directly with `java Tool.java [args]` \u2014 no build step required.",
+  "ttft_ms": 1848,
+  "type": "result",
+  "duration_ms": 71503,
+  "uuid": "38ca726b-7d25-4f29-a756-2b369f9bfa02",
+  "ttft_stream_ms": 595,
+  "time_to_request_ms": 33,
+  "first_content_frame_ms": 595,
+  "queued_turn_count": 0,
+  "result_index": 0,
+  "_wall_s_measured": 72.06775784492493,
+  "condition": "B-c",
+  "trial": 1,
+  "trial_dir": "/private/tmp/claude-501/-Users-sriesenberg-git-ai-cli-experiment/4fe6da76-a1a1-4877-9783-663ab9fb5447/scratchpad/agent-B-9kq81kse",
+  "conformance": {
+    "lang_detected": "java",
+    "passed": 0,
+    "total": 8,
+    "details": [
+      {
+        "case": "logsum-basic",
+        "ok": false
+      },
+      {
+        "case": "logsum-top3",
+        "ok": false
+      },
+      {
+        "case": "logsum-level-error",
+        "ok": false
+      },
+      {
+        "case": "logsum-since",
+        "ok": false
+      },
+      {
+        "case": "logsum-stdin",
+        "ok": false
+      },
+      {
+        "case": "logsum-bad-level",
+        "ok": false
+      },
+      {
+        "case": "logsum-bad-since",
+        "ok": false
+      },
+      {
+        "case": "logsum-missing-file",
+        "ok": false
+      }
+    ]
+  },
+  "success": false
+}

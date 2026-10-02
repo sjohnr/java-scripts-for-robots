@@ -1,0 +1,200 @@
+#!/usr/bin/env python3
+"""treesum: compact repo overview. See SPEC.md."""
+
+import os
+import stat
+import sys
+
+IGNORED_DIRS = (
+    ".git", "node_modules", "build", ".gradle", "target",
+    "dist", ".venv", "__pycache__", ".idea", ".vscode",
+)
+
+DEFAULT_TOP = 10
+DEFAULT_EXT_LIMIT = 20
+
+HELP = """\
+usage: treesum [DIR] [--top N] [--ext-limit M]
+
+Print a compact overview of a directory tree: file and directory counts,
+files and lines of code per extension, and the largest files.
+
+arguments:
+  DIR              directory to scan (default: .)
+
+flags:
+  --top N          number of largest files to list (default: 10)
+  --ext-limit M    max distinct extensions shown in the by-extension table;
+                   the rest are folded into an 'other' row (default: 20)
+  --help           show this help and exit
+
+Ignored directories (fixed, not configurable; skipped anywhere in the tree):
+  {ignored}
+
+Symlinks are never followed and are not counted.
+""".format(ignored=", ".join(IGNORED_DIRS))
+
+
+class UsageError(Exception):
+    pass
+
+
+def write(stream, text):
+    # Always UTF-8 with LF endings, independent of locale/platform. Undecodable
+    # filename bytes are passed through unchanged via surrogateescape.
+    stream.buffer.write(text.encode("utf-8", "surrogateescape"))
+    stream.buffer.flush()
+
+
+def parse_count(flag, value):
+    if not value.isascii() or not value.isdigit():
+        raise UsageError("invalid value for {}: {}".format(flag, value))
+    return int(value)
+
+
+def parse_args(argv):
+    opts = {"dir": None, "top": DEFAULT_TOP, "ext_limit": DEFAULT_EXT_LIMIT}
+    flags = {"--top": "top", "--ext-limit": "ext_limit"}
+    i = 0
+    only_positional = False
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if not only_positional and arg == "--":
+            only_positional = True
+            continue
+        if not only_positional and arg.startswith("-") and arg != "-":
+            name, eq, inline = arg.partition("=")
+            if name == "--help" and not eq:
+                return None
+            if name not in flags:
+                raise UsageError("unknown flag: {}".format(arg))
+            if eq:
+                value = inline
+            elif i < len(argv):
+                value = argv[i]
+                i += 1
+            else:
+                raise UsageError("missing value for {}".format(name))
+            opts[flags[name]] = parse_count(name, value)
+            continue
+        if opts["dir"] is not None:
+            raise UsageError("unexpected argument: {}".format(arg))
+        opts["dir"] = arg
+    if opts["dir"] is None:
+        opts["dir"] = "."
+    return opts
+
+
+def extension(name):
+    head, dot, ext = name.rpartition(".")
+    if not dot or not head:
+        # No '.' at all, or a dotfile with no other '.' (e.g. ".gitignore").
+        return ""
+    return ext.lower()
+
+
+def count_loc(path):
+    newlines = 0
+    last = b""
+    with open(path, "rb") as f:
+        while True:
+            chunk = f.read(1 << 20)
+            if not chunk:
+                break
+            newlines += chunk.count(b"\n")
+            last = chunk[-1:]
+    if last and last != b"\n":
+        newlines += 1
+    return newlines
+
+
+def scan(root):
+    files = []  # (size, relpath, ext, loc)
+    dirs = 0
+    stack = [""]
+    while stack:
+        rel_dir = stack.pop()
+        abs_dir = os.path.join(root, rel_dir) if rel_dir else root
+        try:
+            entries = list(os.scandir(abs_dir))
+        except OSError:
+            continue
+        for entry in entries:
+            rel = rel_dir + "/" + entry.name if rel_dir else entry.name
+            try:
+                st = entry.stat(follow_symlinks=False)
+            except OSError:
+                continue
+            if stat.S_ISDIR(st.st_mode):
+                if entry.name in IGNORED_DIRS:
+                    continue
+                dirs += 1
+                stack.append(rel)
+            elif stat.S_ISREG(st.st_mode):
+                try:
+                    loc = count_loc(entry.path)
+                except OSError:
+                    continue
+                files.append((st.st_size, rel, extension(entry.name), loc))
+            # Symlinks and special files (fifos, sockets, devices) are skipped.
+    return files, dirs
+
+
+def render(files, dirs, top, ext_limit):
+    by_ext = {}
+    for _, _, ext, loc in files:
+        n, total = by_ext.get(ext, (0, 0))
+        by_ext[ext] = (n + 1, total + loc)
+
+    rows = sorted(by_ext.items(), key=lambda kv: (-kv[1][0], kv[0]))
+    shown, folded = rows[:ext_limit], rows[ext_limit:]
+
+    out = ["files: {}".format(len(files)), "dirs: {}".format(dirs), "by extension:"]
+    for ext, (n, loc) in shown:
+        out.append("  {}  files={} loc={}".format(ext or "(none)", n, loc))
+    if folded:
+        n = sum(v[0] for _, v in folded)
+        loc = sum(v[1] for _, v in folded)
+        out.append("  other  files={} loc={}".format(n, loc))
+
+    out.append("largest files:")
+    largest = sorted(files, key=lambda f: (-f[0], f[1]))[:top]
+    for size, rel, _, _ in largest:
+        out.append("  {} {}".format(size, rel))
+    return "".join(line + "\n" for line in out)
+
+
+def main(argv):
+    try:
+        opts = parse_args(argv)
+    except UsageError as e:
+        msg = str(e)
+        if not msg.startswith("unknown flag: "):
+            msg = "error: " + msg
+        write(sys.stderr, msg + "\n")
+        return 2
+    if opts is None:
+        write(sys.stdout, HELP)
+        return 0
+
+    root = opts["dir"]
+    if not os.path.isdir(root):
+        write(sys.stderr, "error: cannot read {}\n".format(root))
+        return 2
+    try:
+        os.scandir(root).close()
+    except OSError:
+        write(sys.stderr, "error: cannot read {}\n".format(root))
+        return 2
+
+    files, dirs = scan(root)
+    write(sys.stdout, render(files, dirs, opts["top"], opts["ext_limit"]))
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main(sys.argv[1:]))
+    except KeyboardInterrupt:
+        sys.exit(2)

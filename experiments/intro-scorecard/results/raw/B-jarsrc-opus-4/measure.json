@@ -1,0 +1,229 @@
+{
+  "run_id": "B-jarsrc-opus-4",
+  "measured": "2026-10-10T20:14:16",
+  "run_command_reported": "./jarsrc",
+  "run_command_used": "./jarsrc",
+  "run_command_notes": [],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "build/jarsrc.jar",
+    "launch": {
+      "lang": "java",
+      "entry": "build/jarsrc.jar",
+      "launch": "jar",
+      "wrapper": "jarsrc",
+      "evidence": [
+        "run command program: ./jarsrc",
+        "wrapper script jarsrc runs: java -Xshare:auto -XX:TieredStopAtLevel=1 -jar \"build/jarsrc.jar\" "
+      ],
+      "flags": [],
+      "java_opts": "-Xshare:auto -XX:TieredStopAtLevel=1",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 272,
+      "java": 14820
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "build script",
+      "launch": "jar",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "build script / jar",
+      "java_file_count": 1,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "jarsrc",
+      "evidence": {
+        "build": [
+          "build.sh"
+        ],
+        "launch": [
+          "run command program: ./jarsrc",
+          "wrapper script jarsrc runs: java -Xshare:auto -XX:TieredStopAtLevel=1 -jar \"build/jarsrc.jar\" ",
+          "run command program: java",
+          "via wrapper script jarsrc"
+        ],
+        "source": [
+          "src/Jarsrc.java:52 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/Jarsrc.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 5788
+    },
+    {
+      "path": "build.sh",
+      "kind": "build",
+      "lang": null,
+      "bytes": 324
+    },
+    {
+      "path": "jarsrc",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 272
+    },
+    {
+      "path": "src/Jarsrc.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 14820
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jarsrc-find-exact",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-glob-star",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-glob-doublestar",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-highest-version",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-lines",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-lines-out-of-range",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-ls-ga",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-ls-gav-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-help",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-unknown-flag",
+        "ok": true
+      }
+    ],
+    "passed": 12,
+    "total": 12,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.03,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 3590,
+    "build_file_tokens": 95,
+    "test_tokens": 0,
+    "source_files": [
+      "jarsrc",
+      "src/Jarsrc.java"
+    ],
+    "build_files": [
+      "build.sh"
+    ],
+    "source_bytes": 15092,
+    "build_file_bytes": 324
+  },
+  "disk": {
+    "source_and_build_files_bytes": 15416,
+    "build_output_bytes": 27691,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 43107
+  },
+  "load_avg_at_bench_start": 1.87890625,
+  "startup": {
+    "command": "./jarsrc --help",
+    "median_ms": 26.808298,
+    "mean_ms": 26.971148513761477,
+    "stddev_ms": 0.7323381834483429,
+    "min_ms": 25.372215000000004,
+    "runs": 109,
+    "load_avg_before": 1.87890625,
+    "load_avg_after": 1.88818359375
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-4/opt/app.jar",
+    "main": "Jarsrc",
+    "training": {
+      "args": [
+        "find",
+        "**.Main",
+        "--root",
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/jarsrc"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-4/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-4/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-4/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 11616256,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-4/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-4/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-4/opt/app.jar Jarsrc --help",
+      "median_ms": 19.45753416,
+      "mean_ms": 19.481167200000005,
+      "stddev_ms": 0.4343223824827303,
+      "min_ms": 18.35028416,
+      "runs": 150,
+      "load_avg_before": 1.88818359375,
+      "load_avg_after": 1.88818359375
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-4/opt/app.jar Jarsrc --help",
+      "median_ms": 22.92304236,
+      "mean_ms": 23.076235730967745,
+      "stddev_ms": 0.7833451432814853,
+      "min_ms": 21.80118836,
+      "runs": 124,
+      "load_avg_before": 1.88818359375,
+      "load_avg_after": 1.81689453125
+    }
+  },
+  "benchmarked": "2026-10-11T09:07:31"
+}

@@ -1,0 +1,331 @@
+#!/usr/bin/env python3
+"""jarsrc - query a Gradle-cache-like tree of *-sources.jar files. See SPEC.md."""
+
+import functools
+import os
+import re
+import sys
+import zipfile
+
+USAGE = """\
+Usage:
+  jarsrc find <fqcn-or-glob> [--root DIR]
+  jarsrc cat <fqcn> [--lines A:B] [--root DIR]
+  jarsrc ls <group:artifact[:version]> [--root DIR]
+  jarsrc --help
+
+Subcommands:
+  find   List classes matching a FQCN or glob ('*' = any run except '.',
+         '**' = any run including '.') as '<fqcn> <group>:<artifact>:<version>'.
+  cat    Print the source of a FQCN from the highest version that contains it.
+  ls     List versions of group:artifact, or classes in group:artifact:version.
+
+Flags:
+  --root DIR     Root of the sources-jar tree (default: .)
+  --lines A:B    (cat only) print only lines A through B, 1-indexed, inclusive
+  --help         Show this help and exit
+"""
+
+EXIT_OK, EXIT_NOT_FOUND, EXIT_USAGE = 0, 1, 2
+
+
+class UsageError(Exception):
+    pass
+
+
+class NotFound(Exception):
+    pass
+
+
+def write(stream, text):
+    stream.buffer.write(text.encode("utf-8"))
+
+
+# ---------------------------------------------------------------- versions
+
+_INT_RE = re.compile(r"[0-9]+\Z")
+
+
+def version_key(version):
+    """Sort key implementing the spec's version ordering."""
+    return [_Segment(s) for s in re.split(r"[.\-]", version)]
+
+
+@functools.total_ordering
+class _Segment:
+    __slots__ = ("text", "num")
+
+    def __init__(self, text):
+        self.text = text.encode("utf-8")
+        self.num = int(text) if _INT_RE.match(text) else None
+
+    def _cmp(self, other):
+        if self.num is not None and other.num is not None:
+            a, b = self.num, other.num
+        else:
+            a, b = self.text, other.text
+        return (a > b) - (a < b)
+
+    def __lt__(self, other):
+        return self._cmp(other) < 0
+
+    def __eq__(self, other):
+        return self._cmp(other) == 0
+
+
+# ---------------------------------------------------------------- tree scan
+
+
+class Jar:
+    def __init__(self, group, artifact, version, path):
+        self.group = group
+        self.artifact = artifact
+        self.version = version
+        self.path = path
+        self._classes = None
+
+    @property
+    def ga(self):
+        return f"{self.group}:{self.artifact}"
+
+    @property
+    def gav(self):
+        return f"{self.ga}:{self.version}"
+
+    def classes(self):
+        """Map of FQCN -> zip entry name for every .java entry."""
+        if self._classes is None:
+            self._classes = {}
+            try:
+                with zipfile.ZipFile(self.path) as zf:
+                    for name in zf.namelist():
+                        if name.endswith("/") or not name.endswith(".java"):
+                            continue
+                        stem = name[: -len(".java")].lstrip("/")
+                        if not stem:
+                            continue
+                        self._classes.setdefault(stem.replace("/", "."), name)
+            except (OSError, zipfile.BadZipFile):
+                pass
+        return self._classes
+
+    def read(self, fqcn):
+        with zipfile.ZipFile(self.path) as zf:
+            return zf.read(self.classes()[fqcn])
+
+
+def scan(root):
+    jars = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames.sort()
+        rel = os.path.relpath(dirpath, root)
+        parts = [] if rel == "." else rel.split(os.sep)
+        if len(parts) < 3:
+            continue
+        group_parts, artifact, version = parts[:-2], parts[-2], parts[-1]
+        expected = f"{artifact}-{version}-sources.jar"
+        if expected in filenames:
+            group = ".".join(group_parts)
+            jars.append(Jar(group, artifact, version, os.path.join(dirpath, expected)))
+    return jars
+
+
+# ---------------------------------------------------------------- helpers
+
+
+def suggestions(prefix, names):
+    if not prefix:
+        return []
+    return sorted({n for n in names if n.startswith(prefix)})[:3]
+
+
+def not_found(what, prefix, names):
+    sugg = suggestions(prefix, names)
+    msg = f"error: {what}"
+    if sugg:
+        msg += f" (did you mean: {', '.join(sugg)}?)"
+    raise NotFound(msg)
+
+
+def simple_name(fqcn):
+    return fqcn.rsplit(".", 1)[-1]
+
+
+def glob_to_regex(pattern):
+    out = []
+    for tok in re.split(r"(\*+)", pattern):
+        if not tok:
+            continue
+        if tok == "*":
+            out.append(r"[^.]*")
+        elif tok.startswith("*"):
+            out.append(r".*")
+        else:
+            out.append(re.escape(tok))
+    return re.compile("".join(out), re.DOTALL)
+
+
+def normalize_source(data):
+    text = data.decode("utf-8", errors="replace")
+    if text.startswith("﻿"):
+        text = text[1:]
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    lines = text.split("\n")
+    if lines and lines[-1] == "":
+        lines.pop()
+    return [line.rstrip() for line in lines]
+
+
+def parse_lines(spec):
+    m = re.fullmatch(r"([0-9]+):([0-9]+)", spec)
+    if not m:
+        raise UsageError(f"error: invalid --lines value: {spec} (expected A:B)")
+    return int(m.group(1)), int(m.group(2))
+
+
+# ---------------------------------------------------------------- commands
+
+
+def cmd_find(jars, query):
+    if "*" in query:
+        rx = glob_to_regex(query)
+        match = rx.fullmatch
+    else:
+        match = lambda fqcn: fqcn == query  # noqa: E731
+    results = []
+    for jar in jars:
+        for fqcn in jar.classes():
+            if match(fqcn):
+                results.append((fqcn, jar.gav))
+    if not results:
+        last = simple_name(query).split("*", 1)[0]
+        names = {simple_name(f) for j in jars for f in j.classes()}
+        not_found(f"no matches for {query}", last, names)
+    results.sort()
+    return "".join(f"{fqcn} {gav}\n" for fqcn, gav in results)
+
+
+def cmd_cat(jars, fqcn, line_range):
+    hits = [j for j in jars if fqcn in j.classes()]
+    if not hits:
+        names = {simple_name(f) for j in jars for f in j.classes()}
+        not_found(f"no source for {fqcn}", simple_name(fqcn), names)
+    gas = sorted({j.ga for j in hits})
+    if len(gas) > 1:
+        raise UsageError(f"error: {fqcn} is ambiguous across: {', '.join(gas)}")
+    best = max(hits, key=lambda j: version_key(j.version))
+    lines = normalize_source(best.read(fqcn))
+    if line_range is not None:
+        a, b = line_range
+        a = max(a, 1)
+        b = min(b, len(lines))
+        lines = lines[a - 1 : b] if a <= b else []
+    return "".join(line + "\n" for line in lines)
+
+
+def cmd_ls(jars, coord):
+    parts = coord.split(":")
+    if len(parts) not in (2, 3) or not all(parts):
+        raise UsageError(
+            f"error: invalid coordinate: {coord} (expected group:artifact[:version])"
+        )
+    ga = f"{parts[0]}:{parts[1]}"
+    known_gas = {j.ga for j in jars}
+    matching = [j for j in jars if j.ga == ga]
+    if not matching:
+        not_found(f"no artifact {ga}", ga, known_gas)
+    if len(parts) == 2:
+        versions = sorted({j.version for j in matching}, key=version_key)
+        return "".join(v + "\n" for v in versions)
+    jar = next((j for j in matching if j.version == parts[2]), None)
+    if jar is None:
+        not_found(f"no artifact {coord}", coord, known_gas)
+    return "".join(f + "\n" for f in sorted(jar.classes()))
+
+
+# ---------------------------------------------------------------- CLI
+
+
+def parse_args(argv):
+    root = "."
+    lines = None
+    positional = []
+    i = 0
+    only_positional = False
+    while i < len(argv):
+        arg = argv[i]
+        i += 1
+        if only_positional or not arg.startswith("-") or arg == "-":
+            positional.append(arg)
+            continue
+        if arg == "--":
+            only_positional = True
+            continue
+        if arg == "--help":
+            return "help", None, None, None
+        name, eq, value = arg.partition("=")
+        if name in ("--root", "--lines"):
+            if not eq:
+                if i >= len(argv):
+                    raise UsageError(f"error: {name} requires a value")
+                value = argv[i]
+                i += 1
+            if name == "--root":
+                root = value
+            else:
+                lines = value
+            continue
+        raise UsageError(f"unknown flag: {arg}")
+    return "run", positional, root, lines
+
+
+def main(argv):
+    mode, positional, root, lines = parse_args(argv)
+    if mode == "help":
+        write(sys.stdout, USAGE)
+        return EXIT_OK
+    if not positional:
+        raise UsageError("error: missing subcommand (see --help)")
+    cmd, args = positional[0], positional[1:]
+    if cmd not in ("find", "cat", "ls"):
+        raise UsageError(f"error: unknown subcommand: {cmd}")
+    if len(args) != 1:
+        what = {"find": "<fqcn-or-glob>", "cat": "<fqcn>", "ls": "<group:artifact[:version]>"}[cmd]
+        if not args:
+            raise UsageError(f"error: {cmd}: missing argument {what}")
+        raise UsageError(f"error: {cmd}: unexpected argument: {args[1]}")
+    if lines is not None and cmd != "cat":
+        raise UsageError("error: --lines is only valid with cat")
+    line_range = parse_lines(lines) if lines is not None else None
+    if not os.path.isdir(root):
+        raise UsageError(f"error: root is not a directory: {root}")
+
+    jars = scan(root)
+    if cmd == "find":
+        out = cmd_find(jars, args[0])
+    elif cmd == "cat":
+        out = cmd_cat(jars, args[0], line_range)
+    else:
+        out = cmd_ls(jars, args[0])
+    write(sys.stdout, out)
+    return EXIT_OK
+
+
+def run():
+    try:
+        code = main(sys.argv[1:])
+    except UsageError as e:
+        write(sys.stderr, f"{e}\n")
+        code = EXIT_USAGE
+    except NotFound as e:
+        write(sys.stderr, f"{e}\n")
+        code = EXIT_NOT_FOUND
+    try:
+        sys.stdout.flush()
+    except BrokenPipeError:
+        pass
+    sys.exit(code)
+
+
+if __name__ == "__main__":
+    run()

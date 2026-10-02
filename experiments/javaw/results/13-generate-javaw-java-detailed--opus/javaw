@@ -1,0 +1,162 @@
+#!/usr/bin/env -S java --source 28 --enable-preview --add-modules jdk.incubator.json
+import module java.base;
+import module jdk.incubator.json;
+
+sealed interface Input permits Source, Jar { Path path(); }
+record Source(Path path) implements Input {}
+record Jar(Path path) implements Input {}
+
+record Options(List<Input> inputs, String classpath, String javaHome, String jvmOpts,
+               Integer minJava, String output, boolean force) {}
+
+record Plan(Input input, Path target) {}
+
+final String HELP = """
+    Usage: javaw [options] <Tool.java>...
+           javaw [options] --jar <tool.jar>...
+
+    Generates a relocatable POSIX sh launcher script for each Java program.
+
+    Options:
+      --jar FILE          launch FILE with java -jar (repeatable)
+      --classpath PATH    add -cp PATH to the launch command (recorded as-is)
+      --java-home DIR     use DIR/bin/java instead of java from the PATH
+      --jvm-opts "OPTS"   JVM options placed before the program
+      --min-java N        fail with a clear error if Java is older than N
+      -o, --output NAME   output file, or directory if it ends in / or exists
+      --force             overwrite existing files
+      -h, --help          show this help
+    """;
+
+void main(String[] args) {
+    try {
+        var options = parse(List.of(args));
+        if (options == null) { IO.print(HELP); return; }
+        var header = "javaw " + Stream.of(args).map(this::shQuote).collect(Collectors.joining(" "));
+        for (var plan : plan(options)) {
+            Files.writeString(plan.target(), wrapper(options, plan, header));
+            Files.setPosixFilePermissions(plan.target(), PosixFilePermissions.fromString("rwxr-xr-x"));
+            IO.println("wrote " + plan.target());
+        }
+    } catch (IllegalArgumentException e) {
+        System.err.println("javaw: " + e.getMessage() + "\nTry 'javaw --help'.");
+        System.exit(2);
+    } catch (IOException | IllegalStateException e) {
+        System.err.println("javaw: " + e.getMessage());
+        System.exit(1);
+    }
+}
+
+Options parse(List<String> args) {
+    var inputs = new ArrayList<Input>();
+    String classpath = null, javaHome = null, jvmOpts = null, output = null;
+    Integer minJava = null;
+    boolean force = false, endOfOptions = false;
+    for (var it = args.iterator(); it.hasNext(); ) {
+        var arg = it.next();
+        if (endOfOptions || !arg.startsWith("-") || arg.equals("-")) {
+            if (!arg.endsWith(".java")) throw new IllegalArgumentException("not a .java file: " + arg + " (use --jar for jars)");
+            inputs.add(new Source(Path.of(arg)));
+            continue;
+        }
+        Supplier<String> value = () -> {
+            if (!it.hasNext()) throw new IllegalArgumentException("missing value for " + arg);
+            return it.next();
+        };
+        switch (arg) {
+            case "-h", "--help" -> { return null; }
+            case "--" -> endOfOptions = true;
+            case "--force" -> force = true;
+            case "--jar" -> inputs.add(new Jar(Path.of(value.get())));
+            case "--classpath" -> classpath = value.get();
+            case "--java-home" -> javaHome = value.get();
+            case "--jvm-opts" -> jvmOpts = value.get();
+            case "-o", "--output" -> output = value.get();
+            case "--min-java" -> {
+                var n = value.get();
+                try { minJava = Integer.parseInt(n); } catch (NumberFormatException _) { minJava = 0; }
+                if (minJava < 1) throw new IllegalArgumentException("--min-java needs a positive integer, got: " + n);
+            }
+            default -> throw new IllegalArgumentException("unknown option: " + arg);
+        }
+    }
+    if (inputs.isEmpty()) throw new IllegalArgumentException("missing input: give a .java file or --jar FILE");
+    return new Options(inputs, classpath, javaHome, jvmOpts, minJava, output, force);
+}
+
+List<Plan> plan(Options o) throws IOException {
+    var out = o.output();
+    var toDir = out == null || out.endsWith("/") || Files.isDirectory(Path.of(out));
+    if (!toDir && o.inputs().size() > 1) throw new IllegalArgumentException("-o must be a directory when several inputs are given");
+    var plans = o.inputs().stream()
+        .map(in -> new Plan(in, toDir ? Path.of(out == null ? "" : out, defaultName(in.path())) : Path.of(out)))
+        .toList();
+    var seen = new HashSet<Path>();
+    for (var p : plans) {
+        if (!seen.add(p.target().toAbsolutePath().normalize())) throw new IllegalStateException("two inputs would both write " + p.target());
+        if (Files.exists(p.target(), LinkOption.NOFOLLOW_LINKS) && !o.force()) throw new IllegalStateException(p.target() + " already exists (use --force to overwrite)");
+    }
+    if (toDir && out != null) Files.createDirectories(Path.of(out));  // only after every check passed
+    return plans;
+}
+
+String defaultName(Path input) {
+    var base = input.getFileName().toString().replaceFirst("\\.[^.]*$", "");
+    return "run-" + base
+        .replaceAll("([a-z0-9])([A-Z])", "$1-$2")      // fooBar -> foo-Bar
+        .replaceAll("([A-Z]+)([A-Z][a-z])", "$1-$2")   // HTTPServer -> HTTP-Server
+        .replaceAll("[-_.\\s]+", "-")
+        .replaceAll("^-|-$", "")
+        .toLowerCase(Locale.ROOT);
+}
+
+String wrapper(Options o, Plan plan, String header) {
+    var java = o.javaHome() == null ? "java" : "\"" + dq(o.javaHome()) + "/bin/java\"";
+    var program = "\"$dir/" + dq(real(plan.target().toAbsolutePath().getParent())
+        .relativize(real(plan.input().path().toAbsolutePath())).toString()) + "\"";
+    var launch = Stream.of(java,
+            o.classpath() == null ? null : "-cp " + shQuote(o.classpath()),
+            o.jvmOpts(),
+            switch (plan.input()) { case Jar _ -> "-jar " + program; case Source _ -> program; },
+            "\"$@\"")
+        .filter(Objects::nonNull).collect(Collectors.joining(" "));
+    var name = plan.target().getFileName();
+    var check = o.minJava() == null ? "" : """
+        v=$(%s -version 2>&1 | sed -n 's/^[^ ]* version "\\([^"]*\\)".*/\\1/p' | head -n 1)
+        n=${v#1.}
+        n=${n%%%%[!0-9]*}
+        if [ -z "$n" ] || [ "$n" -lt %d ]; then
+          echo "%s: requires Java %d or newer, found: ${v:-no usable Java}" >&2
+          exit 1
+        fi
+        """.formatted(java, o.minJava(), name, o.minJava());
+    return """
+        #!/bin/sh
+        # Generated by: %s
+        self=$0
+        while [ -L "$self" ]; do
+          target=$(readlink -- "$self")
+          case $target in
+            /*) self=$target ;;
+            *) self=$(dirname -- "$self")/$target ;;
+          esac
+        done
+        unset CDPATH
+        dir=$(cd -P -- "$(dirname -- "$self")" && pwd -P) || exit 1
+        %sexec %s
+        """.formatted(header.replace("\n", "\n# "), check, launch);
+}
+
+/// Resolves symlinks in the longest existing prefix, so relativize matches the wrapper's `pwd -P`.
+Path real(Path p) {
+    try { return p.toRealPath(); }
+    catch (IOException _) { return p.getParent() == null ? p : real(p.getParent()).resolve(p.getFileName()); }
+}
+
+String shQuote(String s) {
+    return s.matches("[\\w./:=@%+,-]+") ? s : "'" + s.replace("'", "'\\''") + "'";
+}
+
+String dq(String s) {
+    return s.replaceAll("[\"\\\\$`]", "\\\\$0");
+}

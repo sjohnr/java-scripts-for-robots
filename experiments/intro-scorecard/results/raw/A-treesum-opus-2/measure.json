@@ -1,0 +1,105 @@
+{
+  "run_id": "A-treesum-opus-2",
+  "measured": "2026-10-11T09:04:23",
+  "run_command_reported": "./treesum",
+  "run_command_used": "./treesum",
+  "run_command_notes": [],
+  "classification": {
+    "language": "python",
+    "language_group": "scripting",
+    "entry": "treesum",
+    "launch": {
+      "lang": "python",
+      "entry": "treesum",
+      "launch": null,
+      "wrapper": null,
+      "evidence": [
+        "run command program: ./treesum"
+      ],
+      "flags": [],
+      "java_opts": ""
+    },
+    "source_bytes_by_lang": {
+      "python": 5313
+    },
+    "flags": [],
+    "needs_review": false
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 3091
+    },
+    {
+      "path": "treesum",
+      "kind": "source",
+      "lang": "python",
+      "bytes": 5313
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "treesum-basic",
+        "ok": true
+      },
+      {
+        "id": "treesum-top3",
+        "ok": true
+      },
+      {
+        "id": "treesum-extlimit",
+        "ok": true
+      },
+      {
+        "id": "treesum-missing-dir",
+        "ok": true
+      },
+      {
+        "id": "treesum-help",
+        "ok": true
+      }
+    ],
+    "passed": 5,
+    "total": 5,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.03,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 1372,
+    "build_file_tokens": 0,
+    "test_tokens": 0,
+    "source_files": [
+      "treesum"
+    ],
+    "build_files": [],
+    "source_bytes": 5313,
+    "build_file_bytes": 0
+  },
+  "disk": {
+    "source_and_build_files_bytes": 5313,
+    "build_output_bytes": 0,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 5313
+  },
+  "load_avg_at_bench_start": 1.9033203125,
+  "startup": {
+    "command": "./treesum --help",
+    "median_ms": 14.01024456,
+    "mean_ms": 14.063636710259065,
+    "stddev_ms": 0.2915939558563615,
+    "min_ms": 13.57586856,
+    "runs": 193,
+    "load_avg_before": 1.9033203125,
+    "load_avg_after": 1.9033203125
+  },
+  "benchmarked": "2026-10-11T09:06:11"
+}

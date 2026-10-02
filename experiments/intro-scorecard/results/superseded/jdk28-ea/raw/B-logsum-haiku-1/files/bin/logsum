@@ -1,0 +1,3 @@
+#!/bin/sh
+# Launches the logsum jar built by `make jar`.
+exec java -jar "$(dirname "$0")/../build/logsum.jar" "$@"

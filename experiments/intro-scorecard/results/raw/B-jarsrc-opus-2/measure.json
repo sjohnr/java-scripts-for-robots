@@ -1,0 +1,235 @@
+{
+  "run_id": "B-jarsrc-opus-2",
+  "measured": "2026-10-10T20:15:38",
+  "run_command_reported": "./jarsrc",
+  "run_command_used": "./jarsrc",
+  "run_command_notes": [],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "$JAR",
+    "launch": {
+      "lang": "java",
+      "entry": "$JAR",
+      "launch": "jar",
+      "wrapper": "jarsrc",
+      "evidence": [
+        "run command program: ./jarsrc",
+        "wrapper script jarsrc runs: java -Xshare:auto -XX:TieredStopAtLevel=1 -jar \"$JAR\" "
+      ],
+      "flags": [],
+      "java_opts": "-Xshare:auto -XX:TieredStopAtLevel=1",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 411,
+      "java": 20323
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "build script",
+      "launch": "jar",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "build script / jar",
+      "java_file_count": 1,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "jarsrc",
+      "evidence": {
+        "build": [
+          "build.sh"
+        ],
+        "launch": [
+          "run command program: ./jarsrc",
+          "wrapper script jarsrc runs: java -Xshare:auto -XX:TieredStopAtLevel=1 -jar \"$JAR\" ",
+          "run command program: java",
+          "via wrapper script jarsrc"
+        ],
+        "source": [
+          "src/jarsrc/Main.java:76 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/jarsrc/Main.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 5788
+    },
+    {
+      "path": "build.sh",
+      "kind": "build",
+      "lang": null,
+      "bytes": 278
+    },
+    {
+      "path": "jarsrc",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 411
+    },
+    {
+      "path": "src/jarsrc/Main.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 20323
+    },
+    {
+      "path": "tests/run.sh",
+      "kind": "test",
+      "lang": "shell",
+      "bytes": 3999
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "jarsrc-find-exact",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-glob-star",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-glob-doublestar",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-find-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-highest-version",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-lines",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-lines-out-of-range",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-cat-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-ls-ga",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-ls-gav-notfound",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-help",
+        "ok": true
+      },
+      {
+        "id": "jarsrc-unknown-flag",
+        "ok": true
+      }
+    ],
+    "passed": 12,
+    "total": 12,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.04,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 4658,
+    "build_file_tokens": 82,
+    "test_tokens": 1367,
+    "source_files": [
+      "jarsrc",
+      "src/jarsrc/Main.java"
+    ],
+    "build_files": [
+      "build.sh"
+    ],
+    "source_bytes": 20734,
+    "build_file_bytes": 278
+  },
+  "disk": {
+    "source_and_build_files_bytes": 21012,
+    "build_output_bytes": 37876,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 58888
+  },
+  "load_avg_at_bench_start": 1.8056640625,
+  "startup": {
+    "command": "./jarsrc --help",
+    "median_ms": 28.121913460000002,
+    "mean_ms": 29.0031900354717,
+    "stddev_ms": 4.529105799441728,
+    "min_ms": 26.85105946,
+    "runs": 106,
+    "load_avg_before": 1.8056640625,
+    "load_avg_after": 1.8056640625
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-2/opt/app.jar",
+    "main": "jarsrc.Main",
+    "training": {
+      "args": [
+        "find",
+        "**.Main",
+        "--root",
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/jarsrc"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-2/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-2/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-2/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 11649024,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-2/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-2/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-2/opt/app.jar jarsrc.Main --help",
+      "median_ms": 19.261383820000002,
+      "mean_ms": 19.284823507074822,
+      "stddev_ms": 0.5147369794520519,
+      "min_ms": 18.26946782,
+      "runs": 147,
+      "load_avg_before": 1.82080078125,
+      "load_avg_after": 1.82080078125
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-jarsrc-opus-2/opt/app.jar jarsrc.Main --help",
+      "median_ms": 22.25692902,
+      "mean_ms": 22.26145177000001,
+      "stddev_ms": 0.35397360013548784,
+      "min_ms": 21.18209552,
+      "runs": 120,
+      "load_avg_before": 1.82080078125,
+      "load_avg_after": 1.7548828125
+    }
+  },
+  "benchmarked": "2026-10-11T09:07:10"
+}

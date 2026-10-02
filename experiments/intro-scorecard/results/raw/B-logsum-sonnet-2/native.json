@@ -1,0 +1,20 @@
+{
+ "run_id": "B-logsum-sonnet-2",
+ "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-logsum-sonnet-2/opt/app.jar",
+ "main": "Logsum",
+ "jvm": [],
+ "image": "/Users/sriesenberg/.cache/intro-scorecard/native/B-logsum-sonnet-2/app",
+ "build_seconds": 10.5,
+ "image_bytes": 6728528,
+ "help_exit": 0,
+ "startup_native": {
+  "command": "/Users/sriesenberg/.cache/intro-scorecard/native/B-logsum-sonnet-2/app --help",
+  "median_ms": 2.5729743200000006,
+  "mean_ms": 2.5859979410826206,
+  "stddev_ms": 0.09168926725624295,
+  "min_ms": 2.364162820000001,
+  "runs": 702,
+  "load_avg_before": 11.78515625,
+  "load_avg_after": 10.92138671875
+ }
+}

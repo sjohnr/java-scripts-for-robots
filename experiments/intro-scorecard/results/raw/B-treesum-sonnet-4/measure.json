@@ -1,0 +1,187 @@
+{
+  "run_id": "B-treesum-sonnet-4",
+  "measured": "2026-10-10T20:10:11",
+  "run_command_reported": "./treesum",
+  "run_command_used": "./treesum",
+  "run_command_notes": [],
+  "classification": {
+    "language": "java",
+    "language_group": "java",
+    "entry": "Treesum",
+    "launch": {
+      "lang": "java",
+      "entry": "Treesum",
+      "launch": "javac + java",
+      "wrapper": "treesum",
+      "evidence": [
+        "run command program: ./treesum",
+        "wrapper script treesum runs: java -cp \"out\" Treesum "
+      ],
+      "flags": [],
+      "java_opts": "-cp out",
+      "evidence_inner": [
+        "run command program: java"
+      ]
+    },
+    "source_bytes_by_lang": {
+      "shell": 79,
+      "java": 6999
+    },
+    "flags": [],
+    "needs_review": false,
+    "java_style": {
+      "build": "none",
+      "launch": "javac + java",
+      "source": "classic",
+      "imports": "classic",
+      "files": "single file",
+      "dependencies": "none",
+      "optimization": "none",
+      "wrapper_dim": "wrapper script",
+      "combination": "none / javac + java",
+      "java_file_count": 1,
+      "dependency_list": [],
+      "instance_main_files": [],
+      "preview": false,
+      "wrapper": "treesum",
+      "evidence": {
+        "launch": [
+          "run command program: ./treesum",
+          "wrapper script treesum runs: java -cp \"out\" Treesum ",
+          "run command program: java",
+          "via wrapper script treesum"
+        ],
+        "source": [
+          "src/Treesum.java:37 static void main(String[] args) depth=1"
+        ],
+        "imports": [],
+        "files": [
+          "src/Treesum.java"
+        ],
+        "dependencies": [],
+        "optimization": []
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "SPEC.md",
+      "kind": "spec",
+      "lang": null,
+      "bytes": 3091
+    },
+    {
+      "path": "treesum",
+      "kind": "source",
+      "lang": "shell",
+      "bytes": 79
+    },
+    {
+      "path": "src/Treesum.java",
+      "kind": "source",
+      "lang": "java",
+      "bytes": 6999
+    }
+  ],
+  "conformance": {
+    "cases": [
+      {
+        "id": "treesum-basic",
+        "ok": true
+      },
+      {
+        "id": "treesum-top3",
+        "ok": true
+      },
+      {
+        "id": "treesum-extlimit",
+        "ok": true
+      },
+      {
+        "id": "treesum-missing-dir",
+        "ok": true
+      },
+      {
+        "id": "treesum-help",
+        "ok": true
+      }
+    ],
+    "passed": 5,
+    "total": 5,
+    "warmup": {
+      "exit": 0,
+      "seconds": 0.04,
+      "stderr_tail": ""
+    },
+    "pass": true
+  },
+  "size": {
+    "source_tokens": 1721,
+    "build_file_tokens": 0,
+    "test_tokens": 0,
+    "source_files": [
+      "treesum",
+      "src/Treesum.java"
+    ],
+    "build_files": [],
+    "source_bytes": 7078,
+    "build_file_bytes": 0
+  },
+  "disk": {
+    "source_and_build_files_bytes": 7078,
+    "build_output_bytes": 9771,
+    "cache_bytes": 0,
+    "cache_breakdown": {},
+    "runtime_excluded_bytes": 0,
+    "total_bytes": 16849
+  },
+  "load_avg_at_bench_start": 2.69970703125,
+  "startup": {
+    "command": "./treesum --help",
+    "median_ms": 26.46082508,
+    "mean_ms": 26.57819471302753,
+    "stddev_ms": 0.4594756937818858,
+    "min_ms": 25.57890808,
+    "runs": 109,
+    "load_avg_before": 2.69970703125,
+    "load_avg_after": 2.7236328125
+  },
+  "optimized": {
+    "method": "javac + jar",
+    "notes": [],
+    "classpath": "/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-sonnet-4/opt/app.jar",
+    "main": "Treesum",
+    "training": {
+      "args": [
+        "/Users/sriesenberg/git/java-scripts-for-robots/experiments/intro-scorecard/fixtures/small/treesum"
+      ],
+      "exit": 0,
+      "stderr_tail": "Picked up JAVA_TOOL_OPTIONS: -Djava.class.path=/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-sonnet-4/opt/app.jar -XX:AOTCacheOutput=/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-sonnet-4/opt/app.aot -XX:AOTConfiguration=/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-sonnet-4/opt/app.aot.config -XX:AOTMode=create\n"
+    },
+    "aot_bytes": 11567104,
+    "aot": "/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-sonnet-4/opt/app.aot",
+    "aot_help_exit": 0,
+    "aot_stderr": "",
+    "startup_aot": {
+      "command": "java  -XX:AOTCache=/Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-sonnet-4/opt/app.aot -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-sonnet-4/opt/app.jar Treesum --help",
+      "median_ms": 19.493293280000003,
+      "mean_ms": 19.574832636164377,
+      "stddev_ms": 0.6320384489639278,
+      "min_ms": 18.12841828,
+      "runs": 146,
+      "load_avg_before": 2.7236328125,
+      "load_avg_after": 2.74560546875
+    },
+    "startup_jar_no_aot": {
+      "command": "java  -cp /Users/sriesenberg/.cache/intro-scorecard/work/B-treesum-sonnet-4/opt/app.jar Treesum --help",
+      "median_ms": 23.53468412,
+      "mean_ms": 24.392521913388425,
+      "stddev_ms": 3.989169891380224,
+      "min_ms": 22.23664212,
+      "runs": 121,
+      "load_avg_before": 2.74560546875,
+      "load_avg_after": 3.005859375
+    }
+  },
+  "benchmarked": "2026-10-11T09:12:49"
+}

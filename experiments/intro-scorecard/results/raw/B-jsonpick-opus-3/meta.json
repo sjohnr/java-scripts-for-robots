@@ -1,0 +1,94 @@
+{
+  "run_id": "B-jsonpick-opus-3",
+  "condition": "B",
+  "task": "jsonpick",
+  "model_alias": "opus",
+  "model_id": "claude-opus-5-5",
+  "model_ids_used": [
+    "claude-opus-5-5"
+  ],
+  "replicate": 3,
+  "seed": 20261010,
+  "seed_position": 69,
+  "started": "2026-10-11T13:58:55+00:00",
+  "ended": "2026-10-11T14:01:03+00:00",
+  "wall_s": 127.3,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 8,
+  "duration_ms": 126761,
+  "duration_api_ms": 124109,
+  "tokens": {
+    "input_tokens": 14,
+    "output_tokens": 14990,
+    "cache_creation_input_tokens": 20677,
+    "cache_read_input_tokens": 160525
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 14,
+      "outputTokens": 14990,
+      "cacheReadInputTokens": 160525,
+      "cacheCreationInputTokens": 20677,
+      "webSearchRequests": 0,
+      "costUSD": 0.49737699999999996,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3011,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.49737699999999996,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "7306bf45-e059-4f47-845c-02fa5ad1e676",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/B-jsonpick-opus-3",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 2.3,
+    "cost_usd": 0.01529400000000003,
+    "cost_usd_cumulative_reported": 0.512671,
+    "num_turns": 1,
+    "tokens": {
+      "input_tokens": 2,
+      "output_tokens": 8,
+      "cache_creation_input_tokens": 1080,
+      "cache_read_input_tokens": 32430
+    },
+    "subtype": "success",
+    "reply": "./jsonpick",
+    "run_command": "./jsonpick",
+    "limit_hits": []
+  },
+  "run_command": "./jsonpick",
+  "excluded_from_copy": [
+    {
+      "path": "build",
+      "bytes": 23503
+    }
+  ],
+  "prompt": "Build the `jsonpick` command-line tool described in SPEC.md. Write it in Java.",
+  "claude_args": [
+    "-p",
+    "Build the `jsonpick` command-line tool described in SPEC.md. Write it in Java.",
+    "--model",
+    "opus",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

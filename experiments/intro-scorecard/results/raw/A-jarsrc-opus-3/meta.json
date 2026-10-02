@@ -1,0 +1,89 @@
+{
+  "run_id": "A-jarsrc-opus-3",
+  "condition": "A",
+  "task": "jarsrc",
+  "model_alias": "opus",
+  "model_id": "claude-opus-5-5",
+  "model_ids_used": [
+    "claude-opus-5-5"
+  ],
+  "replicate": 3,
+  "seed": 20261010,
+  "seed_position": 75,
+  "started": "2026-10-11T14:01:05+00:00",
+  "ended": "2026-10-11T14:02:55+00:00",
+  "wall_s": 109.1,
+  "exit_status": 0,
+  "result_subtype": "success",
+  "is_error": false,
+  "num_turns": 8,
+  "duration_ms": 108403,
+  "duration_api_ms": 107198,
+  "tokens": {
+    "input_tokens": 16,
+    "output_tokens": 12456,
+    "cache_creation_input_tokens": 18957,
+    "cache_read_input_tokens": 173845
+  },
+  "model_usage": {
+    "claude-opus-5-5": {
+      "inputTokens": 16,
+      "outputTokens": 12456,
+      "cacheReadInputTokens": 173845,
+      "cacheCreationInputTokens": 18957,
+      "webSearchRequests": 0,
+      "costUSD": 0.435609,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3408,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "cost_usd": 0.435609,
+  "limit_hits": [],
+  "api_key_source": "none",
+  "claude_code_version": "2.1.296",
+  "session_id": "128052e6-3741-40c9-94cf-6237b9f3bf25",
+  "work_dir": "/Users/sriesenberg/.cache/intro-scorecard/work/A-jarsrc-opus-3",
+  "followup": {
+    "exit_status": 0,
+    "timed_out": false,
+    "wall_s": 4.3,
+    "cost_usd": 0.024822599999999972,
+    "cost_usd_cumulative_reported": 0.4604316,
+    "num_turns": 2,
+    "tokens": {
+      "input_tokens": 4,
+      "output_tokens": 145,
+      "cache_creation_input_tokens": 1203,
+      "cache_read_input_tokens": 61413
+    },
+    "subtype": "success",
+    "reply": "./jarsrc",
+    "run_command": "./jarsrc",
+    "limit_hits": []
+  },
+  "run_command": "./jarsrc",
+  "excluded_from_copy": [],
+  "prompt": "Build the `jarsrc` command-line tool described in SPEC.md.",
+  "claude_args": [
+    "-p",
+    "Build the `jarsrc` command-line tool described in SPEC.md.",
+    "--model",
+    "opus",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "acceptEdits",
+    "--allowedTools",
+    "Read,Write,Edit,Glob,Grep,Bash",
+    "--max-budget-usd",
+    "5.00"
+  ]
+}

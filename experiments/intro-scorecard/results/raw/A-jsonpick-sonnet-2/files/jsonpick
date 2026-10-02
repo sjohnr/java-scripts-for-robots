@@ -1,0 +1,224 @@
+#!/usr/bin/env python3
+"""jsonpick: extract a value by path from JSON."""
+import json
+import re
+import sys
+from decimal import Decimal
+
+HELP = """\
+Usage: jsonpick PATH [FILE] [--shape] [--depth N]
+
+Extract a value by path from JSON.
+
+Arguments:
+  PATH     dot/bracket path, e.g. a.b[0].c ('.' or '' selects the whole document)
+  FILE     input file; omitted or '-' reads stdin
+
+Options:
+  --shape    print a type/array-length summary of the subtree at PATH
+  --depth N  levels to describe in --shape mode (default 2)
+  --help     show this message and exit
+"""
+
+
+def out(stream, text):
+    stream.buffer.write(text.encode("utf-8", errors="replace"))
+    stream.buffer.flush()
+
+
+def die(code, msg):
+    out(sys.stderr, msg + "\n")
+    sys.exit(code)
+
+
+def parse_path(path):
+    """Return list of str keys / int indexes, or None if syntax is invalid."""
+    if path.startswith("."):
+        path = path[1:]
+    if path == "":
+        return []
+    toks = []
+    i, n = 0, len(path)
+    expect_key = True  # at start or after a dot a key is required
+    while i < n:
+        c = path[i]
+        if c == "[":
+            m = re.compile(r"\[(\d+)\]").match(path, i)
+            if not m:
+                return None
+            toks.append(int(m.group(1)))
+            i = m.end()
+            expect_key = False
+            if i < n and path[i] not in ".[":
+                return None
+            if i < n and path[i] == ".":
+                i += 1
+                expect_key = True
+                if i >= n:
+                    return None
+        else:
+            j = i
+            while j < n and path[j] not in ".[":
+                j += 1
+            if j == i:
+                return None
+            toks.append(path[i:j])
+            i = j
+            expect_key = False
+            if i < n and path[i] == ".":
+                i += 1
+                expect_key = True
+                if i >= n:
+                    return None
+    return toks
+
+
+_MISSING = object()
+
+
+def navigate(doc, toks):
+    cur = doc
+    for t in toks:
+        if isinstance(t, int):
+            if not isinstance(cur, list) or t >= len(cur):
+                return _MISSING
+            cur = cur[t]
+        else:
+            if not isinstance(cur, dict) or t not in cur:
+                return _MISSING
+            cur = cur[t]
+    return cur
+
+
+def fmt_number(v):
+    if isinstance(v, int):
+        return str(v)
+    d = v.normalize()
+    exp = d.as_tuple().exponent
+    if isinstance(exp, int) and abs(exp) <= 30 and d.adjusted() <= 30:
+        return format(d, "f")
+    return str(d).replace("E+", "e").replace("E", "e")
+
+
+def fmt_string(s):
+    try:
+        r = json.dumps(s, ensure_ascii=False)
+        r.encode("utf-8")
+        return r
+    except UnicodeEncodeError:
+        return json.dumps(s, ensure_ascii=True)
+
+
+def compact(v):
+    if v is None:
+        return "null"
+    if v is True:
+        return "true"
+    if v is False:
+        return "false"
+    if isinstance(v, str):
+        return fmt_string(v)
+    if isinstance(v, (int, Decimal)):
+        return fmt_number(v)
+    if isinstance(v, list):
+        return "[" + ",".join(compact(x) for x in v) + "]"
+    return "{" + ",".join(fmt_string(k) + ":" + compact(x) for k, x in v.items()) + "}"
+
+
+def shape(v, budget):
+    if isinstance(v, str):
+        return "string"
+    if v is True or v is False:
+        return "boolean"
+    if v is None:
+        return "null"
+    if isinstance(v, (int, Decimal)):
+        return "number"
+    if isinstance(v, list):
+        s = "array[%d]" % len(v)
+        if budget > 0 and v:
+            s += " of " + shape(v[0], budget - 1)
+        return s
+    if budget <= 0:
+        return "object{%d keys}" % len(v)
+    return "object{" + ", ".join("%s: %s" % (k, shape(x, budget - 1)) for k, x in v.items()) + "}"
+
+
+def reject_constant(name):
+    raise ValueError("invalid literal " + name)
+
+
+def main(argv):
+    if "--help" in argv:
+        out(sys.stdout, HELP)
+        return 0
+    positional = []
+    do_shape = False
+    depth = 2
+    i = 0
+    only_pos = False
+    while i < len(argv):
+        a = argv[i]
+        if only_pos or a == "-" or not a.startswith("-"):
+            positional.append(a)
+        elif a == "--":
+            only_pos = True
+        elif a == "--shape":
+            do_shape = True
+        elif a == "--depth" or a.startswith("--depth="):
+            if a == "--depth":
+                i += 1
+                if i >= len(argv):
+                    die(2, "error: --depth requires a value")
+                val = argv[i]
+            else:
+                val = a[len("--depth="):]
+            if not re.fullmatch(r"\d+", val):
+                die(2, "error: invalid --depth value: " + val)
+            depth = int(val)
+        else:
+            die(2, "unknown flag: " + a)
+        i += 1
+    if not positional:
+        die(2, "error: missing required argument: PATH")
+    if len(positional) > 2:
+        die(2, "error: too many arguments")
+    path = positional[0]
+    file = positional[1] if len(positional) > 1 else "-"
+
+    try:
+        if file == "-":
+            raw = sys.stdin.buffer.read()
+        else:
+            with open(file, "rb") as f:
+                raw = f.read()
+    except OSError as e:
+        die(2, "error: cannot read %s: %s" % (file, e.strerror or "read error"))
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError as e:
+        die(2, "error: invalid JSON: invalid UTF-8 at byte offset %d" % e.start)
+    try:
+        doc = json.loads(text, parse_float=Decimal, parse_constant=reject_constant)
+    except json.JSONDecodeError as e:
+        die(2, "error: invalid JSON: %s at line %d column %d" % (e.msg, e.lineno, e.colno))
+    except (ValueError, RecursionError) as e:
+        die(2, "error: invalid JSON: %s at line 1 column 1" % str(e).replace("\n", " "))
+
+    toks = parse_path(path)
+    val = _MISSING if toks is None else navigate(doc, toks)
+    if val is _MISSING:
+        die(1, "error: path not found: " + path)
+
+    if do_shape:
+        res = shape(val, depth)
+    elif isinstance(val, str):
+        res = val
+    else:
+        res = compact(val)
+    out(sys.stdout, res + "\n")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

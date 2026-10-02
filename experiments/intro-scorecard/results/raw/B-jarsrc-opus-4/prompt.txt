@@ -1,0 +1,1 @@
+Build the `jarsrc` command-line tool described in SPEC.md. Write it in Java.

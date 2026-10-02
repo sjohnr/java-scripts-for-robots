@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+# Run one numbered prompt through Claude Code and record everything.
+#
+#   ./generate 01
+#   ./generate 12 --model opus
+#   ./generate 01 --rerun
+#
+# Output: results/<prompt-name>/   (e.g. results/01-generate-javaw/)
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROMPTS="$ROOT/prompts"
+RESULTS="$ROOT/results"
+
+usage() {
+  cat <<USAGE
+Usage: ./generate NUMBER [options] [-- extra claude args]
+
+Builds one prompt from prompts/NUMBER-*.md followed by the shared requirements
+doc (REQUIREMENTS-v1.md by default; identical for every prompt), then runs it through 'claude -p' with its working
+directory set to results/<prompt-name>/, so everything the agent creates lands there.
+
+Options:
+  -m, --model MODEL   Pass --model to claude. The result directory gets a
+                      "--MODEL" suffix so runs with different models coexist.
+  -v, --version N     Use REQUIREMENTS-vN.md instead of v1. Results for N other
+                      than 1 get a "--vN" suffix so v1 and v2 runs coexist.
+  -r, --rerun         If the result directory exists, archive it as
+                      <dir>.prev-<timestamp> and run again. Nothing is deleted.
+  -n, --dry-run       Show what would run, then stop.
+  -l, --list          List available prompts.
+  -h, --help          This help.
+
+Environment:
+  JAVAW_CLAUDE_ARGS   Replaces the default permission arguments:
+                      --permission-mode acceptEdits --allowedTools Read,Write,Edit,Glob,Grep,Bash
+                      The agent runs shell commands unattended in the result
+                      directory. Review the prompt before running it.
+
+Records kept in results/<prompt-name>/.generate/:
+  prompt.md (prompt + requirements, exactly as sent)  meta.txt  transcript.jsonl  stderr.log  result.md (if jq is installed)
+USAGE
+}
+
+list_prompts() { for f in "$PROMPTS"/*.md; do basename "$f" .md; done; }
+
+die() { echo "generate: $*" >&2; exit 1; }
+
+sha256() { if command -v shasum >/dev/null 2>&1; then shasum -a 256 "$1" | cut -d' ' -f1; else sha256sum "$1" | cut -d' ' -f1; fi; }
+
+NUM="" MODEL="" VERSION=1 RERUN=0 DRY=0 PRINT_DIR=0 EXTRA=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    -l|--list) list_prompts; exit 0 ;;
+    -m|--model) [ $# -ge 2 ] || die "--model needs a value"; MODEL="$2"; shift 2 ;;
+    -v|--version) [ $# -ge 2 ] || die "--version needs a value"; VERSION="$2"; shift 2 ;;
+    -r|--rerun) RERUN=1; shift ;;
+    --print-dir) PRINT_DIR=1; shift ;;   # used by ./install
+    -n|--dry-run) DRY=1; shift ;;
+    --) shift; EXTRA=("$@"); break ;;
+    -*) die "unknown option: $1 (try --help)" ;;
+    *) [ -z "$NUM" ] || die "only one prompt number allowed"; NUM="$1"; shift ;;
+  esac
+done
+
+if [ -z "$NUM" ]; then usage >&2; exit 2; fi
+case "$NUM" in *[!0-9]*) die "prompt number must be digits, got: $NUM" ;; esac
+NUM="$(printf '%02d' "$((10#$NUM))")"
+
+# Find exactly one prompts/NN-*.md
+MATCHES=()
+for f in "$PROMPTS/$NUM"-*.md; do [ -e "$f" ] && MATCHES+=("$f"); done
+[ ${#MATCHES[@]} -ge 1 ] || die "no prompt numbered $NUM in prompts/ (try --list)"
+[ ${#MATCHES[@]} -eq 1 ] || die "more than one prompt numbered $NUM: ${MATCHES[*]}"
+case "$VERSION" in ''|*[!0-9]*) die "--version must be a number, got: $VERSION" ;; esac
+VERSION="$((10#$VERSION))"
+REQUIREMENTS="$ROOT/REQUIREMENTS-v$VERSION.md"
+if [ ! -f "$REQUIREMENTS" ]; then
+  AVAIL="$(cd "$ROOT" && ls REQUIREMENTS-v*.md 2>/dev/null | tr '\n' ' ')"
+  die "no requirements for version $VERSION (available: ${AVAIL:-none})"
+fi
+PROMPT_FILE="${MATCHES[0]}"
+NAME="$(basename "$PROMPT_FILE" .md)"
+
+DIRNAME="$NAME"
+if [ -n "$MODEL" ]; then
+  SAFE_MODEL="$(printf '%s' "$MODEL" | tr -c 'A-Za-z0-9._-' '-')"
+  DIRNAME="$NAME--$SAFE_MODEL"
+fi
+[ "$VERSION" -eq 1 ] || DIRNAME="$DIRNAME--v$VERSION"
+OUT="$RESULTS/$DIRNAME"
+[ "$PRINT_DIR" -eq 1 ] && { echo "$OUT"; exit 0; }
+REC="$OUT/.generate"
+
+if [ -n "${JAVAW_CLAUDE_ARGS+x}" ]; then
+  # shellcheck disable=SC2206
+  PERM_ARGS=($JAVAW_CLAUDE_ARGS)
+else
+  PERM_ARGS=(--permission-mode acceptEdits --allowedTools "Read,Write,Edit,Glob,Grep,Bash")
+fi
+
+CMD=(claude -p --output-format stream-json --verbose "${PERM_ARGS[@]}")
+[ -n "$MODEL" ] && CMD+=(--model "$MODEL")
+[ ${#EXTRA[@]} -gt 0 ] && CMD+=("${EXTRA[@]}")
+
+echo "prompt:  $PROMPT_FILE"
+echo "requirements: $REQUIREMENTS"
+echo "output:  $OUT"
+echo "command: (cd results/$DIRNAME && ${CMD[*]} < .generate/prompt.md)   [prompt + requirements]"
+[ "$DRY" -eq 1 ] && exit 0
+
+command -v claude >/dev/null 2>&1 || die "claude not found on PATH"
+
+if [ -e "$OUT" ] && [ -n "$(ls -A "$OUT" 2>/dev/null)" ]; then
+  [ "$RERUN" -eq 1 ] || die "results/$DIRNAME already exists. Use --rerun to archive it and run again."
+  ARCHIVE="$OUT.prev-$(date +%Y%m%d-%H%M%S)"
+  mv "$OUT" "$ARCHIVE"
+  echo "archived previous run: ${ARCHIVE#"$ROOT"/}"
+fi
+
+mkdir -p "$REC"
+# One prompt: the variation, a separator, then the shared requirements.
+{ cat "$PROMPT_FILE"; printf '\n---\n\n'; cat "$REQUIREMENTS"; } > "$REC/prompt.md"
+
+START="$(date +%s)"
+{
+  echo "prompt_file:   prompts/$NAME.md"
+  echo "prompt_sha256: $(sha256 "$PROMPT_FILE")"
+  echo "requirements_file:   REQUIREMENTS-v$VERSION.md"
+  echo "requirements_sha256: $(sha256 "$REQUIREMENTS")"
+  echo "composed_sha256: $(sha256 "$REC/prompt.md")"
+  echo "started:       $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  echo "model:         ${MODEL:-default}"
+  echo "claude:        $(claude --version 2>&1 | head -n1)"
+  echo "java:          $(java -version 2>&1 | grep -v "^Picked up" | head -n1 || true)"
+  echo "command:       ${CMD[*]}"
+  echo "repo_commit:   $(git -C "$ROOT" rev-parse --short HEAD 2>/dev/null || echo n/a)"
+} > "$REC/meta.txt"
+
+echo "running... (transcript: results/$DIRNAME/.generate/transcript.jsonl)"
+set +e
+( cd "$OUT" && "${CMD[@]}" < "$REC/prompt.md" > "$REC/transcript.jsonl" 2> "$REC/stderr.log" )
+STATUS=$?
+set -e
+END="$(date +%s)"
+
+{
+  echo "finished:      $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  echo "wall_seconds:  $((END - START))"
+  echo "exit_status:   $STATUS"
+} >> "$REC/meta.txt"
+
+if command -v jq >/dev/null 2>&1; then
+  jq -r 'select(.type=="result") | .result // empty' "$REC/transcript.jsonl" > "$REC/result.md" 2>/dev/null || true
+  jq -r 'select(.type=="result") | "num_turns:      \(.num_turns)\ntotal_cost_usd: \(.total_cost_usd)\nduration_ms:    \(.duration_ms)"' \
+    "$REC/transcript.jsonl" >> "$REC/meta.txt" 2>/dev/null || true
+fi
+
+echo "done: exit $STATUS, $((END - START))s"
+echo "files: results/$DIRNAME/"
+exit "$STATUS"
