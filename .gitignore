@@ -1,61 +1,38 @@
+# OS and language caches
+.DS_Store
 __pycache__/
 *.pyc
 *.class
 node_modules/
-llm-cli-bakeoff/tools/*/go/jarsrc
-llm-cli-bakeoff/tools/*/go/logsum
-llm-cli-bakeoff/tools/*/go/treesum
-llm-cli-bakeoff/tools/*/go/jsonpick
-llm-cli-bakeoff/tools/*/go/noop
-llm-cli-bakeoff/fixtures/
-llm-cli-bakeoff/bench/results/raw/*.json
-.DS_Store
-llm-cli-bakeoff/tools/*/java/build/
-llm-cli-bakeoff/tools/*/java/native/
 
-# Generated from start.spring.io
-HELP.md
-.gradle
+# Build output
 build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+bin/
+.gradle
+experiments/llm-cli-bakeoff/tools/*/go/jarsrc
+experiments/llm-cli-bakeoff/tools/*/go/jsonpick
+experiments/llm-cli-bakeoff/tools/*/go/logsum
+experiments/llm-cli-bakeoff/tools/*/go/noop
+experiments/llm-cli-bakeoff/tools/*/go/treesum
+experiments/llm-cli-bakeoff/tools/*/java/native/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# IntelliJ IDEA: share only the module layout; misc.xml (project SDK) and the rest stay local
+.idea/*
+!.idea/modules.xml
+!.idea/gradle.xml
+!.idea/compiler.xml
+*.iml
+!.idea/java-scripts-for-robots.iml
+!examples/*/examples-*.iml
+*.iws
+*.ipr
 
-### VS Code ###
+# VS Code
 .vscode/
 
-# Ignore local files
+# Claude session transcripts and machine/toolchain details from experiment runs
 .generate
-results/superceded
 *.jsonl
-
-# Machine/toolchain details recorded by experiments
+!experiments/intro-scorecard/results/ledger.jsonl
 experiments/*/results/environment.md
