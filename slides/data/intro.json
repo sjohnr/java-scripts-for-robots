@@ -1,0 +1,486 @@
+{
+  "generated": "2026-10-13T17:04:44.655Z",
+  "planned": 84,
+  "runs": {
+    "generated": 84,
+    "measured": 84
+  },
+  "models": [
+    "haiku",
+    "opus",
+    "sonnet"
+  ],
+  "tasks": [
+    "jarsrc",
+    "jsonpick",
+    "logsum",
+    "treesum"
+  ],
+  "default": {
+    "n": 36,
+    "languages": [
+      {
+        "name": "python",
+        "count": 36
+      }
+    ],
+    "groups": [
+      {
+        "name": "scripting",
+        "count": 36
+      }
+    ],
+    "byTask": {
+      "jarsrc": [
+        {
+          "name": "python",
+          "count": 9
+        }
+      ],
+      "jsonpick": [
+        {
+          "name": "python",
+          "count": 9
+        }
+      ],
+      "logsum": [
+        {
+          "name": "python",
+          "count": 9
+        }
+      ],
+      "treesum": [
+        {
+          "name": "python",
+          "count": 9
+        }
+      ]
+    },
+    "pass": 34
+  },
+  "java": {
+    "n": 48,
+    "java": 48,
+    "pass": 40,
+    "combinations": [
+      {
+        "name": "build script / jar",
+        "count": 22
+      },
+      {
+        "name": "none / javac + java",
+        "count": 15
+      },
+      {
+        "name": "build script / javac + java",
+        "count": 6
+      },
+      {
+        "name": "Make / jar",
+        "count": 4
+      },
+      {
+        "name": "Make / javac + java",
+        "count": 1
+      }
+    ],
+    "dims": {
+      "build": [
+        {
+          "name": "build script",
+          "count": 28
+        },
+        {
+          "name": "none",
+          "count": 15
+        },
+        {
+          "name": "Make",
+          "count": 5
+        }
+      ],
+      "launch": [
+        {
+          "name": "jar",
+          "count": 26
+        },
+        {
+          "name": "javac + java",
+          "count": 22
+        }
+      ],
+      "source": [
+        {
+          "name": "classic",
+          "count": 48
+        }
+      ],
+      "imports": [
+        {
+          "name": "classic",
+          "count": 48
+        }
+      ],
+      "files": [
+        {
+          "name": "single file",
+          "count": 40
+        },
+        {
+          "name": "multiple files",
+          "count": 8
+        }
+      ],
+      "dependencies": [
+        {
+          "name": "none",
+          "count": 48
+        }
+      ],
+      "optimization": [
+        {
+          "name": "none",
+          "count": 48
+        }
+      ],
+      "wrapper_dim": [
+        {
+          "name": "wrapper script",
+          "count": 40
+        },
+        {
+          "name": "none",
+          "count": 8
+        }
+      ]
+    },
+    "jsonpick": {
+      "n": 12,
+      "withDependencies": 0
+    }
+  },
+  "compare": {
+    "go": {
+      "programs": 4,
+      "generated": 0,
+      "startupMs": 1.4878217700000005,
+      "aotStartupMs": null,
+      "nativeStartupMs": null,
+      "nativeDiskBytes": null,
+      "nativePrograms": 0,
+      "aotPrograms": 0,
+      "tokensVsPython": 1.443160553097663,
+      "diskBytes": 3248977,
+      "javaWithDepsDiskBytes": null,
+      "bestStartupMs": 1.4878217700000005,
+      "buildStepShare": 1,
+      "launcherShare": 0
+    },
+    "python": {
+      "programs": 38,
+      "generated": 34,
+      "startupMs": 14.685579660000002,
+      "aotStartupMs": null,
+      "nativeStartupMs": null,
+      "nativeDiskBytes": null,
+      "nativePrograms": 0,
+      "aotPrograms": 0,
+      "tokensVsPython": 1,
+      "diskBytes": 6693.5,
+      "javaWithDepsDiskBytes": null,
+      "bestStartupMs": 14.685579660000002,
+      "buildStepShare": 0,
+      "launcherShare": 0
+    },
+    "node": {
+      "programs": 4,
+      "generated": 0,
+      "startupMs": 20.69965489,
+      "aotStartupMs": null,
+      "nativeStartupMs": null,
+      "nativeDiskBytes": null,
+      "nativePrograms": 0,
+      "aotPrograms": 0,
+      "tokensVsPython": 0.9653964593349667,
+      "diskBytes": 4910.5,
+      "javaWithDepsDiskBytes": null,
+      "bestStartupMs": 20.69965489,
+      "buildStepShare": 0,
+      "launcherShare": 0
+    },
+    "java": {
+      "programs": 40,
+      "generated": 40,
+      "startupMs": 26.80454117,
+      "aotStartupMs": 19.72526971,
+      "nativeStartupMs": 2.52501997,
+      "nativeDiskBytes": 6657767.5,
+      "nativePrograms": 40,
+      "aotPrograms": 40,
+      "tokensVsPython": 1.8006239988788673,
+      "diskBytes": 38717.5,
+      "javaWithDepsDiskBytes": null,
+      "bestStartupMs": 19.72526971,
+      "buildStepShare": 1,
+      "launcherShare": 0.8
+    }
+  },
+  "verdicts": [
+    {
+      "id": "H1.python",
+      "hypothesis": 1,
+      "expectation": "Python is produced in at least 50% of runs.",
+      "verdict": "supported",
+      "n": 36,
+      "count": 36,
+      "share": 1,
+      "ciLow": 0.9035813700311206,
+      "ciHigh": 1,
+      "exceptions": null,
+      "threshold": 0.5,
+      "comparison": ">=",
+      "mostCommon": null,
+      "baselineSet": null
+    },
+    {
+      "id": "H1.scripting",
+      "hypothesis": 1,
+      "expectation": "A scripting language (Python, JavaScript, TypeScript or a shell script) is produced in at least two-thirds of runs.",
+      "verdict": "supported",
+      "n": 36,
+      "count": 36,
+      "share": 1,
+      "ciLow": 0.9035813700311206,
+      "ciHigh": 1,
+      "exceptions": null,
+      "threshold": 0.6666666666666666,
+      "comparison": ">=",
+      "mostCommon": null,
+      "baselineSet": null
+    },
+    {
+      "id": "H1.compiled",
+      "hypothesis": 1,
+      "expectation": "A compiled language other than Java (for example Go or Rust) is produced in at most 25% of runs.",
+      "verdict": "supported",
+      "n": 36,
+      "count": 0,
+      "share": 0,
+      "ciLow": 0,
+      "ciHigh": 0.09641862996887933,
+      "exceptions": null,
+      "threshold": 0.25,
+      "comparison": "<=",
+      "mostCommon": null,
+      "baselineSet": null
+    },
+    {
+      "id": "H1.java",
+      "hypothesis": 1,
+      "expectation": "Java is produced in fewer than 10% of runs.",
+      "verdict": "supported",
+      "n": 36,
+      "count": 0,
+      "share": 0,
+      "ciLow": 0,
+      "ciHigh": 0.09641862996887933,
+      "exceptions": null,
+      "threshold": 0.1,
+      "comparison": "<",
+      "mostCommon": null,
+      "baselineSet": null
+    },
+    {
+      "id": "H2.java",
+      "hypothesis": 2,
+      "expectation": "Appending \"Write it in Java.\" to the prompt produces Java in every run.",
+      "verdict": "supported",
+      "n": 48,
+      "count": 48,
+      "share": 1,
+      "ciLow": null,
+      "ciHigh": null,
+      "exceptions": 0,
+      "threshold": null,
+      "comparison": "every",
+      "mostCommon": null,
+      "baselineSet": null
+    },
+    {
+      "id": "H2.pass",
+      "hypothesis": 2,
+      "expectation": "At least 85% of those runs pass the task's conformance tests.",
+      "verdict": "inconclusive",
+      "n": 48,
+      "count": 40,
+      "share": 0.8333333333333334,
+      "ciLow": 0.7042217148214244,
+      "ciHigh": 0.9130448646795889,
+      "exceptions": null,
+      "threshold": 0.85,
+      "comparison": ">=",
+      "mostCommon": null,
+      "baselineSet": null
+    },
+    {
+      "id": "H3.distinct",
+      "hypothesis": 3,
+      "expectation": "At least four distinct style combinations are produced.",
+      "verdict": "supported",
+      "n": 48,
+      "count": 5,
+      "share": null,
+      "ciLow": null,
+      "ciHigh": null,
+      "exceptions": null,
+      "threshold": 4,
+      "comparison": "count >=",
+      "mostCommon": null,
+      "baselineSet": null
+    },
+    {
+      "id": "H3.max_share",
+      "hypothesis": 3,
+      "expectation": "No single style combination accounts for more than two-thirds of runs.",
+      "verdict": "supported",
+      "n": 48,
+      "count": 22,
+      "share": 0.4583333333333333,
+      "ciLow": 0.3257524219824218,
+      "ciHigh": 0.5970892555799516,
+      "exceptions": null,
+      "threshold": 0.6666666666666666,
+      "comparison": "<=",
+      "mostCommon": "build script / jar",
+      "baselineSet": null
+    },
+    {
+      "id": "H4.startup.bake-off",
+      "hypothesis": 4,
+      "expectation": "Startup: every unoptimized Java program starts more slowly than the median Go, Python and Node programs for the same task.",
+      "verdict": "supported",
+      "n": 40,
+      "count": 40,
+      "share": 1,
+      "ciLow": null,
+      "ciHigh": null,
+      "exceptions": 0,
+      "threshold": null,
+      "comparison": "every",
+      "mostCommon": null,
+      "baselineSet": "bake-off"
+    },
+    {
+      "id": "H4.source.bake-off",
+      "hypothesis": 4,
+      "expectation": "Source size: the median Java program is more than 25% larger, in tokens, than the median of the smallest competing language for the same task.",
+      "verdict": "supported",
+      "n": 40,
+      "count": 35,
+      "share": 0.875,
+      "ciLow": 0.7388788003201471,
+      "ciHigh": 0.9454049978360052,
+      "exceptions": null,
+      "threshold": 0.5,
+      "comparison": ">",
+      "mostCommon": null,
+      "baselineSet": "bake-off"
+    },
+    {
+      "id": "H4.disk.bake-off",
+      "hypothesis": 4,
+      "expectation": "Disk: Java programs that use dependencies occupy more disk space than the median competing program for the same task.",
+      "verdict": "inconclusive (n=0)",
+      "n": 0,
+      "count": 0,
+      "share": null,
+      "ciLow": null,
+      "ciHigh": null,
+      "exceptions": 0,
+      "threshold": null,
+      "comparison": "every",
+      "mostCommon": null,
+      "baselineSet": "bake-off"
+    },
+    {
+      "id": "H4.optimization.bake-off",
+      "hypothesis": 4,
+      "expectation": "Optimization: with optimization applied, median Java startup is within twice the median Python and Node startup.",
+      "verdict": "supported",
+      "n": 40,
+      "count": 40,
+      "share": 1,
+      "ciLow": 0.9123783975415363,
+      "ciHigh": 1,
+      "exceptions": null,
+      "threshold": 0.5,
+      "comparison": ">",
+      "mostCommon": null,
+      "baselineSet": "bake-off"
+    },
+    {
+      "id": "H4.startup.condA",
+      "hypothesis": 4,
+      "expectation": "Startup: every unoptimized Java program starts more slowly than the median Go, Python and Node programs for the same task.",
+      "verdict": "supported",
+      "n": 40,
+      "count": 40,
+      "share": 1,
+      "ciLow": null,
+      "ciHigh": null,
+      "exceptions": 0,
+      "threshold": null,
+      "comparison": "every",
+      "mostCommon": null,
+      "baselineSet": "condition A"
+    },
+    {
+      "id": "H4.source.condA",
+      "hypothesis": 4,
+      "expectation": "Source size: the median Java program is more than 25% larger, in tokens, than the median of the smallest competing language for the same task.",
+      "verdict": "supported",
+      "n": 40,
+      "count": 38,
+      "share": 0.95,
+      "ciLow": 0.8349612250489412,
+      "ciHigh": 0.9861793327384413,
+      "exceptions": null,
+      "threshold": 0.5,
+      "comparison": ">",
+      "mostCommon": null,
+      "baselineSet": "condition A"
+    },
+    {
+      "id": "H4.disk.condA",
+      "hypothesis": 4,
+      "expectation": "Disk: Java programs that use dependencies occupy more disk space than the median competing program for the same task.",
+      "verdict": "inconclusive (n=0)",
+      "n": 0,
+      "count": 0,
+      "share": null,
+      "ciLow": null,
+      "ciHigh": null,
+      "exceptions": 0,
+      "threshold": null,
+      "comparison": "every",
+      "mostCommon": null,
+      "baselineSet": "condition A"
+    },
+    {
+      "id": "H4.optimization.condA",
+      "hypothesis": 4,
+      "expectation": "Optimization: with optimization applied, median Java startup is within twice the median Python and Node startup.",
+      "verdict": "supported",
+      "n": 40,
+      "count": 40,
+      "share": 1,
+      "ciLow": 0.9123783975415363,
+      "ciHigh": 1,
+      "exceptions": null,
+      "threshold": 0.5,
+      "comparison": ">",
+      "mostCommon": null,
+      "baselineSet": "condition A"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "jsfr-slides",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "data": "node scripts/intro-data.mjs && node scripts/speed-data.mjs",
+    "predev": "node scripts/intro-data.mjs && node scripts/speed-data.mjs",
+    "dev": "slidev --open",
+    "prebuild": "node scripts/intro-data.mjs && node scripts/speed-data.mjs",
+    "build": "slidev build",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^53.0.0",
+    "@slidev/theme-default": "^0.25.0"
+  }
+}

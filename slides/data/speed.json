@@ -1,0 +1,43 @@
+{
+  "env": {
+    "date": "Mon Oct 12 18:01:47 CDT 2026",
+    "machine": "Darwin 24.6.0 arm64",
+    "hyperfine": "hyperfine 1.20.0",
+    "python": "Python 3.13.5",
+    "java": "25.0.4.1"
+  },
+  "libKb": 984,
+  "launchers": {
+    "python": {
+      "warm": 0.0210673745,
+      "warmSd": 0.00024256178700504658
+    },
+    "small-disk": {
+      "warm": 0.3120783125,
+      "warmSd": 0.007269967585668917,
+      "diskKb": 8,
+      "lines": 57
+    },
+    "portable": {
+      "warm": 0.067548854,
+      "warmSd": 0.0008784517913967779,
+      "first": 0.45162229200000004,
+      "diskKb": 16,
+      "lines": 98
+    },
+    "fast-start": {
+      "warm": 0.05282487550000001,
+      "warmSd": 0.0018247976413054369,
+      "first": 0.7403025830000001,
+      "diskKb": 11812,
+      "lines": 123
+    },
+    "native": {
+      "warm": 0.021722104,
+      "warmSd": 0.00026381979327026956,
+      "first": 13.608778084,
+      "diskKb": 11020,
+      "lines": 149
+    }
+  }
+}
